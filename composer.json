@@ -1,0 +1,15 @@
+{
+    "name": "mariusz_soltys/yii2-user",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "source": {
+        "type": "git",
+        "url":  "https://mariusz_soltys@bitbucket.org/mariusz_soltys/yii2-user.git",
+        "reference": "master"
+    },
+    "autoload": {
+    "psr-4": {
+      "mariusz_soltys\\yii2user\\": ""
+    }
+  }
+}
