@@ -5,6 +5,8 @@ namespace mariusz_soltys\yii2user\components;
 use Yii;
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\UserModule;
+use yii\helpers\Html;
+use yii\helpers\Json;
 
 class UWjuidate {
 	
@@ -54,13 +56,13 @@ class UWjuidate {
 		
 		$id = $htmlOptions['id'];
 		$options['dateFormat'] = 'yy-mm-dd';
-		$options=CJavaScript::encode($options);
+		$options=Json::encode($options);
 		
-		$basePath=Yii::getPathOfAlias('user.views.asset');
-		$baseUrl=Yii::$app->getAssetManager()->publish($basePath);
-		$cs = Yii::$app->getClientScript();
-		$cs->registerCssFile($baseUrl.'/css/'.$this->params['ui-theme'].'/jquery-ui.css');
-		$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
+//		$basePath=Yii::getPathOfAlias('user.views.asset');
+//		$baseUrl=Yii::$app->getAssetManager()->publish($basePath);
+//		$cs = Yii::$app->getClientScript();
+//		$cs->registerCssFile($baseUrl.'/css/'.$this->params['ui-theme'].'/jquery-ui.css');
+//		$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
 		
 		$language = $this->params['language'];
 		if ($language!='en') {
@@ -70,7 +72,7 @@ class UWjuidate {
 
 		$cs->registerScript('ProfileFieldController'.'#'.$id, $js);
 		
-		return CHtml::activeTextField($model,$field->varname,$htmlOptions);
+		return Html::activeInput($model,$field->varname,$htmlOptions);
 	}
 	
 }

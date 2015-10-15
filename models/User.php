@@ -3,7 +3,6 @@
 namespace mariusz_soltys\yii2user\models;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
 use mariusz_soltys\yii2user\UserModule;
@@ -33,9 +32,6 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 	const STATUS_ACTIVE=1;
 	const STATUS_BANNED=-1;
 	
-	//TODO: Delete for next version (backward compatibility)
-	const STATUS_BANED=-1;
-	
 	/**
 	 * The followings are the available columns in table 'users':
 	 * @var integer $id
@@ -47,8 +43,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 	 * @var integer $lastvisit
 	 * @var integer $superuser
 	 * @var integer $status
-	 * @var timestamp $create_at
-	 * @var timestamp $lastvisit_at
+	 * @var integer $create_at
+	 * @var integer $lastvisit_at
 	 */
 
 
@@ -69,8 +65,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 		// will receive user inputs.CConsoleApplication
 		return (
         (
-            get_class(Yii::$app)=='CConsoleApplication' ||
-            (get_class(Yii::$app)!='CConsoleApplication' && Yii::$app->user->isAdmin())
+            get_class(Yii::$app)=='yii\console\Application' ||
+            (get_class(Yii::$app)!='yii\console\Application' && Yii::$app->user->isAdmin())
         )?array(
 			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
 			array('password', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")),
@@ -103,12 +99,21 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
 	}
 
+    /**
+     * @inheritdoc
+     * @return UserQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
+
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
 	{
-		return array(
+		return [
 			'id' => UserModule::t("Id"),
 			'username'=>UserModule::t("username"),
 			'password'=>UserModule::t("password"),
@@ -122,29 +127,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 			'lastvisit_at' => UserModule::t("Last visit"),
 			'superuser' => UserModule::t("Superuser"),
 			'status' => UserModule::t("Status"),
-		);
+		];
 	}
-	
-	public function scopes()
-    {
-        return array(
-            'active'=>array(
-                'condition'=>'status='.self::STATUS_ACTIVE,
-            ),
-            'notactive'=>array(
-                'condition'=>'status='.self::STATUS_NOACTIVE,
-            ),
-            'banned'=>array(
-                'condition'=>'status='.self::STATUS_BANNED,
-            ),
-            'superuser'=>array(
-                'condition'=>'superuser=1',
-            ),
-            'notsafe'=>array(
-            	'select' => 'id, username, password, email, activkey, create_at, lastvisit_at, superuser, status',
-            ),
-        );
-    }
 	
 	public function defaultScope()
     {

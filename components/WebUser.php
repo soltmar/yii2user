@@ -2,8 +2,17 @@
 
 namespace mariusz_soltys\yii2user\components;
 
+use mariusz_soltys\yii2user\models\User;
+use mariusz_soltys\yii2user\UserModule;
 use Yii;
 use yii\helpers\ArrayHelper;
+
+
+/**
+ * @inheritdoc
+ *
+ * @property \app\models\User|\yii\web\IdentityInterface|null $identity The identity object associated with the currently logged-in user. null is returned if the user is not logged in (not authenticated).
+ */
 
 class WebUser extends \yii\web\User
 {
@@ -22,6 +31,14 @@ class WebUser extends \yii\web\User
     public $loginUrl=array('/user/login');
 
     private $_sessionKeys = array();
+
+    /** @var UserModule $module */
+    private $module;
+
+    function init() {
+        parent::init();
+        $this->module = Yii::$app->getModule('user');
+    }
 
     public function getRole()
     {
@@ -76,7 +93,7 @@ class WebUser extends \yii\web\User
      * @return User
      */
     public function model($id=0) {
-        return Yii::$app->getModule('user')->user($id);
+        return $this->module->user($id);
     }
 
     /**
@@ -90,15 +107,15 @@ class WebUser extends \yii\web\User
 
     /**
      * Returns user model by user name.
-     * @param string username
+     * @param string $username
      * @return User
      */
     public function getUserByName($username) {
-        return Yii::$app->getModule('user')->getUserByName($username);
+        return $this->module->getUserByName($username);
     }
 
     public function getAdmins() {
-        return Yii::$app->getModule('user')->getAdmins();
+        return $this->module->getAdmins();
     }
 
 
@@ -106,7 +123,7 @@ class WebUser extends \yii\web\User
      * @return boolean
      */
     public function isAdmin() {
-        return Yii::$app->getModule('user')->isAdmin();
+        return $this->module->isAdmin();
     }
 
     public function __get($name){

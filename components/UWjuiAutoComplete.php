@@ -5,6 +5,7 @@ namespace mariusz_soltys\yii2user\components;
 use mariusz_soltys\yii2user\UserModule;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Html;
 use yii\helpers\Json;
 
 class UWjuiAutoComplete {
@@ -115,15 +116,17 @@ class UWjuiAutoComplete {
 		$options['showAnim'] = 'fold';
 		$options['select'] = "js:function(event, ui) { $('#".get_class($model)."_".$field->varname."').val(ui.item.id);}";
 		$options=Json::encode($options);
-		//$basePath=Yii::getPathOfAlias('application.views.asset');
-		$basePath=Yii::getPathOfAlias('application.modules.user.views.asset');
-		$baseUrl=Yii::$app->getAssetManager()->publish($basePath);
-		$cs = Yii::$app->getClientScript();
-		$cs->registerCssFile($baseUrl.'/css/'.$this->params['ui-theme'].'/jquery-ui.css');
-		$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
+
+//		//$basePath=Yii::getPathOfAlias('application.views.asset');
+//		$basePath=Yii::getAlias('@mariusz_soltys/yii2user/views/asset');
+//		$baseUrl=Yii::$app->getAssetManager()->publish($basePath);
+//		$cs = Yii::$app->getClientScript();
+//		$cs->registerCssFile($baseUrl.'/css/'.$this->params['ui-theme'].'/jquery-ui.css');
+//		$cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
+
 		$js = "jQuery('#{$id}').autocomplete({$options});";
 		$cs->registerScript('Autocomplete'.'#'.$id, $js);
 		
-		return CHtml::activeTextField($model,$field->varname,$htmlOptions).CHtml::activehiddenField($model,$field->varname);
+		return Html::activeInput($model,$field->varname,$htmlOptions).Html::activeHiddenInput($model,$field->varname);
 	}
 } 
