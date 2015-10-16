@@ -7,7 +7,7 @@ namespace mariusz_soltys\yii2user\models;
  * LoginForm is the data structure for keeping
  * user login form data. It is used by the 'login' action of 'SiteController'.
  */
-class UserLogin extends yii\base\Model
+class UserLogin extends \yii\base\Model
 {
 	public $username;
 	public $password;

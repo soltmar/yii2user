@@ -32,23 +32,31 @@ class UserQuery extends \yii\db\ActiveQuery
         return $this->andWhere(['status' => User::STATUS_ACTIVE]);
     }
 
-    public function  notactive()
+    public function notactive()
     {
         return $this->andWhere(['status' => User::STATUS_NOACTIVE]);
     }
 
-    public function  banned()
+    public function banned()
     {
         return $this->andWhere(['status' => User::STATUS_BANNED]);
     }
 
-    public function  superuser()
+    public function superuser()
     {
         return $this->andWhere(['superuser' => 1]);
     }
 
-    public function  notsafe()
+    public function notsafe()
     {
         return $this->addSelect(['id', 'username', 'password', 'email', 'activkey', 'create_at', 'lastvisit_at', 'superuser', 'status']);
+    }
+
+    public function findbyPk($condition) {
+        $primaryKey = User::primaryKey();
+        if (isset($primaryKey[0])) {
+            $condition = [$primaryKey[0] => $condition];
+        }
+        return $this->andWhere($condition);
     }
 }

@@ -1,12 +1,15 @@
 <?php
 
 namespace mariusz_soltys\yii2user\models;
+use mariusz_soltys\yii2user\UserModule;
+use yii\base\Model;
+
 /**
  * UserChangePassword class.
  * UserChangePassword is the data structure for keeping
  * user change password form data. It is used by the 'changepassword' action of 'UserController'.
  */
-class UserChangePassword extends CFormModel {
+class UserChangePassword extends Model {
 	public $oldPassword;
 	public $password;
 	public $verifyPassword;

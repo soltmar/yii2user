@@ -24,80 +24,78 @@ use yii\web\IdentityInterface;
  * @property string $lastvisit_at
  *
  * The followings are the available model relations:
- * @property Profile $profiles
+ * @property Profile $profile
+ *
+ * @method ActiveRecord static findOne(mixed $condition)
  */
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
-	const STATUS_NOACTIVE=0;
-	const STATUS_ACTIVE=1;
-	const STATUS_BANNED=-1;
-	
-	/**
-	 * The followings are the available columns in table 'users':
-	 * @var integer $id
-	 * @var string $username
-	 * @var string $password
-	 * @var string $email
-	 * @var string $activkey
-	 * @var integer $createtime
-	 * @var integer $lastvisit
-	 * @var integer $superuser
-	 * @var integer $status
-	 * @var integer $create_at
-	 * @var integer $lastvisit_at
-	 */
+    const STATUS_NOACTIVE=0;
+    const STATUS_ACTIVE=1;
+    const STATUS_BANNED=-1;
 
+    const SCENARIO_SEARCH = 'search';
+    const SCENARION_INSERT = 'insert';
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public static function tableName()
-	{
-		return Yii::$app->getModule('user')->tableUsers;
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public static function tableName()
+    {
+        return Yii::$app->getModule('user')->tableUsers;
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.CConsoleApplication
-		return (
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules()
+    {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.CConsoleApplication
+        return (
         (
             get_class(Yii::$app)=='yii\console\Application' ||
             (get_class(Yii::$app)!='yii\console\Application' && Yii::$app->user->isAdmin())
-        )?array(
-			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
-			array('password', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")),
-			array('email', 'email'),
-			array('username', 'unique', 'message' => UserModule::t("This user's name already exists.")),
-			array('email', 'unique', 'message' => UserModule::t("This user's email address already exists.")),
-			array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u','message' => UserModule::t("Incorrect symbols (A-z0-9).")),
-			array('status', 'in', 'range'=>array(self::STATUS_NOACTIVE,self::STATUS_ACTIVE,self::STATUS_BANNED)),
-			array('superuser', 'in', 'range'=>array(0,1)),
-			array('create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true, 'on' => 'insert'),
-			array('lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true, 'on' => 'insert'),
-			array('username, email, superuser, status', 'required'),
-			array('superuser, status', 'numerical', 'integerOnly'=>true),
-			array('id, username, password, email, activkey, create_at, lastvisit_at, superuser, status', 'safe', 'on'=>'search'),
-		):((Yii::$app->user->id==$this->id)?array(
-			array('username, email', 'required'),
-			array('username', 'length', 'max'=>20, 'min' => 3,'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")),
-			array('email', 'email'),
-			array('username', 'unique', 'message' => UserModule::t("This user's name already exists.")),
-			array('username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u','message' => UserModule::t("Incorrect symbols (A-z0-9).")),
-			array('email', 'unique', 'message' => UserModule::t("This user's email address already exists.")),
-		):array()));
-	}
+        )?[
+            ['username', 'length', 'max'=>20, 'min' => 3,
+                'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")],
+            ['password', 'length', 'max'=>128, 'min' => 4,
+                'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")],
+            ['email', 'email'],
+            ['username', 'unique', 'message' => UserModule::t("This user's name already exists.")],
+            ['email', 'unique', 'message' => UserModule::t("This user's email address already exists.")],
+            ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
+                'message' => UserModule::t("Incorrect symbols (A-z0-9).")],
+            ['status', 'in', 'range'=>[self::STATUS_NOACTIVE,self::STATUS_ACTIVE,self::STATUS_BANNED]],
+            ['superuser', 'in', 'range'=>[0,1]],
+            ['create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true,
+                'on' => self::SCENARION_INSERT],
+            ['lastvisit_at', 'default', 'value' => '0000-00-00 00:00:00', 'setOnEmpty' => true,
+                'on' => self::SCENARION_INSERT],
+            ['username, email, superuser, status', 'required'],
+            ['superuser, status', 'numerical', 'integerOnly'=>true],
+            ['id, username, password, email, activkey, create_at, lastvisit_at, superuser, status', 'safe',
+                'on' => self::SCENARIO_SEARCH],
+        ]:((Yii::$app->user->id==$this->id)?[
+            ['username, email', 'required'],
+            ['username', 'length', 'max'=>20, 'min' => 3,
+                'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")],
+            ['email', 'email'],
+            ['username', 'unique', 'message' => UserModule::t("This user's name already exists.")],
+            ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
+                'message' => UserModule::t("Incorrect symbols (A-z0-9).")],
+            ['email', 'unique', 'message' => UserModule::t("This user's email address already exists.")],
+        ]:[])
+        );
+    }
 
-	/**
-	 * Relations
-	 */
-	public function getProfile()
-	{
+    /**
+     * Relations
+     */
+    public function getProfile()
+    {
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
-	}
+    }
 
     /**
      * @inheritdoc
@@ -108,71 +106,78 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return new UserQuery(get_called_class());
     }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'id' => UserModule::t("Id"),
-			'username'=>UserModule::t("username"),
-			'password'=>UserModule::t("password"),
-			'verifyPassword'=>UserModule::t("Retype Password"),
-			'email'=>UserModule::t("E-mail"),
-			'verifyCode'=>UserModule::t("Verification Code"),
-			'activkey' => UserModule::t("activation key"),
-			'createtime' => UserModule::t("Registration date"),
-			'create_at' => UserModule::t("Registration date"),
-			
-			'lastvisit_at' => UserModule::t("Last visit"),
-			'superuser' => UserModule::t("Superuser"),
-			'status' => UserModule::t("Status"),
-		];
-	}
-	
-	public function defaultScope()
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
     {
-        return ArrayHelper::merge(Yii::$app->getModule('user')->defaultScope,array(
+        return [
+            'id' => UserModule::t("Id"),
+            'username'=>UserModule::t("username"),
+            'password'=>UserModule::t("password"),
+            'verifyPassword'=>UserModule::t("Retype Password"),
+            'email'=>UserModule::t("E-mail"),
+            'verifyCode'=>UserModule::t("Verification Code"),
+            'activkey' => UserModule::t("activation key"),
+            'createtime' => UserModule::t("Registration date"),
+            'create_at' => UserModule::t("Registration date"),
+
+            'lastvisit_at' => UserModule::t("Last visit"),
+            'superuser' => UserModule::t("Superuser"),
+            'status' => UserModule::t("Status"),
+        ];
+    }
+
+    public function defaultScope()
+    {
+        return ArrayHelper::merge(Yii::$app->getModule('user')->defaultScope, [
             'alias'=>'user',
             'select' => 'user.id, user.username, user.email, user.create_at, user.lastvisit_at, user.superuser, user.status',
-        ));
+        ]);
     }
-	
-	public static function itemAlias($type,$code=NULL) {
-		$_items = array(
-			'UserStatus' => array(
-				self::STATUS_NOACTIVE => UserModule::t('Not active'),
-				self::STATUS_ACTIVE => UserModule::t('Active'),
-				self::STATUS_BANNED => UserModule::t('Banned'),
-			),
-			'AdminStatus' => array(
-				'0' => UserModule::t('No'),
-				'1' => UserModule::t('Yes'),
-			),
-		);
-		if (isset($code))
-			return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
-		else
-			return isset($_items[$type]) ? $_items[$type] : false;
-	}
 
-    public function getCreatetime() {
+    public static function itemAlias($type, $code = null)
+    {
+        $_items = array(
+            'UserStatus' => array(
+                self::STATUS_NOACTIVE => UserModule::t('Not active'),
+                self::STATUS_ACTIVE => UserModule::t('Active'),
+                self::STATUS_BANNED => UserModule::t('Banned'),
+            ),
+            'AdminStatus' => array(
+                '0' => UserModule::t('No'),
+                '1' => UserModule::t('Yes'),
+            ),
+        );
+        if (isset($code)) {
+            return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
+        } else {
+            return isset($_items[$type]) ? $_items[$type] : false;
+        }
+    }
+
+    public function getCreatetime()
+    {
         return strtotime($this->create_at);
     }
 
-    public function setCreatetime($value) {
-        $this->create_at=date('Y-m-d H:i:s',$value);
+    public function setCreatetime($value)
+    {
+        $this->create_at = date('Y-m-d H:i:s', $value);
     }
 
-    public function getLastvisit() {
+    public function getLastvisit()
+    {
         return strtotime($this->lastvisit_at);
     }
 
-    public function setLastvisit($value) {
-        $this->lastvisit_at=date('Y-m-d H:i:s',$value);
+    public function setLastvisit($value)
+    {
+        $this->lastvisit_at = date('Y-m-d H:i:s', $value);
     }
 
-    public function afterSave($insert, $changedAttributes) {
+    public function afterSave($insert, $changedAttributes)
+    {
         if (get_class(Yii::$app)=='CWebApplication'&&Profile::$regMode==false) {
             Yii::$app->user->updateSession();
         }

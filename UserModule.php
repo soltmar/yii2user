@@ -113,7 +113,7 @@ class UserModule extends \yii\base\Module
     {
         parent::init();
         $this->setAliases([
-            '@user-assets' => __DIR__ . '/views/assets'
+            '@user-assets' => __DIR__ . '/views/assets',
         ]);
     }
 
