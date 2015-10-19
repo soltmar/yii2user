@@ -2,102 +2,100 @@
 
 namespace mariusz_soltys\yii2user\controllers;
 
+use HttpException;
+use mariusz_soltys\yii2user\models\User;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+
 class UserController extends Controller
 {
-	/**
-	 * @var CActiveRecord the currently loaded data model instance.
-	 */
-	private $_model;
+    /**
+    í * @var CActiveRecord the currently loaded data model instance.
+     */
+    private $model;
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return ArrayHelper::merge(parent::filters(),array(
-			'accessControl', // perform access control for CRUD operations
-		));
-	}
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}	
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                ],
+            ],
+        ];
+    }
 
-	/**
-	 * Displays a particular model.
-	 */
-	public function actionView()
-	{
-		$model = $this->loadModel();
-		$this->render('view',array(
-			'model'=>$model,
-		));
-	}
+    /**
+     * Displays a particular model.
+     */
+    public function actionView()
+    {
+        $model = $this->loadModel();
+        $this->render('view', [
+            'model'=>$model,
+        ]);
+    }
 
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('User', array(
-			'criteria'=>array(
-		        'condition'=>'status>'.User::STATUS_BANNED,
-		    ),
-				
-			'pagination'=>array(
-				'pageSize'=>Yii::$app->controller->module->user_page_size,
-			),
-		));
+    /**
+     * Lists all models.
+     */
+    public function actionIndex()
+    {
+        $query = User::find()->where('status > '.User::STATUS_BANNED);
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => Yii::$app->controller->module->user_page_size,
+            ],
+        ]);
 
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
+        $this->render('index', [
+            'dataProvider'=>$provider,
+        ]);
+    }
 
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 */
-	public function loadModel()
-	{
-		if($this->_model===null)
-		{
-			if(isset($_GET['id']))
-				$this->_model=User::model()->findbyPk($_GET['id']);
-			if($this->_model===null)
-				throw new CHttpException(404,'The requested page does not exist.');
-		}
-		return $this->_model;
-	}
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     */
+    public function loadModel()
+    {
+        if ($this->model === null) {
+            if (isset($_GET['id'])) {
+                $this->model=User::findOne($_GET['id']);
+            }
+            if ($this->model === null) {
+                throw new HttpException(404, 'The requested page does not exist.');
+            }
+        }
+        return $this->model;
+    }
 
 
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer the primary key value. Defaults to null, meaning using the 'id' GET variable
-	 */
-	public function loadUser($id=null)
-	{
-		if($this->_model===null)
-		{
-			if($id!==null || isset($_GET['id']))
-				$this->_model=User::model()->findbyPk($id!==null ? $id : $_GET['id']);
-			if($this->_model===null)
-				throw new CHttpException(404,'The requested page does not exist.');
-		}
-		return $this->_model;
-	}
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer $id the primary key value. Defaults to null, meaning using the 'id' GET variable
+     * @return User
+     * @throws HttpException
+     */
+    public function loadUser($id = null)
+    {
+        if ($this->model===null) {
+            if ($id!==null || isset($_GET['id'])) {
+                $this->model=User::findOne($id!==null ? $id : $_GET['id']);
+            }
+            if ($this->model===null) {
+                throw new HttpException(404, 'The requested page does not exist.');
+            }
+        }
+        return $this->model;
+    }
 }

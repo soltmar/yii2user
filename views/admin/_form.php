@@ -1,73 +1,67 @@
+<?php
+
+use mariusz_soltys\yii2user\models\Profile;
+use mariusz_soltys\yii2user\models\User;
+use mariusz_soltys\yii2user\UserModule;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
+/* @var $this yii\web\View */
+/* @var $model mariusz_soltys\yii2user\models\User */
+/* @var $profile mariusz_soltys\yii2user\models\Profile */
+/* @var $form yii\widgets\ActiveForm */
+?>
+
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'user-form',
-	'enableAjaxValidation'=>true,
-	'htmlOptions' => array('enctype'=>'multipart/form-data'),
-));
-?>
 
-	<p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
+    <?php $form = ActiveForm::begin([
+        'id'=>'user-form',
+        'enableAjaxValidation'=>true,
+        'options' => ['enctype'=>'multipart/form-data'],
+    ]); ?>
 
-	<?php echo $form->errorSummary(array($model,$profile)); ?>
+    <p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
+    <?php echo $form->errorSummary(array($model,$profile)); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>128)); ?>
-		<?php echo $form->error($model,'password'); ?>
-	</div>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>128)); ?>
-		<?php echo $form->error($model,'email'); ?>
-	</div>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'superuser'); ?>
-		<?php echo $form->dropDownList($model,'superuser',User::itemAlias('AdminStatus')); ?>
-		<?php echo $form->error($model,'superuser'); ?>
-	</div>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->dropDownList($model,'status',User::itemAlias('UserStatus')); ?>
-		<?php echo $form->error($model,'status'); ?>
-	</div>
-<?php 
-		$profileFields=Profile::getFields();
-		if ($profileFields) {
-			foreach($profileFields as $field) {
-			?>
-	<div class="row">
-		<?php echo $form->labelEx($profile,$field->varname); ?>
-		<?php 
-		if ($widgetEdit = $field->widgetEdit($profile)) {
-			echo $widgetEdit;
-		} elseif ($field->range) {
-			echo $form->dropDownList($profile,$field->varname,Profile::range($field->range));
-		} elseif ($field->field_type=="TEXT") {
-			echo CHtml::activeTextArea($profile,$field->varname,array('rows'=>6, 'cols'=>50));
-		} else {
-			echo $form->textField($profile,$field->varname,array('size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)));
-		}
-		 ?>
-		<?php echo $form->error($profile,$field->varname); ?>
-	</div>
-			<?php
-			}
-		}
-?>
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save')); ?>
-	</div>
+    <?= $form->field($model, 'superuser')->dropDownList(User::itemAlias('AdminStatus')) ?>
 
-<?php $this->endWidget(); ?>
+    <?= $form->field($model, 'status')->dropDownList(User::itemAlias('UserStatus')) ?>
+
+    <?php
+    $profileFields=Profile::getFields();
+    if ($profileFields) {
+        foreach ($profileFields as $field) {
+            /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
+            $input = $form->field($model, $field->varname);
+
+            if ($widgetEdit = $field->widgetEdit($profile)) {
+                echo $widgetEdit;
+            } elseif ($field->range) {
+                echo $input->dropDownList(Profile::range($field->range));
+            } elseif ($field->field_type=="TEXT") {
+                echo $input->textarea(['rows'=>6, 'cols'=>50]);
+            } else {
+                echo $input->textInput(['size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)]);
+            }
+        }
+    }
+    ?>
+    <div class="form-group">
+        <?=
+        Html::submitButton(
+            $model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save'),
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+        ); ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div><!-- form -->

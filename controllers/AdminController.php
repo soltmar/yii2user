@@ -6,6 +6,7 @@ use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\UserModule;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\HttpException;
@@ -18,33 +19,25 @@ class AdminController extends Controller
 
     private $model;
 
-    /**
-     * @return array action filters
-     */
-    public function filters()
+    public function behaviors()
     {
-        return ArrayHelper::merge(parent::filters(), array(
-            'accessControl', // perform access control for CRUD operations
-        ));
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['admin','delete','create','update','view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'matchCallback'=>function () {
+                            return Yii::$app->user->isAdmin();
+                        },
+                    ],
+                ],
+            ],
+        ];
     }
 
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules()
-    {
-        return array(
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions'=>array('admin','delete','create','update','view'),
-                'users'=>UserModule::getAdmins(),
-            ),
-            array('deny',  // deny all users
-                'users'=>array('*'),
-            ),
-        );
-    }
+
     /**
      * Manages all models.
      */

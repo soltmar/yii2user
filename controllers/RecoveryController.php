@@ -4,7 +4,6 @@ namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\models\UserChangePassword;
-use mariusz_soltys\yii2user\models\UserQuery;
 use mariusz_soltys\yii2user\models\UserRecoveryForm;
 use mariusz_soltys\yii2user\UserModule;
 use Yii;
@@ -68,22 +67,25 @@ class RecoveryController extends Controller
                             ]
                         );
                         $message = UserModule::t(
-                            "You have requested the password recovery site {site_name}. To receive a new password, go to {activation_url}.",
+                            "You have requested the password recovery site {site_name}.
+                            To receive a new password, go to {activation_url}.",
                             [
                                 '{site_name}'=>Yii::$app->name,
                                 '{activation_url}'=>$activation_url,
                             ]
                         );
 
-                        UserModule::sendMail($user->email,$subject,$message);
+                        UserModule::sendMail($user->email, $subject, $message);
 
-                        Yii::$app->user->setFlash('recoveryMessage',UserModule::t("Please check your email. An instructions was sent to your email address."));
+                        Yii::$app->user->setFlash(
+                            'recoveryMessage',
+                            UserModule::t("Please check your email. An instructions was sent to your email address.")
+                        );
                         $this->refresh();
                     }
                 }
-                $this->render('recovery',array('form'=>$form));
+                $this->render('recovery', array('form'=>$form));
             }
         }
     }
-
 }

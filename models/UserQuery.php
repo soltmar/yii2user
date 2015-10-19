@@ -52,7 +52,8 @@ class UserQuery extends \yii\db\ActiveQuery
         return $this->addSelect(['id', 'username', 'password', 'email', 'activkey', 'create_at', 'lastvisit_at', 'superuser', 'status']);
     }
 
-    public function findbyPk($condition) {
+    public function findbyPk($condition)
+    {
         $primaryKey = User::primaryKey();
         if (isset($primaryKey[0])) {
             $condition = [$primaryKey[0] => $condition];

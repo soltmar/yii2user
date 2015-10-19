@@ -30,19 +30,20 @@ class WebUser extends \yii\web\User
      */
     public $loginUrl=array('/user/login');
 
-    private $_sessionKeys = array();
+    private $sessionKeys = array();
 
     /** @var UserModule $module */
     private $module;
 
-    function init() {
+    public function init()
+    {
         parent::init();
         $this->module = Yii::$app->getModule('user');
     }
 
     public function getRole()
     {
-        return Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());;
+        return Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
     }
     
     public function getId()
@@ -65,12 +66,12 @@ class WebUser extends \yii\web\User
 //    }
 
     protected function afterLogin($identity, $cookieBased, $duration)
-	{
+    {
         parent::afterLogin($identity, $cookieBased, $duration);
        // $this->updateSession();
 
         //TODO Check what user components properties needs to be stored in session
-	}
+    }
 
 //    public function updateSession() {
 //        if ($user = Yii::$app->getModule('user')->user($this->id)) {
@@ -92,7 +93,8 @@ class WebUser extends \yii\web\User
      * @param integer $id user id. Default - current user id.
      * @return User
      */
-    public function model($id=0) {
+    public function model($id = 0)
+    {
         return $this->module->user($id);
     }
 
@@ -110,12 +112,47 @@ class WebUser extends \yii\web\User
      * @param string $username
      * @return User
      */
-    public function getUserByName($username) {
+    public function getUserByName($username)
+    {
         return $this->module->getUserByName($username);
     }
 
-    public function getAdmins() {
+    public function getAdmins()
+    {
         return $this->module->getAdmins();
+    }
+
+    /**
+     * This is function here is to make it compatible with new Yii2 flash messages
+     * @param string $key
+     * @param mixed $value
+     * @param bool|true $del
+     */
+    public function setFlash($key, $value, $del = true)
+    {
+        Yii::$app->session->setFlash($key, $value, $del);
+    }
+
+    /**
+     * This is function here is to make it compatible with new Yii2 flash messages
+     * @param $key
+     * @param string|null $defaultValue
+     * @param bool|false $delete
+     * @return mixed
+     */
+    public function getFlash($key, $defaultValue = null, $delete = false)
+    {
+        return Yii::$app->session->getFlash($key, $defaultValue, $delete);
+    }
+
+    /**
+     * This is function here is to make it compatible with new Yii2 flash messages
+     * @param $key
+     * @return bool
+     */
+    public function hasFlash($key)
+    {
+        return Yii::$app->session->hasFlash($key);
     }
 
 
@@ -130,7 +167,7 @@ class WebUser extends \yii\web\User
         try{
             return parent::__get($name);
         }catch (\yii\base\UnknownPropertyException $e){
-            if(in_array($name, $this->_sessionKeys)){
+            if(in_array($name, $this->sessionKeys)){
                 return \Yii::$app->session->get("user.$name");
             }else{
                 throw $e;
@@ -142,7 +179,7 @@ class WebUser extends \yii\web\User
         try {
             parent::__set($name, $value);
         }catch (\yii\base\UnknownPropertyException $e){
-            if(in_array($name, $this->_sessionKeys)){
+            if(in_array($name, $this->sessionKeys)){
                 \Yii::$app->session->set("user.$name", $value);
             }else{
                 throw $e;

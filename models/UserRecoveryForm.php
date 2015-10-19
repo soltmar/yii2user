@@ -1,6 +1,8 @@
 <?php
 
 namespace mariusz_soltys\yii2user\models;
+
+use mariusz_soltys\yii2user\UserModule;
 use yii\base\Model;
 
 /**
@@ -10,7 +12,8 @@ use yii\base\Model;
  */
 class UserRecoveryForm extends Model
 {
-    public $login_or_email, $user_id;
+    public $login_or_email;
+    public $user_id;
 
     /**
      * Declares the validation rules.
@@ -37,25 +40,29 @@ class UserRecoveryForm extends Model
         );
     }
 
-    public function checkexists($attribute,$params) {
-        if(!$this->hasErrors())  // we only want to authenticate when no input errors
-        {
-            if (strpos($this->login_or_email,"@")) {
-                $user=User::model()->findByAttributes(array('email'=>$this->login_or_email));
-                if ($user)
+    public function checkexists()
+    {
+        if (!$this->hasErrors()) {// we only want to authenticate when no input errors
+            /**@var User $user*/
+            if (strpos($this->login_or_email, "@")) {
+                $user=User::findOne(['email'=>$this->login_or_email]);
+                if ($user) {
                     $this->user_id=$user->id;
+                }
             } else {
-                $user=User::model()->findByAttributes(array('username'=>$this->login_or_email));
-                if ($user)
+                $user=User::findOne(['username'=>$this->login_or_email]);
+                if ($user) {
                     $this->user_id=$user->id;
+                }
             }
 
-            if($user===null)
-                if (strpos($this->login_or_email,"@")) {
-                    $this->addError("login_or_email",UserModule::t("Email is incorrect."));
+            if ($user === null) {
+                if (strpos($this->login_or_email, "@")) {
+                    $this->addError("login_or_email", UserModule::t("Email is incorrect."));
                 } else {
-                    $this->addError("login_or_email",UserModule::t("Username is incorrect."));
+                    $this->addError("login_or_email", UserModule::t("Username is incorrect."));
                 }
+            }
         }
     }
 

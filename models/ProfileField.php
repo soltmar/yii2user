@@ -4,24 +4,26 @@ namespace mariusz_soltys\yii2user\models;
 use Yii;
 use yii\db\ActiveRecord;
 use mariusz_soltys\yii2user\UserModule;
-use yii\helpers\BaseJson;
+use yii\helpers\Json;
 
 /**
  * The followings are the available columns in table 'profiles_fields':
- * @property integer $id
- * @property string $varname
- * @property string $title
- * @property string $field_type
- * @property integer $field_size
- * @property integer $field_size_mix
- * @property integer $required
- * @property integer $match
- * @property string $range
- * @property string $error_message
- * @property string $other_validator
- * @property string $default
- * @property integer $position
- * @property integer $visible
+ * @property integer id
+ * @property string varname
+ * @property string title
+ * @property string field_type
+ * @property integer field_size
+ * @property integer field_size_mix
+ * @property integer required
+ * @property integer match
+ * @property string range
+ * @property string error_message
+ * @property string other_validator
+ * @property string default
+ * @property integer position
+ * @property integer visible
+ * @property string widget
+ * @property string widgetparams
  */
 
 class ProfileField extends ActiveRecord
@@ -68,17 +70,6 @@ class ProfileField extends ActiveRecord
     }
 
     /**
-     * @return array relational rules.
-     */
-    public function relations()
-    {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-        );
-    }
-
-    /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels()
@@ -103,72 +94,63 @@ class ProfileField extends ActiveRecord
         );
     }
 
-    public function scopes()
+    /**
+     * @inheritdoc
+     * @return ProfileFieldQuery the active query used by this AR class.
+     */
+    public static function find()
     {
-        return array(
-            'forAll'=>array(
-                'condition'=>'visible='.self::VISIBLE_ALL,
-                'order'=>'position',
-            ),
-            'forUser'=>array(
-                'condition'=>'visible>='.self::VISIBLE_REGISTER_USER,
-                'order'=>'position',
-            ),
-            'forOwner'=>array(
-                'condition'=>'visible>='.self::VISIBLE_ONLY_OWNER,
-                'order'=>'position',
-            ),
-            'forRegistration'=>array(
-                'condition'=>'required='.self::REQUIRED_NO_SHOW_REG.' OR required='.self::REQUIRED_YES_SHOW_REG,
-                'order'=>'position',
-            ),
-            'sort'=>array(
-                'order'=>'position',
-            ),
-        );
+        return new ProfileFieldQuery(get_called_class());
     }
 
     /**
-     * @param $value
-     * @return formated value (string)
+     * @param ActiveRecord $model
+     * @return string formated value
+     * @internal param $value
      */
-    public function widgetView($model) {
+    public function widgetView($model)
+    {
         if ($this->widget && class_exists($this->widget)) {
             $widgetClass = new $this->widget;
 
             $arr = $this->widgetparams;
             if ($arr) {
                 $newParams = $widgetClass->params;
-                $arr = BaseJson::decode($arr, true);
-                foreach ($arr as $p=>$v) {
-                    if (isset($newParams[$p])) $newParams[$p] = $v;
+                $arr = Json::decode($arr, true);
+                foreach ($arr as $p => $v) {
+                    if (isset($newParams[$p])) {
+                        $newParams[$p] = $v;
+                    }
                 }
                 $widgetClass->params = $newParams;
             }
 
-            if (method_exists($widgetClass,'viewAttribute')) {
-                return $widgetClass->viewAttribute($model,$this);
+            if (method_exists($widgetClass, 'viewAttribute')) {
+                return $widgetClass->viewAttribute($model, $this);
             }
         }
         return false;
     }
 
-    public function widgetEdit($model,$params=array()) {
+    public function widgetEdit($model, $params = [])
+    {
         if ($this->widget && class_exists($this->widget)) {
             $widgetClass = new $this->widget;
 
             $arr = $this->widgetparams;
             if ($arr) {
                 $newParams = $widgetClass->params;
-                $arr = (array)CJavaScript::jsonDecode($arr);
-                foreach ($arr as $p=>$v) {
-                    if (isset($newParams[$p])) $newParams[$p] = $v;
+                $arr = (array)Json::decode($arr);
+                foreach ($arr as $p => $v) {
+                    if (isset($newParams[$p])) {
+                        $newParams[$p] = $v;
+                    }
                 }
                 $widgetClass->params = $newParams;
             }
 
-            if (method_exists($widgetClass,'editAttribute')) {
-                return $widgetClass->editAttribute($model,$this,$params);
+            if (method_exists($widgetClass, 'editAttribute')) {
+                return $widgetClass->editAttribute($model, $this, $params);
             }
         }
         return false;
@@ -213,44 +195,5 @@ class ProfileField extends ActiveRecord
         } else {
             return isset($_items[$type]) ? $_items[$type] : false;
         }
-    }
-
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-     */
-    public function search()
-    {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
-
-        $criteria=new CDbCriteria;
-
-        $criteria->compare('id',$this->id);
-        $criteria->compare('varname',$this->varname,true);
-        $criteria->compare('title',$this->title,true);
-        $criteria->compare('field_type',$this->field_type,true);
-        $criteria->compare('field_size',$this->field_size);
-        $criteria->compare('field_size_min',$this->field_size_min);
-        $criteria->compare('required',$this->required);
-        $criteria->compare('match',$this->match,true);
-        $criteria->compare('range',$this->range,true);
-        $criteria->compare('error_message',$this->error_message,true);
-        $criteria->compare('other_validator',$this->other_validator,true);
-        $criteria->compare('default',$this->default,true);
-        $criteria->compare('widget',$this->widget,true);
-        $criteria->compare('widgetparams',$this->widgetparams,true);
-        $criteria->compare('position',$this->position);
-        $criteria->compare('visible',$this->visible);
-
-        return new CActiveDataProvider(get_class($this), array(
-            'criteria'=>$criteria,
-            'pagination'=>array(
-                'pageSize'=>Yii::$app->controller->module->fields_page_size,
-            ),
-            'sort'=>array(
-                'defaultOrder'=>'position',
-            ),
-        ));
     }
 }
