@@ -130,15 +130,15 @@ class Module extends \yii\base\Module
         }
     }
 
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-        // your custom code here
-        //
-        // return true; // or false to not run the action
-    }
+//    public function beforeAction($action)
+//    {
+//        if (!parent::beforeAction($action)) {
+//            return false;
+//        }
+//        // your custom code here
+//        //
+//        // return true; // or false to not run the action
+//    }
 
 
     /**

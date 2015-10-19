@@ -10,7 +10,7 @@ use yii\web\Controller;
 
 class LoginController extends Controller
 {
-    public $defaultAction = 'index';
+    public $defaultAction = 'login';
 
     public function init()
     {
@@ -27,7 +27,6 @@ class LoginController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = 'main';
         if (Yii::$app->user->isGuest) {
             /** @var $model UserLogin */
             $model=new UserLogin;
