@@ -46,7 +46,7 @@ $('.search-form form').submit(function(){
 		),
 		array(
 			'name'=>'title',
-			'value'=>'UserModule::t($data->title)',
+			'value'=>'Module::t($data->title)',
 		),
 		array(
 			'name'=>'field_type',

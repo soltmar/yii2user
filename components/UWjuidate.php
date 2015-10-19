@@ -4,7 +4,7 @@ namespace mariusz_soltys\yii2user\components;
 
 use Yii;
 use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\helpers\Json;
 
@@ -25,11 +25,11 @@ class UWjuidate {
 	public function init() {
 		return array(
 			'name'=>__CLASS__,
-			'label'=>UserModule::t('jQueryUI datepicker'),
+			'label'=>Module::t('jQueryUI datepicker'),
 			'fieldType'=>array('DATE','VARCHAR'),
 			'params'=>$this->params,
 			'paramsLabels' => array(
-				'dateFormat'=>UserModule::t('Date format'),
+				'dateFormat'=>Module::t('Date format'),
 			),
 		);
 	}

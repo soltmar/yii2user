@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 
 class UWrelBelongsTo {
 	
@@ -20,14 +20,14 @@ class UWrelBelongsTo {
 	public function init() {
 		return array(
 			'name'=>__CLASS__,
-			'label'=>UserModule::t('Relation Belongs To',array(),__CLASS__),
+			'label'=>Module::t('Relation Belongs To',array(),__CLASS__),
 			'fieldType'=>array('INTEGER'),
 			'params'=>$this->params,
 			'paramsLabels' => array(
-				'modelName'=>UserModule::t('Model Name',array(),__CLASS__),
-				'optionName'=>UserModule::t('Lable field name',array(),__CLASS__),
-				'emptyField'=>UserModule::t('Empty item name',array(),__CLASS__),
-				'relationName'=>UserModule::t('Profile model relation name',array(),__CLASS__),
+				'modelName'=>Module::t('Model Name',array(),__CLASS__),
+				'optionName'=>Module::t('Lable field name',array(),__CLASS__),
+				'emptyField'=>Module::t('Empty item name',array(),__CLASS__),
+				'relationName'=>Module::t('Profile model relation name',array(),__CLASS__),
 			),
 		);
 	}

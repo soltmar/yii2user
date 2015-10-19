@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\models;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 
 /**
  * RegistrationForm class.
@@ -23,32 +23,32 @@ class RegistrationForm extends User
                 'length',
                 'max'=>20,
                 'min' => 3,
-                'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")
+                'message' => Module::t("Incorrect username (length between 3 and 20 characters).")
             ],
             [
                 'password',
                 'length',
                 'max'=>128,
                 'min' => 4,
-                'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")
+                'message' => Module::t("Incorrect password (minimal length 4 symbols).")
             ],
             ['email', 'email'],
-            ['username', 'unique', 'message' => UserModule::t("This user's name already exists.")],
-            ['email', 'unique', 'message' => UserModule::t("This user's email address already exists.")],
+            ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
+            ['email', 'unique', 'message' => Module::t("This user's email address already exists.")],
 //            [
 //                'verifyPassword',
 //                'compare',
 //                'compareAttribute'=>'password',
-//                'message' => UserModule::t("Retype Password is incorrect.")
+//                'message' => Module::t("Retype Password is incorrect.")
 //            ],
             [
                 'username',
                 'match',
-                'pattern' => '/^[A-Za-z0-9_]+$/u','message' => UserModule::t("Incorrect symbols (A-z0-9).")
+                'pattern' => '/^[A-Za-z0-9_]+$/u','message' => Module::t("Incorrect symbols (A-z0-9).")
             ],
         ];
         if (!(isset($_POST['ajax']) && $_POST['ajax']==='registration-form')) {
-            array_push($rules, ['verifyCode', 'captcha', 'allowEmpty'=>!UserModule::doCaptcha('registration')]);
+            array_push($rules, ['verifyCode', 'captcha', 'allowEmpty'=>!Module::doCaptcha('registration')]);
         }
 
         array_push(
@@ -57,7 +57,7 @@ class RegistrationForm extends User
                 'verifyPassword',
                 'compare',
                 'compareAttribute'=>'password',
-                'message' => UserModule::t("Retype Password is incorrect.")
+                'message' => Module::t("Retype Password is incorrect.")
             ]
         );
 

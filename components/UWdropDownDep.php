@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -36,17 +36,17 @@ class UWdropDownDep {
 	public function init() {
 		return [
 			'name'=>__CLASS__,
-			'label'=>UserModule::t('DropDown List Dependent',[],__CLASS__),
+			'label'=>Module::t('DropDown List Dependent',[],__CLASS__),
 			'fieldType'=>['INTEGER'],
 			'params'=>$this->params,
 			'paramsLabels' => [
-				'modelName'=>UserModule::t('Model Name',[],__CLASS__),
-				'optionName'=>UserModule::t('Lable field name',[],__CLASS__),
-				'emptyField'=>UserModule::t('Empty item name',[],__CLASS__),
-				'relationName'=>UserModule::t('Profile model relation name',[],__CLASS__),
-				'modelDestName'=>UserModule::t('Model Dest Name',[],__CLASS__),
-				'destField'=>UserModule::t('Dest Field',[],__CLASS__),
-				'optionDestName'=>UserModule::t('Label Dest field name',[],__CLASS__),
+				'modelName'=>Module::t('Model Name',[],__CLASS__),
+				'optionName'=>Module::t('Lable field name',[],__CLASS__),
+				'emptyField'=>Module::t('Empty item name',[],__CLASS__),
+				'relationName'=>Module::t('Profile model relation name',[],__CLASS__),
+				'modelDestName'=>Module::t('Model Dest Name',[],__CLASS__),
+				'destField'=>Module::t('Dest Field',[],__CLASS__),
+				'optionDestName'=>Module::t('Label Dest field name',[],__CLASS__),
 			],
 		];
 	}

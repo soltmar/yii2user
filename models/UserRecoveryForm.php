@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\models;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\base\Model;
 
 /**
@@ -25,7 +25,7 @@ class UserRecoveryForm extends Model
         return array(
             // username and password are required
             array('login_or_email', 'required'),
-            array('login_or_email', 'match', 'pattern' => '/^[A-Za-z0-9@.-\s,]+$/u','message' => UserModule::t("Incorrect symbols (A-z0-9).")),
+            array('login_or_email', 'match', 'pattern' => '/^[A-Za-z0-9@.-\s,]+$/u','message' => Module::t("Incorrect symbols (A-z0-9).")),
             // password needs to be authenticated
             array('login_or_email', 'checkexists'),
         );
@@ -36,7 +36,7 @@ class UserRecoveryForm extends Model
     public function attributeLabels()
     {
         return array(
-            'login_or_email'=>UserModule::t("username or email"),
+            'login_or_email'=>Module::t("username or email"),
         );
     }
 
@@ -58,9 +58,9 @@ class UserRecoveryForm extends Model
 
             if ($user === null) {
                 if (strpos($this->login_or_email, "@")) {
-                    $this->addError("login_or_email", UserModule::t("Email is incorrect."));
+                    $this->addError("login_or_email", Module::t("Email is incorrect."));
                 } else {
-                    $this->addError("login_or_email", UserModule::t("Username is incorrect."));
+                    $this->addError("login_or_email", Module::t("Username is incorrect."));
                 }
             }
         }

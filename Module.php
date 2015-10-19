@@ -5,7 +5,7 @@ namespace mariusz_soltys\yii2user;
 use mariusz_soltys\yii2user\models\User;
 use Yii;
 
-class UserModule extends \yii\base\Module
+class Module extends \yii\base\Module
 {
     /**
      * @var int
@@ -108,6 +108,11 @@ class UserModule extends \yii\base\Module
      */
     public $componentBehaviors=array();
 
+    /**
+     * @inheritdoc
+     */
+    public $controllerNamespace = 'mariusz_soltys\yii2user\controllers';
+
 
     public function init()
     {
@@ -143,10 +148,10 @@ class UserModule extends \yii\base\Module
      * @return string
      */
     public static function t($str='',$params=array(),$dic='user') {
-        if (Yii::t("UserModule", $str)==$str)
-            return Yii::t("UserModule.".$dic, $str, $params);
+        if (Yii::t("Module", $str)==$str)
+            return Yii::t("Module.".$dic, $str, $params);
         else
-            return Yii::t("UserModule", $str, $params);
+            return Yii::t("Module", $str, $params);
     }
 
     /**

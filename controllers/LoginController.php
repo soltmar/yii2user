@@ -10,13 +10,24 @@ use yii\web\Controller;
 
 class LoginController extends Controller
 {
-    public $defaultAction = 'login';
+    public $defaultAction = 'index';
+
+    public function init()
+    {
+        parent::init();
+    }
+
+    public function actionIndex()
+    {
+        echo "Yoooo";
+    }
 
     /**
      * Displays the login page
      */
     public function actionLogin()
     {
+        $this->layout = 'main';
         if (Yii::$app->user->isGuest) {
             /** @var $model UserLogin */
             $model=new UserLogin;
@@ -34,7 +45,7 @@ class LoginController extends Controller
                 }
             }
             // display the login form
-            $this->render('/user/login', ['model'=>$model]);
+            return $this->render('/user/login', ['model'=>$model]);
         } else {
             $this->redirect(Yii::$app->controller->module->returnUrl);
         }

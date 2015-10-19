@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\base\Event;
 use yii\db\ActiveRecord;
@@ -30,11 +30,11 @@ class UWfile {
     public function init() {
         return array(
             'name'=>__CLASS__,
-            'label'=>UserModule::t('File field'),
+            'label'=>Module::t('File field'),
             'fieldType'=>array('VARCHAR'),
             'params'=>$this->params,
             'paramsLabels' => array(
-                'path'=>UserModule::t('Upload path'),
+                'path'=>Module::t('Upload path'),
             ),
             'other_validator'=>array(
                 'file'=>array(
@@ -113,7 +113,7 @@ class UWfile {
         
         return Html::activeFileInput($model,$field->varname,$params)
         .(($model->getAttribute($field->varname))?'<br/>'.Html::activeCheckBox($model,'[uwfdel]'.$field->varname,$params)
-        .' '.Html::activeLabel($model,'[uwfdel]'.$field->varname,array('label'=>UserModule::t('Delete file'),'style'=>'display:inline;')):'')
+        .' '.Html::activeLabel($model,'[uwfdel]'.$field->varname,array('label'=>Module::t('Delete file'),'style'=>'display:inline;')):'')
         ;
     }
 

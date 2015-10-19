@@ -2,7 +2,7 @@
 
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
         'options' => ['enctype'=>'multipart/form-data'],
     ]); ?>
 
-    <p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
+    <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
     <?php echo $form->errorSummary(array($model,$profile)); ?>
 
@@ -57,7 +57,7 @@ use yii\widgets\ActiveForm;
     <div class="form-group">
         <?=
         Html::submitButton(
-            $model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save'),
+            $model->isNewRecord ? Module::t('Create') : Module::t('Save'),
             ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
         ); ?>
     </div>

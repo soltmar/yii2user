@@ -4,7 +4,7 @@ namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;

@@ -5,7 +5,7 @@ namespace mariusz_soltys\yii2user\models;
 use Yii;
 use yii\db\ActiveRecord;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\helpers\Json;
 
 class Profile extends ActiveRecord
@@ -68,7 +68,7 @@ class Profile extends ActiveRecord
                         'min' => $field->field_size_min
                     ];
                     if ($field->error_message) {
-                        $field_rule['message'] = UserModule::t($field->error_message);
+                        $field_rule['message'] = Module::t($field->error_message);
                     }
                     array_push($rules, $field_rule);
                 }
@@ -79,14 +79,14 @@ class Profile extends ActiveRecord
                             $field_rule = array($field->varname, $name);
                             $field_rule = array_merge($field_rule, (array)$validator[$name]);
                             if ($field->error_message) {
-                                $field_rule['message'] = UserModule::t($field->error_message);
+                                $field_rule['message'] = Module::t($field->error_message);
                             }
                             array_push($rules, $field_rule);
                         }
                     } else {
                         $field_rule = array($field->varname, $field->other_validator);
                         if ($field->error_message) {
-                            $field_rule['message'] = UserModule::t($field->error_message);
+                            $field_rule['message'] = Module::t($field->error_message);
                         }
                         array_push($rules, $field_rule);
                     }
@@ -102,21 +102,21 @@ class Profile extends ActiveRecord
                     }
 
                     if ($field->error_message) {
-                        $field_rule['message'] = UserModule::t($field->error_message);
+                        $field_rule['message'] = Module::t($field->error_message);
                     }
                     array_push($rules, $field_rule);
                 }
                 if ($field->match) {
                     $field_rule = array($field->varname, 'match', 'pattern' => $field->match);
                     if ($field->error_message) {
-                        $field_rule['message'] = UserModule::t($field->error_message);
+                        $field_rule['message'] = Module::t($field->error_message);
                     }
                     array_push($rules, $field_rule);
                 }
                 if ($field->range) {
                     $field_rule = array($field->varname, 'in', 'range' => self::rangeRules($field->range));
                     if ($field->error_message) {
-                        $field_rule['message'] = UserModule::t($field->error_message);
+                        $field_rule['message'] = Module::t($field->error_message);
                     }
                     array_push($rules, $field_rule);
                 }
@@ -146,15 +146,15 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         $labels = array(
-            'user_id' => UserModule::t('User ID'),
+            'user_id' => Module::t('User ID'),
         );
         $model=self::getFields();
 
         foreach ($model as $field) {
             if (Yii::$app->getModule('user')->fieldsMessage) {
-                $l = UserModule::t($field->title, array(), Yii::$app->getModule('user')->fieldsMessage);
+                $l = Module::t($field->title, array(), Yii::$app->getModule('user')->fieldsMessage);
             } else {
-                $l = UserModule::t($field->title);
+                $l = Module::t($field->title);
             }
             $labels[$field->varname] = $l;
         }

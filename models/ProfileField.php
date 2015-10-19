@@ -3,7 +3,7 @@ namespace mariusz_soltys\yii2user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\helpers\Json;
 
 /**
@@ -58,8 +58,8 @@ class ProfileField extends ActiveRecord
         // will receive user inputs.
         return array(
             array('varname, title, field_type', 'required'),
-            array('varname', 'match', 'pattern' => '/^[A-Za-z_0-9]+$/u','message' => UserModule::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")),
-            array('varname', 'unique', 'message' => UserModule::t("This field already exists.")),
+            array('varname', 'match', 'pattern' => '/^[A-Za-z_0-9]+$/u','message' => Module::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")),
+            array('varname', 'unique', 'message' => Module::t("This field already exists.")),
             array('varname, field_type', 'length', 'max'=>50),
             array('field_size_min, required, position, visible', 'numerical', 'integerOnly'=>true),
             array('field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'),
@@ -75,22 +75,22 @@ class ProfileField extends ActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id' => UserModule::t('Id'),
-            'varname' => UserModule::t('Variable name'),
-            'title' => UserModule::t('Title'),
-            'field_type' => UserModule::t('Field Type'),
-            'field_size' => UserModule::t('Field Size'),
-            'field_size_min' => UserModule::t('Field Size min'),
-            'required' => UserModule::t('Required'),
-            'match' => UserModule::t('Match'),
-            'range' => UserModule::t('Range'),
-            'error_message' => UserModule::t('Error Message'),
-            'other_validator' => UserModule::t('Other Validator'),
-            'default' => UserModule::t('Default'),
-            'widget' => UserModule::t('Widget'),
-            'widgetparams' => UserModule::t('Widget parametrs'),
-            'position' => UserModule::t('Position'),
-            'visible' => UserModule::t('Visible'),
+            'id' => Module::t('Id'),
+            'varname' => Module::t('Variable name'),
+            'title' => Module::t('Title'),
+            'field_type' => Module::t('Field Type'),
+            'field_size' => Module::t('Field Size'),
+            'field_size_min' => Module::t('Field Size min'),
+            'required' => Module::t('Required'),
+            'match' => Module::t('Match'),
+            'range' => Module::t('Range'),
+            'error_message' => Module::t('Error Message'),
+            'other_validator' => Module::t('Other Validator'),
+            'default' => Module::t('Default'),
+            'widget' => Module::t('Widget'),
+            'widgetparams' => Module::t('Widget parametrs'),
+            'position' => Module::t('Position'),
+            'visible' => Module::t('Visible'),
         );
     }
 
@@ -166,27 +166,27 @@ class ProfileField extends ActiveRecord
     {
         $_items = array(
             'field_type' => array(
-                'INTEGER' => UserModule::t('INTEGER'),
-                'VARCHAR' => UserModule::t('VARCHAR'),
-                'TEXT'=> UserModule::t('TEXT'),
-                'DATE'=> UserModule::t('DATE'),
-                'FLOAT'=> UserModule::t('FLOAT'),
-                'DECIMAL'=> UserModule::t('DECIMAL'),
-                'BOOL'=> UserModule::t('BOOL'),
-                'BLOB'=> UserModule::t('BLOB'),
-                'BINARY'=> UserModule::t('BINARY'),
+                'INTEGER' => Module::t('INTEGER'),
+                'VARCHAR' => Module::t('VARCHAR'),
+                'TEXT'=> Module::t('TEXT'),
+                'DATE'=> Module::t('DATE'),
+                'FLOAT'=> Module::t('FLOAT'),
+                'DECIMAL'=> Module::t('DECIMAL'),
+                'BOOL'=> Module::t('BOOL'),
+                'BLOB'=> Module::t('BLOB'),
+                'BINARY'=> Module::t('BINARY'),
             ),
             'required' => array(
-                self::REQUIRED_NO => UserModule::t('No'),
-                self::REQUIRED_NO_SHOW_REG => UserModule::t('No, but show on registration form'),
-                self::REQUIRED_YES_SHOW_REG => UserModule::t('Yes and show on registration form'),
-                self::REQUIRED_YES_NOT_SHOW_REG => UserModule::t('Yes'),
+                self::REQUIRED_NO => Module::t('No'),
+                self::REQUIRED_NO_SHOW_REG => Module::t('No, but show on registration form'),
+                self::REQUIRED_YES_SHOW_REG => Module::t('Yes and show on registration form'),
+                self::REQUIRED_YES_NOT_SHOW_REG => Module::t('Yes'),
             ),
             'visible' => array(
-                self::VISIBLE_ALL => UserModule::t('For all'),
-                self::VISIBLE_REGISTER_USER => UserModule::t('Registered users'),
-                self::VISIBLE_ONLY_OWNER => UserModule::t('Only owner'),
-                self::VISIBLE_NO => UserModule::t('Hidden'),
+                self::VISIBLE_ALL => Module::t('For all'),
+                self::VISIBLE_REGISTER_USER => Module::t('Registered users'),
+                self::VISIBLE_ONLY_OWNER => Module::t('Only owner'),
+                self::VISIBLE_NO => Module::t('Hidden'),
             ),
         );
 

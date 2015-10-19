@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
 
@@ -46,18 +46,18 @@ class UHtml extends Html
 
                 $monthOptions = array(
 					'0' => ' - ',
-					'1'=> UserModule::t('January'),
-					'2'=> UserModule::t('February'),
-					'3'=> UserModule::t('March'),
-					'4'=> UserModule::t('April'),
-					'5'=> UserModule::t('May'),
-					'6'=> UserModule::t('June'),
-					'7'=> UserModule::t('July'),
-					'8'=> UserModule::t('August'),
-					'9'=> UserModule::t('September'),
-					'10'=> UserModule::t('October'),
-					'11'=> UserModule::t('November'),
-					'12'=> UserModule::t('December'),
+					'1'=> Module::t('January'),
+					'2'=> Module::t('February'),
+					'3'=> Module::t('March'),
+					'4'=> Module::t('April'),
+					'5'=> Module::t('May'),
+					'6'=> Module::t('June'),
+					'7'=> Module::t('July'),
+					'8'=> Module::t('August'),
+					'9'=> Module::t('September'),
+					'10'=> Module::t('October'),
+					'11'=> Module::t('November'),
+					'12'=> Module::t('December'),
                 );
 
                 $yearOptions = array('0'=>' - ');
@@ -130,18 +130,18 @@ class UHtml extends Html
 
                 $monthOptions = array(
 					'00' => ' - ',
-					'01'=> UserModule::t('January'),
-					'02'=> UserModule::t('February'),
-					'03'=> UserModule::t('March'),
-					'04'=> UserModule::t('April'),
-					'05'=> UserModule::t('May'),
-					'06'=> UserModule::t('June'),
-					'07'=> UserModule::t('July'),
-					'08'=> UserModule::t('August'),
-					'09'=> UserModule::t('September'),
-					'10'=> UserModule::t('October'),
-					'11'=> UserModule::t('November'),
-					'12'=> UserModule::t('December'),
+					'01'=> Module::t('January'),
+					'02'=> Module::t('February'),
+					'03'=> Module::t('March'),
+					'04'=> Module::t('April'),
+					'05'=> Module::t('May'),
+					'06'=> Module::t('June'),
+					'07'=> Module::t('July'),
+					'08'=> Module::t('August'),
+					'09'=> Module::t('September'),
+					'10'=> Module::t('October'),
+					'11'=> Module::t('November'),
+					'12'=> Module::t('December'),
                 );
 
                 $yearOptions = array('0000'=>' - ');

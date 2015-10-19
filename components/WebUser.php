@@ -3,7 +3,7 @@
 namespace mariusz_soltys\yii2user\components;
 
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -32,7 +32,7 @@ class WebUser extends \yii\web\User
 
     private $sessionKeys = array();
 
-    /** @var UserModule $module */
+    /** @var Module $module */
     private $module;
 
     public function init()

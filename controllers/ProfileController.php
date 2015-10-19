@@ -4,7 +4,7 @@ namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\models\UserChangePassword;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\web\Controller;
 use yii\widgets\ActiveForm;
@@ -51,7 +51,7 @@ class ProfileController extends Controller
             if ($model->validate()&&$profile->validate()) {
                 $model->save();
                 $profile->save();
-                Yii::$app->user->setFlash('profileMessage', UserModule::t("Changes is saved."));
+                Yii::$app->user->setFlash('profileMessage', Module::t("Changes is saved."));
                 $this->redirect(array('/user/profile'));
             } else {
                 $profile->validate();
@@ -83,10 +83,10 @@ class ProfileController extends Controller
                 $model->load($_POST['UserChangePassword']);
                 if ($model->validate()) {
                     $new_password = User::find()->notsafe()->andWhere(['id'=>Yii::$app->user->id])->one();
-                    $new_password->password = UserModule::encrypting($model->password);
-                    $new_password->activkey=UserModule::encrypting(microtime().$model->password);
+                    $new_password->password = Module::encrypting($model->password);
+                    $new_password->activkey=Module::encrypting(microtime().$model->password);
                     $new_password->save();
-                    Yii::$app->user->setFlash('profileMessage', UserModule::t("New password is saved."));
+                    Yii::$app->user->setFlash('profileMessage', Module::t("New password is saved."));
                     $this->redirect(array("profile"));
                 }
             }

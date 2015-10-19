@@ -3,7 +3,7 @@
 namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\web\Controller;
 
 class ActivationController extends Controller
@@ -25,28 +25,28 @@ class ActivationController extends Controller
                 $this->render(
                     '/user/message',
                     [
-                        'title'=>UserModule::t("User activation"),
-                        'content'=>UserModule::t("You account is active.")
+                        'title'=>Module::t("User activation"),
+                        'content'=>Module::t("You account is active.")
                     ]
                 );
             } elseif (isset($find->activkey) && ($find->activkey==$activkey)) {
-                $find->activkey = UserModule::encrypting(microtime());
+                $find->activkey = Module::encrypting(microtime());
                 $find->status = 1;
                 $find->save();
 
                 $this->render(
                     '/user/message',
                     [
-                        'title'=>UserModule::t("User activation"),
-                        'content'=>UserModule::t("You account is activated.")
+                        'title'=>Module::t("User activation"),
+                        'content'=>Module::t("You account is activated.")
                     ]
                 );
             } else {
                 $this->render(
                     '/user/message',
                     [
-                        'title'=>UserModule::t("User activation"),
-                        'content'=>UserModule::t("Incorrect activation URL.")
+                        'title'=>Module::t("User activation"),
+                        'content'=>Module::t("Incorrect activation URL.")
                     ]
                 );
             }
@@ -54,8 +54,8 @@ class ActivationController extends Controller
             $this->render(
                 '/user/message',
                 [
-                    'title'=>UserModule::t("User activation"),
-                    'content'=>UserModule::t("Incorrect activation URL.")
+                    'title'=>Module::t("User activation"),
+                    'content'=>Module::t("Incorrect activation URL.")
                 ]
             );
         }

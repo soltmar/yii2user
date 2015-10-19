@@ -5,7 +5,7 @@ namespace mariusz_soltys\yii2user\models;
 use Yii;
 use yii\db\ActiveRecord;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use yii\web\IdentityInterface;
 
 /**
@@ -57,14 +57,14 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             (get_class(Yii::$app)!='yii\console\Application' && Yii::$app->user->isAdmin())
         )?[
             ['username', 'length', 'max'=>20, 'min' => 3,
-                'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")],
+                'message' => Module::t("Incorrect username (length between 3 and 20 characters).")],
             ['password', 'length', 'max'=>128, 'min' => 4,
-                'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")],
+                'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
             ['email', 'email'],
-            ['username', 'unique', 'message' => UserModule::t("This user's name already exists.")],
-            ['email', 'unique', 'message' => UserModule::t("This user's email address already exists.")],
+            ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
+            ['email', 'unique', 'message' => Module::t("This user's email address already exists.")],
             ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
-                'message' => UserModule::t("Incorrect symbols (A-z0-9).")],
+                'message' => Module::t("Incorrect symbols (A-z0-9).")],
             ['status', 'in', 'range'=>[self::STATUS_NOACTIVE,self::STATUS_ACTIVE,self::STATUS_BANNED]],
             ['superuser', 'in', 'range'=>[0,1]],
             ['create_at', 'default', 'value' => date('Y-m-d H:i:s'), 'setOnEmpty' => true,
@@ -78,12 +78,12 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         ]:((Yii::$app->user->id==$this->id)?[
             ['username, email', 'required'],
             ['username', 'length', 'max'=>20, 'min' => 3,
-                'message' => UserModule::t("Incorrect username (length between 3 and 20 characters).")],
+                'message' => Module::t("Incorrect username (length between 3 and 20 characters).")],
             ['email', 'email'],
-            ['username', 'unique', 'message' => UserModule::t("This user's name already exists.")],
+            ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
             ['username', 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u',
-                'message' => UserModule::t("Incorrect symbols (A-z0-9).")],
-            ['email', 'unique', 'message' => UserModule::t("This user's email address already exists.")],
+                'message' => Module::t("Incorrect symbols (A-z0-9).")],
+            ['email', 'unique', 'message' => Module::t("This user's email address already exists.")],
         ]:[])
         );
     }
@@ -111,19 +111,19 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id' => UserModule::t("Id"),
-            'username'=>UserModule::t("username"),
-            'password'=>UserModule::t("password"),
-            'verifyPassword'=>UserModule::t("Retype Password"),
-            'email'=>UserModule::t("E-mail"),
-            'verifyCode'=>UserModule::t("Verification Code"),
-            'activkey' => UserModule::t("activation key"),
-            'createtime' => UserModule::t("Registration date"),
-            'create_at' => UserModule::t("Registration date"),
+            'id' => Module::t("Id"),
+            'username'=>Module::t("username"),
+            'password'=>Module::t("password"),
+            'verifyPassword'=>Module::t("Retype Password"),
+            'email'=>Module::t("E-mail"),
+            'verifyCode'=>Module::t("Verification Code"),
+            'activkey' => Module::t("activation key"),
+            'createtime' => Module::t("Registration date"),
+            'create_at' => Module::t("Registration date"),
 
-            'lastvisit_at' => UserModule::t("Last visit"),
-            'superuser' => UserModule::t("Superuser"),
-            'status' => UserModule::t("Status"),
+            'lastvisit_at' => Module::t("Last visit"),
+            'superuser' => Module::t("Superuser"),
+            'status' => Module::t("Status"),
         ];
     }
 
@@ -136,13 +136,13 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         $_items = array(
             'UserStatus' => array(
-                self::STATUS_NOACTIVE => UserModule::t('Not active'),
-                self::STATUS_ACTIVE => UserModule::t('Active'),
-                self::STATUS_BANNED => UserModule::t('Banned'),
+                self::STATUS_NOACTIVE => Module::t('Not active'),
+                self::STATUS_ACTIVE => Module::t('Active'),
+                self::STATUS_BANNED => Module::t('Banned'),
             ),
             'AdminStatus' => array(
-                '0' => UserModule::t('No'),
-                '1' => UserModule::t('Yes'),
+                '0' => Module::t('No'),
+                '1' => Module::t('Yes'),
             ),
         );
         if (isset($code)) {

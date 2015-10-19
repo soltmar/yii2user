@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\models;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\base\Model;
 
@@ -21,12 +21,12 @@ class UserChangePassword extends Model
     {
         return Yii::$app->controller->id == 'recovery' ? [
             ['password, verifyPassword', 'required'],
-            ['password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")],
-            ['verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Retype Password is incorrect.")],
+            ['password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
+            ['verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => Module::t("Retype Password is incorrect.")],
         ] : [
             ['oldPassword, password, verifyPassword', 'required'],
-            ['oldPassword, password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")],
-            ['verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Retype Password is incorrect.")],
+            ['oldPassword, password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
+            ['verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => Module::t("Retype Password is incorrect.")],
             ['oldPassword', 'verifyOldPassword'],
         ];
     }
@@ -37,9 +37,9 @@ class UserChangePassword extends Model
     public function attributeLabels()
     {
         return array(
-            'oldPassword'=>UserModule::t("Old Password"),
-            'password'=>UserModule::t("password"),
-            'verifyPassword'=>UserModule::t("Retype Password"),
+            'oldPassword'=>Module::t("Old Password"),
+            'password'=>Module::t("password"),
+            'verifyPassword'=>Module::t("Retype Password"),
         );
     }
 
@@ -51,7 +51,7 @@ class UserChangePassword extends Model
         $cond = User::find()->notsafe()->findByPk(Yii::$app->user->id)->one()->password
             != Yii::$app->getModule('user')->encrypting($this->$attribute);
         if ($cond) {
-            $this->addError($attribute, UserModule::t("Old Password is incorrect."));
+            $this->addError($attribute, Module::t("Old Password is incorrect."));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
@@ -27,16 +27,16 @@ class UWjuiAutoComplete {
 	public function init() {
 		return array(
 			'name'=>__CLASS__,
-			'label'=>UserModule::t('jQueryUI autocomplete',array(),__CLASS__),
+			'label'=>Module::t('jQueryUI autocomplete',array(),__CLASS__),
 			'fieldType'=>array('INTEGER'),
 			'params'=>$this->params,
 			'paramsLabels' => array(
-				'modelName'=>UserModule::t('Model Name',array(),__CLASS__),
-				'optionName'=>UserModule::t('Lable field name',array(),__CLASS__),
-				'emptyFieldLabel'=>UserModule::t('Empty item name',array(),__CLASS__),
-				'emptyFieldValue'=>UserModule::t('Empty item value',array(),__CLASS__),
-				'relationName'=>UserModule::t('Profile model relation name',array(),__CLASS__),
-				'minLength'=>UserModule::t('minimal start research length',array(),__CLASS__),
+				'modelName'=>Module::t('Model Name',array(),__CLASS__),
+				'optionName'=>Module::t('Lable field name',array(),__CLASS__),
+				'emptyFieldLabel'=>Module::t('Empty item name',array(),__CLASS__),
+				'emptyFieldValue'=>Module::t('Empty item value',array(),__CLASS__),
+				'relationName'=>Module::t('Profile model relation name',array(),__CLASS__),
+				'minLength'=>Module::t('minimal start research length',array(),__CLASS__),
 			),
 		);
 	}

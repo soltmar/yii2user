@@ -6,7 +6,7 @@ namespace mariusz_soltys\yii2user\controllers;
 use yii\base\Exception;
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\ProfileField;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -160,7 +160,7 @@ class ProfileFieldController extends Controller
 				'val':{
 					'field_size':0,
 					'default':0,
-					'range':'1==".UserModule::t('Yes').";0==".UserModule::t('No')."',
+					'range':'1==".Module::t('Yes').";0==".Module::t('No')."',
 					'widgetparams':''
 				}
 			},
@@ -186,7 +186,7 @@ class ProfileFieldController extends Controller
 
 	function showWidgetList(type) {
 		$('div.widget select').empty();
-		$('div.widget select').append('<option value=\"\">".UserModule::t('No')."</option>');
+		$('div.widget select').append('<option value=\"\">".Module::t('No')."</option>');
 		if (wgByType[type]) {
 			for (var k in wgByType[type]) {
 				$('div.widget select')
@@ -231,7 +231,7 @@ class ProfileFieldController extends Controller
 		width: 400,
 		modal: true,
 		buttons: {
-			'".UserModule::t('Save')."': function() {
+			'".Module::t('Save')."': function() {
 				var wparam = {};
 				var fparam = {};
 				$('#dialog-form fieldset .wparam').each(function(){
@@ -249,7 +249,7 @@ class ProfileFieldController extends Controller
 
 				$(this).dialog('close');
 			},
-			'".UserModule::t('Cancel')."': function() {
+			'".Module::t('Cancel')."': function() {
 				$(this).dialog('close');
 			}
 		},
@@ -323,7 +323,7 @@ class ProfileFieldController extends Controller
 	});
 
 	// show all function
-	$('div.form p.note').append('<br/><a href=\"#\" id=\"showAll\">".UserModule::t('Show all')."</a>');
+	$('div.form p.note').append('<br/><a href=\"#\" id=\"showAll\">".Module::t('Show all')."</a>');
  	$('#showAll').click(function(){
 		$('div.row').show(500);
 		return false;
@@ -538,7 +538,7 @@ class ProfileFieldController extends Controller
     {
         $basePath=Yii::getAlias('@mariusz_soltys/yii2user/components');
         $widgets = array();
-        $list = array(''=>UserModule::t('No'));
+        $list = array(''=>Module::t('No'));
         if (self::$widgets) {
             $widgets = self::$widgets;
         } else {

@@ -5,7 +5,7 @@ namespace mariusz_soltys\yii2user\controllers;
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\RegistrationForm;
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\UserModule;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -49,9 +49,9 @@ class RegistrationController extends Controller
                 $model->load($_POST['RegistrationForm']);
                 $profile->load(isset($_POST['Profile'])?$_POST['Profile']:array());
                 if ($model->validate()&&$profile->validate()) {
-                    $model->activkey=UserModule::encrypting(microtime().$model->password);
-                    $model->password=UserModule::encrypting($model->password);
-                    $model->verifyPassword=UserModule::encrypting($model->verifyPassword);
+                    $model->activkey=Module::encrypting(microtime().$model->password);
+                    $model->password=Module::encrypting($model->password);
+                    $model->verifyPassword=Module::encrypting($model->verifyPassword);
                     $model->superuser=0;
                     $model->status=(
                         (Yii::$app->controller->module->activeAfterRegister)?User::STATUS_ACTIVE:User::STATUS_NOACTIVE
@@ -65,13 +65,13 @@ class RegistrationController extends Controller
                                 '/user/activation/activation',
                                 ["activkey" => $model->activkey, "email" => $model->email]
                             );
-                            UserModule::sendMail(
+                            Module::sendMail(
                                 $model->email,
-                                UserModule::t(
+                                Module::t(
                                     "You registered from {site_name}",
                                     ['{site_name}'=>Yii::$app->name]
                                 ),
-                                UserModule::t(
+                                Module::t(
                                     "Please activate you account go to {activation_url}",
                                     ['{activation_url}'=>$activation_url]
                                 )
@@ -95,7 +95,7 @@ class RegistrationController extends Controller
                             ) {
                                 Yii::$app->user->setFlash(
                                     'registration',
-                                    UserModule::t(
+                                    Module::t(
                                         "Thank you for your registration. Contact Admin to activate your account."
                                     )
                                 );
@@ -105,11 +105,11 @@ class RegistrationController extends Controller
                             ) {
                                 Yii::$app->user->setFlash(
                                     'registration',
-                                    UserModule::t(
+                                    Module::t(
                                         "Thank you for your registration. Please {{login}}.",
                                         [
                                             '{{login}}'=>Html::a(
-                                                UserModule::t('Login'),
+                                                Module::t('Login'),
                                                 Yii::$app->controller->module->loginUrl
                                             )
                                         ]
@@ -118,12 +118,12 @@ class RegistrationController extends Controller
                             } elseif (Yii::$app->controller->module->loginNotActiv) {
                                 Yii::$app->user->setFlash(
                                     'registration',
-                                    UserModule::t("Thank you for your registration. Please check your email or login.")
+                                    Module::t("Thank you for your registration. Please check your email or login.")
                                 );
                             } else {
                                 Yii::$app->user->setFlash(
                                     'registration',
-                                    UserModule::t("Thank you for your registration. Please check your email.")
+                                    Module::t("Thank you for your registration. Please check your email.")
                                 );
                             }
                             $this->refresh();
