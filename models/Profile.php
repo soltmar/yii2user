@@ -122,11 +122,10 @@ class Profile extends ActiveRecord
                 }
             }
 
-            array_push($rules, [implode(',', $required), 'required']);
-            array_push($rules, [implode(',', $numerical), 'numerical', 'integerOnly'=>true]);
-            array_push($rules, [implode(',', $float), 'type', 'type'=>'float']);
-            array_push($rules, [
-                implode(',', $decimal), 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'
+            array_push($rules, [$required, 'required']);
+            array_push($rules, [$numerical, 'numerical', 'integerOnly'=>true]);
+            array_push($rules, [$float, 'type', 'type'=>'float']);
+            array_push($rules, [$decimal, 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'
             ]);
             self::$rules = $rules;
         }

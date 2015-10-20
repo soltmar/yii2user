@@ -130,7 +130,7 @@ class WebUser extends \yii\web\User
      */
     public function setFlash($key, $value, $del = true)
     {
-        Yii::$app->session->setFlash($key, $value, $del);
+        Yii::$app->session->setFlash("user.".$key, $value, $del);
     }
 
     /**
@@ -142,7 +142,7 @@ class WebUser extends \yii\web\User
      */
     public function getFlash($key, $defaultValue = null, $delete = false)
     {
-        return Yii::$app->session->getFlash($key, $defaultValue, $delete);
+        return Yii::$app->session->getFlash("user.".$key, $defaultValue, $delete);
     }
 
     /**
@@ -152,7 +152,22 @@ class WebUser extends \yii\web\User
      */
     public function hasFlash($key)
     {
-        return Yii::$app->session->hasFlash($key);
+        return Yii::$app->session->hasFlash("user.".$key);
+    }
+
+    public function getFlashes()
+    {
+        $messages = Yii::$app->session->getAllFlashes();
+
+        $messages = array_filter($messages, function ($key) {
+            return(strpos($key, 'user.') !== false);
+        }, ARRAY_FILTER_USE_KEY);
+
+        foreach ($messages as $key => $value) {
+            $nkey = str_replace("user.", "", $key);
+            $messages[$nkey] = $value;
+            unset($messages[$key]);
+        }
     }
 
 

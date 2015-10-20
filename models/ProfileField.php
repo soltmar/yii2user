@@ -56,17 +56,40 @@ class ProfileField extends ActiveRecord
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('varname, title, field_type', 'required'),
-            array('varname', 'match', 'pattern' => '/^[A-Za-z_0-9]+$/u','message' => Module::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")),
-            array('varname', 'unique', 'message' => Module::t("This field already exists.")),
-            array('varname, field_type', 'length', 'max'=>50),
-            array('field_size_min, required, position, visible', 'numerical', 'integerOnly'=>true),
-            array('field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'),
-            array('title, match, error_message, other_validator, default, widget', 'length', 'max'=>255),
-            array('range, widgetparams', 'length', 'max'=>5000),
-            array('id, varname, title, field_type, field_size, field_size_min, required, match, range, error_message, other_validator, default, widget, widgetparams, position, visible', 'safe', 'on'=>'search'),
-        );
+        return [
+            [['varname', 'title', 'field_type'], 'required'],
+            [
+                'varname',
+                'match',
+                'pattern' => '/^[A-Za-z_0-9]+$/u',
+                'message' => Module::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")
+            ],
+            ['varname', 'unique', 'message' => Module::t("This field already exists.")],
+            [['varname', 'field_type'], 'length', 'max'=>50],
+            [['field_size_min', 'required', 'position', 'visible'], 'numerical', 'integerOnly'=>true],
+            ['field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
+            [['title', 'match', 'error_message', 'other_validator', 'default', 'widget'], 'length', 'max'=>255],
+            [['range', 'widgetparams'], 'length', 'max'=>5000],
+            [
+                [
+                    'id',
+                    'varname',
+                    'title',
+                    'field_type',
+                    'field_size',
+                    'field_size_min',
+                    'required', 'match',
+                    'range',
+                    'error_message',
+                    'other_validator',
+                    'default',
+                    'widget',
+                    'widgetparams',
+                    'position',
+                    'visible'
+                ],
+                'safe', 'on'=>self::SENARIO_SEARCH],
+        ];
     }
 
     /**
