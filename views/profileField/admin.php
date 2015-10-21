@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	UserModule::t('Profile Fields')=>array('admin'),
-	UserModule::t('Manage'),
+	Module::t('Profile Fields')=>array('admin'),
+	Module::t('Manage'),
 );
 $this->menu=array(
-    array('label'=>UserModule::t('Create Profile Field'), 'url'=>array('create')),
-    array('label'=>UserModule::t('Manage Profile Field'), 'url'=>array('admin')),
-    array('label'=>UserModule::t('Manage Users'), 'url'=>array('/user/admin')),
+    array('label'=>Module::t('Create Profile Field'), 'url'=>array('create')),
+    array('label'=>Module::t('Manage Profile Field'), 'url'=>array('admin')),
+    array('label'=>Module::t('Manage Users'), 'url'=>array('/user/admin')),
 );
 
 Yii::$app->clientScript->registerScript('search', "
@@ -23,11 +23,11 @@ $('.search-form form').submit(function(){
 ");
 
 ?>
-<h1><?php echo UserModule::t('Manage Profile Fields'); ?></h1>
+<h1><?php echo Module::t('Manage Profile Fields'); ?></h1>
 
-<p><?php echo UserModule::t("You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b> or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done."); ?></p>
+<p><?php echo Module::t("You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b> or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done."); ?></p>
 
-<?php echo CHtml::link(UserModule::t('Advanced Search'),'#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link(Module::t('Advanced Search'),'#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
     'model'=>$model,

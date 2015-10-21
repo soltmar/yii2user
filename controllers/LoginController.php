@@ -29,10 +29,10 @@ class LoginController extends Controller
     {
         if (Yii::$app->user->isGuest) {
             /** @var $model UserLogin */
-            $model=new UserLogin;
+            $model=new UserLogin();
             // collect user input data
             if (isset($_POST['UserLogin'])) {
-                $model->load($_POST['UserLogin']);
+                $model->load(Yii::$app->request->post());
                 // validate user input and redirect to previous page if valid
                 if ($model->validate()) {
                     $this->lastVisit();

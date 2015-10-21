@@ -33,15 +33,25 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     const STATUS_ACTIVE=1;
     const STATUS_BANNED=-1;
 
+    const ERROR_NONE=0;
+    const ERROR_USERNAME_INVALID=1;
+    const ERROR_PASSWORD_INVALID=2;
+    const ERROR_EMAIL_INVALID=3;
+    const ERROR_STATUS_NOTACTIV=4;
+    const ERROR_STATUS_BAN=5;
+    const ERROR_UNKNOWN_IDENTITY=100;
+
     const SCENARIO_SEARCH = 'search';
     const SCENARION_INSERT = 'insert';
+
+    public $errorCode;
 
     /**
      * @return string the associated database table name
      */
     public static function tableName()
     {
-        return Yii::$app->getModule('user')->tableUsers;
+        return Module::getInstance()->tableUsers;
     }
 
     /**
@@ -56,9 +66,9 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             get_class(Yii::$app)=='yii\console\Application' ||
             (get_class(Yii::$app)!='yii\console\Application' && Yii::$app->user->isAdmin())
         )?[
-            ['username', 'length', 'max'=>20, 'min' => 3,
+            ['username', 'string', 'max'=>20, 'min' => 3,
                 'message' => Module::t("Incorrect username (length between 3 and 20 characters).")],
-            ['password', 'length', 'max'=>128, 'min' => 4,
+            ['password', 'string', 'max'=>128, 'min' => 4,
                 'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
             ['email', 'email'],
             ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
@@ -77,7 +87,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
                 'on' => self::SCENARIO_SEARCH],
         ]:((Yii::$app->user->id==$this->id)?[
             ['username, email', 'required'],
-            ['username', 'length', 'max'=>20, 'min' => 3,
+            ['username', 'string', 'max'=>20, 'min' => 3,
                 'message' => Module::t("Incorrect username (length between 3 and 20 characters).")],
             ['email', 'email'],
             ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
@@ -180,15 +190,48 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return parent::afterSave($insert, $changedAttributes);
     }
 
-    public function beforeSave($insert)
+    //TODO Do we actually need method below?
+//
+//    public function beforeSave($insert)
+//    {
+//        if (parent::beforeSave($insert)) {
+//            if ($this->isNewRecord) {
+//                $this->activkey = \Yii::$app->security->generateRandomString();
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
+
+    /**
+     * Returns User model if authenticated or false if not
+     * @param string $username entered through login form
+     * @param string $password entered through login form
+     * @return User
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function authenticate($username, $password)
     {
-        if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord) {
-                $this->activkey = \Yii::$app->security->generateRandomString();
-            }
-            return true;
+        $user = $this::find()->notsafe()->filterWhere([
+            'or',
+            ['username' => $username],
+            ['email' => $username]
+        ])->one();
+
+        var_dump($this->status);
+
+        if (!$user) {
+            $user->errorCode = self::ERROR_USERNAME_INVALID;
+        } elseif (!Yii::$app->getSecurity()->validatePassword($password, $user->password)) {
+            $user->errorCode = self::ERROR_PASSWORD_INVALID;
+        } elseif ($user->status == self::STATUS_NOACTIVE && Module::getInstance()->loginNotActiv == false) {
+            $user->errorCode = self::ERROR_STATUS_NOTACTIV;
+        } elseif ($user->status == self::ERROR_STATUS_BAN) {
+            $user->errorCode = self::ERROR_STATUS_BAN;
+        } else {
+            $user->errorCode = self::ERROR_NONE;
         }
-        return false;
+        return $user;
     }
 
     /**

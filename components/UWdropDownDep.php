@@ -101,7 +101,7 @@ class UWdropDownDep {
 		$list = array();
 		if ($this->params['emptyField']) $list[0] = $this->params['emptyField'];
 		
-		$models =$modelName::find()->All();
+		$models =$modelName::find()->all();
 		foreach ($models as $m)
 			$list[$m->getAttribute($m->tableSchema->primaryKey)] = 
                                 (($this->params['optionName'])?$m->getAttribute($this->params['optionName']):$m->getAttribute($m->tableSchema->primaryKey));

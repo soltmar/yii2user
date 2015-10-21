@@ -63,7 +63,7 @@ class UserChangePassword extends Model
     public function verifyOldPassword($attribute, $params)
     {
         $cond = User::find()->notsafe()->findByPk(Yii::$app->user->id)->one()->password
-            != Yii::$app->getModule('user')->encrypting($this->$attribute);
+            != Module::getInstance()->encrypting($this->$attribute);
         if ($cond) {
             $this->addError($attribute, Module::t("Old Password is incorrect."));
         }

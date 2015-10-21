@@ -46,7 +46,7 @@
     </div>
 
     <div class="row buttons">
-        <?php echo CHtml::submitButton(UserModule::t('Search')); ?>
+        <?php echo CHtml::submitButton(Module::t('Search')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

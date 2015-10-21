@@ -35,7 +35,7 @@ class Module extends \yii\base\Module
      * @var boolean
      * @desc allow auth for is not active user
      */
-    public $loginNotActiv=false;
+    public $loginNotActiv = false;
 
     /**
      * @var boolean
@@ -79,7 +79,7 @@ class Module extends \yii\base\Module
     public $profileRelations = array();
 
     /**
-     * @var boolean
+     * @var array
      */
     public $captcha = array('registration'=>true);
 
@@ -96,11 +96,11 @@ class Module extends \yii\base\Module
         'with'=>array('profile'),
     );
 
-    static private $_user;
-    static private $_users=array();
-    static private $_userByName=array();
-    static private $_admin;
-    static private $_admins;
+    static private $user;
+    static private $users=array();
+    static private $userByName=array();
+    static private $admin;
+    static private $admins;
 
     /**
      * @var array
@@ -113,6 +113,13 @@ class Module extends \yii\base\Module
      */
     public $controllerNamespace = 'mariusz_soltys\yii2user\controllers';
 
+    /**
+     * @return Module
+    */
+    public static function getInstance()
+    {
+        return parent::getInstance();
+    }
 
     public function init()
     {
@@ -122,7 +129,8 @@ class Module extends \yii\base\Module
         ]);
     }
 
-    public function getBehaviorsFor($componentName){
+    public function getBehaviorsFor($componentName)
+    {
         if (isset($this->componentBehaviors[$componentName])) {
             return $this->componentBehaviors[$componentName];
         } else {
@@ -147,11 +155,13 @@ class Module extends \yii\base\Module
      * @param $dic
      * @return string
      */
-    public static function t($str='',$params=array(),$dic='user') {
-        if (Yii::t("Module", $str)==$str)
+    public static function t($str = '', $params = array(), $dic = 'user')
+    {
+        if (Yii::t("Module", $str)==$str) {
             return Yii::t("Module.".$dic, $str, $params);
-        else
+        } else {
             return Yii::t("Module", $str, $params);
+        }
     }
 
     /**
@@ -160,7 +170,8 @@ class Module extends \yii\base\Module
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public static function encrypting($string="") {
+    public static function encrypting($string = "")
+    {
 
         return Yii::$app->getSecurity()->generatePasswordHash($string);
     }
@@ -169,11 +180,16 @@ class Module extends \yii\base\Module
      * @param $place
      * @return boolean
      */
-    public static function doCaptcha($place = '') {
-        if(!extension_loaded('gd'))
+    public static function doCaptcha($place = '')
+    {
+        if (!extension_loaded('gd')) {
             return false;
-        if (in_array($place, Yii::$app->getModule('user')->captcha))
-            return Yii::$app->getModule('user')->captcha[$place];
+        }
+
+        if (in_array($place, Module::getInstance()->captcha)) {
+            return Module::getInstance()->captcha[$place];
+        }
+
         return false;
     }
 
@@ -181,17 +197,19 @@ class Module extends \yii\base\Module
      * Return admin status.
      * @return boolean
      */
-    public static function isAdmin() {
-        if(Yii::$app->user->isGuest)
+    public static function isAdmin()
+    {
+        if (Yii::$app->user->isGuest) {
             return false;
-        else {
-            if (!isset(self::$_admin)) {
-                if(self::user()->superuser)
-                    self::$_admin = true;
-                else
-                    self::$_admin = false;
+        } else {
+            if (!isset(self::$admin)) {
+                if (self::user()->superuser) {
+                    self::$admin = true;
+                } else {
+                    self::$admin = false;
+                }
             }
-            return self::$_admin;
+            return self::$admin;
         }
     }
 
@@ -199,51 +217,76 @@ class Module extends \yii\base\Module
      * Return admins.
      * @return array superusers names
      */
-    public static function getAdmins() {
-        if (!self::$_admins) {
-            $admins = User::model()->active()->superuser()->findAll();
+    public static function getAdmins()
+    {
+        if (!self::$admins) {
+            $admins = User::find()->active()->superuser()->all();
             $return_name = array();
-            foreach ($admins as $admin)
-                array_push($return_name,$admin->username);
-            self::$_admins = ($return_name)?$return_name:array('');
+            foreach ($admins as $admin) {
+                array_push($return_name, $admin->username);
+            }
+            self::$admins = ($return_name)?$return_name:array('');
         }
-        return self::$_admins;
+        return self::$admins;
     }
 
     /**
      * Send to user mail
+     * @param $email
+     * @param $subject
+     * @param $message
+     * @return bool
      */
-    public static function sendMail($email,$subject,$message) {
+    public static function sendMail($email, $subject, $message)
+    {
         $adminEmail = Yii::$app->params['adminEmail'];
-        $headers = "MIME-Version: 1.0\r\nFrom: $adminEmail\r\nReply-To: $adminEmail\r\nContent-Type: text/html; charset=utf-8";
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "From: $adminEmail\r\n";
+        $headers .= "Reply-To: $adminEmail\r\n";
+        $headers .= "Content-Type: text/html; charset=utf-8";
         $message = wordwrap($message, 70);
         $message = str_replace("\n.", "\n..", $message);
-        return mail($email,'=?UTF-8?B?'.base64_encode($subject).'?=',$message,$headers);
+        return mail($email, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $headers);
     }
 
     /**
      * Send to user mail
+     * @param $user_id
+     * @param $subject
+     * @param $message
+     * @param string $from
+     * @return bool
      */
-    public function sendMailToUser($user_id,$subject,$message,$from='') {
+    public function sendMailToUser($user_id, $subject, $message, $from = '')
+    {
+        /**@var User $user*/
         $user = User::findOne($user_id);
-        if (!$from) $from = Yii::$app->params['adminEmail'];
+        if (!$from) {
+            $from = Yii::$app->params['adminEmail'];
+        }
         $headers="From: ".$from."\r\nReply-To: ".Yii::$app->params['adminEmail'];
-        return mail($user->email,'=?UTF-8?B?'.base64_encode($subject).'?=',$message,$headers);
+        return mail($user->email, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $headers);
     }
 
     /**
      * Return safe user data.
      * @param $id int user id not required
-     * @return user object or false
+     * @param bool $clearCache
+     * @return User object or false
      */
-    public static function user($id=0,$clearCache=false) {
-        if (!$id&&!Yii::$app->user->isGuest)
+    public static function user($id = 0, $clearCache = false)
+    {
+        if (!$id&&!Yii::$app->user->isGuest) {
             $id = Yii::$app->user->id;
+        }
         if ($id) {
-            if (!isset(self::$_users[$id])||$clearCache)
-                self::$_users[$id] = User::findOne($id);
-            return self::$_users[$id];
-        } else return false;
+            if (!isset(self::$users[$id])||$clearCache) {
+                self::$users[$id] = User::findOne($id);
+            }
+            return self::$users[$id];
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -251,8 +294,10 @@ class Module extends \yii\base\Module
      * @param $username string user name
      * @return user object or false
      */
-    public static function getUserByName($username) {
-        if (!isset(self::$_userByName[$username])) {
+    public static function getUserByName($username)
+    {
+        $_userByName = [];
+        if (!isset(self::$userByName[$username])) {
             $_userByName[$username] = User::findOne(['username'=>$username]);
         }
         return $_userByName[$username];

@@ -22,7 +22,7 @@ class RegistrationController extends Controller
     public function actions()
     {
         return array(
-            'captcha'=>Yii::$app->getModule('user')->captchaParams,
+            'captcha'=>Module::getInstance()->captchaParams,
         );
     }
     /**

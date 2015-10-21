@@ -1,11 +1,11 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.UserModule::t("Restore");
+<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Restore");
 $this->breadcrumbs=array(
-	UserModule::t("Login") => array('/user/login'),
-	UserModule::t("Restore"),
+	Module::t("Login") => array('/user/login'),
+	Module::t("Restore"),
 );
 ?>
 
-<h1><?php echo UserModule::t("Restore"); ?></h1>
+<h1><?php echo Module::t("Restore"); ?></h1>
 
 <?php if(Yii::$app->user->hasFlash('recoveryMessage')): ?>
 <div class="success">
@@ -21,11 +21,11 @@ $this->breadcrumbs=array(
 	<div class="row">
 		<?php echo CHtml::activeLabel($form,'login_or_email'); ?>
 		<?php echo CHtml::activeTextField($form,'login_or_email') ?>
-		<p class="hint"><?php echo UserModule::t("Please enter your login or email addres."); ?></p>
+		<p class="hint"><?php echo Module::t("Please enter your login or email addres."); ?></p>
 	</div>
 	
 	<div class="row submit">
-		<?php echo CHtml::submitButton(UserModule::t("Restore")); ?>
+		<?php echo CHtml::submitButton(Module::t("Restore")); ?>
 	</div>
 
 <?php echo CHtml::endForm(); ?>

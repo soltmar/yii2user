@@ -1,56 +1,79 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.UserModule::t("Profile");
-$this->breadcrumbs=array(
-	UserModule::t("Profile"),
-);
-$this->menu=array(
-	((UserModule::isAdmin())
-		?array('label'=>UserModule::t('Manage Users'), 'url'=>array('/user/admin'))
-		:array()),
-    array('label'=>UserModule::t('List User'), 'url'=>array('/user')),
-    array('label'=>UserModule::t('Edit'), 'url'=>array('edit')),
-    array('label'=>UserModule::t('Change password'), 'url'=>array('changepassword')),
-    array('label'=>UserModule::t('Logout'), 'url'=>array('/user/logout')),
-);
-?><h1><?php echo UserModule::t('Your profile'); ?></h1>
+<?php use mariusz_soltys\yii2user\models\Profile;
+use mariusz_soltys\yii2user\models\ProfileField;
+use mariusz_soltys\yii2user\models\User;
+use mariusz_soltys\yii2user\Module;
+use yii\helpers\Html;
 
-<?php if(Yii::$app->user->hasFlash('profileMessage')): ?>
-<div class="success">
-	<?php echo Yii::$app->user->getFlash('profileMessage'); ?>
-</div>
+/**
+ * @var $this yii\web\View
+ * @var mariusz_soltys\yii2user\models\User $model
+ * @var mariusz_soltys\yii2user\models\Profile $profile
+ */
+
+$this->title=Yii::$app->name . ' - '.Module::t("Profile");
+$this->params['breadcrumbs'][] = Module::t("Profile");
+
+$this->params['subnav']= [
+    ((Module::isAdmin())
+        ? ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']]
+        : []),
+    ['label'=>Module::t('List User'), 'url'=> ['/user']],
+    ['label'=>Module::t('Edit'), 'url'=> ['edit']],
+    ['label'=>Module::t('Change password'), 'url'=> ['changepassword']],
+    ['label'=>Module::t('Logout'), 'url'=> ['/user/logout']],
+];
+?><h1><?php echo Module::t('Your profile'); ?></h1>
+
+<?php if (Yii::$app->user->hasFlash('profileMessage')) : ?>
+    <div class="success">
+        <?php echo Yii::$app->user->getFlash('profileMessage'); ?>
+    </div>
 <?php endif; ?>
 <table class="dataGrid">
-	<tr>
-		<th class="label"><?php echo CHtml::encode($model->getAttributeLabel('username')); ?></th>
-	    <td><?php echo CHtml::encode($model->username); ?></td>
-	</tr>
-	<?php 
-		$profileFields=ProfileField::model()->forOwner()->sort()->findAll();
-		if ($profileFields) {
-			foreach($profileFields as $field) {
-				//echo "<pre>"; print_r($profile); die();
-			?>
-	<tr>
-		<th class="label"><?php echo CHtml::encode(UserModule::t($field->title)); ?></th>
-    	<td><?php echo (($field->widgetView($profile))?$field->widgetView($profile):CHtml::encode((($field->range)?Profile::range($field->range,$profile->getAttribute($field->varname)):$profile->getAttribute($field->varname)))); ?></td>
-	</tr>
-			<?php
-			}//$profile->getAttribute($field->varname)
-		}
-	?>
-	<tr>
-		<th class="label"><?php echo CHtml::encode($model->getAttributeLabel('email')); ?></th>
-    	<td><?php echo CHtml::encode($model->email); ?></td>
-	</tr>
-	<tr>
-		<th class="label"><?php echo CHtml::encode($model->getAttributeLabel('create_at')); ?></th>
-    	<td><?php echo $model->create_at; ?></td>
-	</tr>
-	<tr>
-		<th class="label"><?php echo CHtml::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
-    	<td><?php echo $model->lastvisit_at; ?></td>
-	</tr>
-	<tr>
-		<th class="label"><?php echo CHtml::encode($model->getAttributeLabel('status')); ?></th>
-    	<td><?php echo CHtml::encode(User::itemAlias("UserStatus",$model->status)); ?></td>
-	</tr>
+    <tr>
+        <th class="label"><?php echo Html::encode($model->getAttributeLabel('username')); ?></th>
+        <td><?php echo Html::encode($model->username); ?></td>
+    </tr>
+    <?php
+    $profileFields = ProfileField::find()->forOwner()->sort()->all();
+    if ($profileFields) {
+        foreach ($profileFields as $field) {
+            /** $field */
+            ?>
+            <tr>
+                <th class="label"><?php echo Html::encode(Module::t($field->title)); ?></th>
+                <td>
+                    <?php
+                    if ($field->widgetView($profile)) {
+                        echo $field->widgetView($profile);
+                    } else {
+                        if (Html::encode(($field->range))) {
+                            echo Profile::range($field->range, $profile->getAttribute($field->varname));
+                        } else {
+                            $profile->getAttribute($field->varname);
+                        }
+                    }
+                    ?>
+                </td>
+            </tr>
+            <?php
+        }//$profile->getAttribute($field->varname)
+    }
+    ?>
+    <tr>
+        <th class="label"><?php echo Html::encode($model->getAttributeLabel('email')); ?></th>
+        <td><?php echo Html::encode($model->email); ?></td>
+    </tr>
+    <tr>
+        <th class="label"><?php echo Html::encode($model->getAttributeLabel('create_at')); ?></th>
+        <td><?php echo $model->create_at; ?></td>
+    </tr>
+    <tr>
+        <th class="label"><?php echo Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
+        <td><?php echo $model->lastvisit_at; ?></td>
+    </tr>
+    <tr>
+        <th class="label"><?php echo Html::encode($model->getAttributeLabel('status')); ?></th>
+        <td><?php echo Html::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
+    </tr>
 </table>

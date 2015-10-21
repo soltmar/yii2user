@@ -26,7 +26,7 @@ class Profile extends ActiveRecord
      */
     public static function tableName()
     {
-        return Yii::$app->getModule('user')->tableProfiles;
+        return Module::getInstance()->tableProfiles;
     }
 
     /**
@@ -150,8 +150,8 @@ class Profile extends ActiveRecord
         $model=self::getFields();
 
         foreach ($model as $field) {
-            if (Yii::$app->getModule('user')->fieldsMessage) {
-                $l = Module::t($field->title, array(), Yii::$app->getModule('user')->fieldsMessage);
+            if (Module::getInstance()->fieldsMessage) {
+                $l = Module::t($field->title, array(), Module::getInstance()->fieldsMessage);
             } else {
                 $l = Module::t($field->title);
             }

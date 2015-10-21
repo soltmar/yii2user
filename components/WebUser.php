@@ -38,18 +38,18 @@ class WebUser extends \yii\web\User
     public function init()
     {
         parent::init();
-        $this->module = Yii::$app->getModule('user');
+        $this->module = Module::getInstance();
     }
 
     public function getRole()
     {
         return Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
     }
-    
-    public function getId()
-    {
-        return $this->id ? $this->id : 0;
-    }
+//
+//    public function getId()
+//    {
+//        return $this->id ? $this->id : 0;
+//    }
 
 //    protected function beforeLogin($id, $states, $fromCookie)
 //    {
@@ -74,7 +74,7 @@ class WebUser extends \yii\web\User
     }
 
 //    public function updateSession() {
-//        if ($user = Yii::$app->getModule('user')->user($this->id)) {
+//        if ($user = Module::getInstance()->user($this->id)) {
 //            $this->name = $user->username;
 //            $this = ArrayHelper::merge(array(
 //                'email'=>$user->email,
@@ -103,7 +103,8 @@ class WebUser extends \yii\web\User
      * @param integer $id user id. Default - current user id.
      * @return User
      */
-    public function user($id=0) {
+    public function user($id=0)
+    {
         return $this->model($id);
     }
 

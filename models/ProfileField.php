@@ -46,7 +46,7 @@ class ProfileField extends ActiveRecord
      */
     public static function tableName()
     {
-        return Yii::$app->getModule('user')->tableProfileFields;
+        return Module::getInstance()->tableProfileFields;
     }
 
     /**
@@ -129,7 +129,6 @@ class ProfileField extends ActiveRecord
     /**
      * @param ActiveRecord $model
      * @return string formated value
-     * @internal param $value
      */
     public function widgetView($model)
     {

@@ -1,18 +1,18 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.UserModule::t("Profile");
+<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Profile");
 $this->breadcrumbs=array(
-	UserModule::t("Profile")=>array('profile'),
-	UserModule::t("Edit"),
+	Module::t("Profile")=>array('profile'),
+	Module::t("Edit"),
 );
 $this->menu=array(
-	((UserModule::isAdmin())
-		?array('label'=>UserModule::t('Manage Users'), 'url'=>array('/user/admin'))
+	((Module::isAdmin())
+		?array('label'=>Module::t('Manage Users'), 'url'=>array('/user/admin'))
 		:array()),
-    array('label'=>UserModule::t('List User'), 'url'=>array('/user')),
-    array('label'=>UserModule::t('Profile'), 'url'=>array('/user/profile')),
-    array('label'=>UserModule::t('Change password'), 'url'=>array('changepassword')),
-    array('label'=>UserModule::t('Logout'), 'url'=>array('/user/logout')),
+    array('label'=>Module::t('List User'), 'url'=>array('/user')),
+    array('label'=>Module::t('Profile'), 'url'=>array('/user/profile')),
+    array('label'=>Module::t('Change password'), 'url'=>array('changepassword')),
+    array('label'=>Module::t('Logout'), 'url'=>array('/user/logout')),
 );
-?><h1><?php echo UserModule::t('Edit profile'); ?></h1>
+?><h1><?php echo Module::t('Edit profile'); ?></h1>
 
 <?php if(Yii::$app->user->hasFlash('profileMessage')): ?>
 <div class="success">
@@ -26,7 +26,7 @@ $this->menu=array(
 	'htmlOptions' => array('enctype'=>'multipart/form-data'),
 )); ?>
 
-	<p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
+	<p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
 	<?php echo $form->errorSummary(array($model,$profile)); ?>
 
@@ -66,7 +66,7 @@ $this->menu=array(
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? UserModule::t('Create') : UserModule::t('Save')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Save')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

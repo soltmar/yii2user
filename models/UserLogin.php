@@ -2,6 +2,9 @@
 
 namespace mariusz_soltys\yii2user\models;
 
+use mariusz_soltys\yii2user\Module;
+use Yii;
+
 /**
  * LoginForm class.
  * LoginForm is the data structure for keeping
@@ -9,71 +12,69 @@ namespace mariusz_soltys\yii2user\models;
  */
 class UserLogin extends \yii\base\Model
 {
-	public $username;
-	public $password;
-	public $rememberMe;
+    public $username;
+    public $password;
+    public $rememberMe;
 
-	/**
-	 * Declares the validation rules.
-	 * The rules state that username and password are required,
-	 * and password needs to be authenticated.
-	 */
-	public function rules()
-	{
-		return array(
-			// username and password are required
-			array('username, password', 'required'),
-			// rememberMe needs to be a boolean
-			array('rememberMe', 'boolean'),
-			// password needs to be authenticated
-			array('password', 'authenticate'),
-		);
-	}
+    /**
+     * Declares the validation rules.
+     * The rules state that username and password are required,
+     * and password needs to be authenticated.
+     */
+    public function rules()
+    {
+        return array(
+            // username and password are required
+            array(['username', 'password'], 'required'),
+            // rememberMe needs to be a boolean
+            array('rememberMe', 'boolean'),
+            // password needs to be authenticated
+            array('password', 'authenticate'),
+        );
+    }
 
-	/**
-	 * Declares attribute labels.
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'rememberMe'=>UserModule::t("Remember me next time"),
-			'username'=>UserModule::t("username or email"),
-			'password'=>UserModule::t("password"),
-		);
-	}
+    /**
+     * Declares attribute labels.
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'rememberMe'=>Module::t("Remember me next time"),
+            'username'=>Module::t("username or email"),
+            'password'=>Module::t("password"),
+        );
+    }
 
-	/**
-	 * Authenticates the password.
-	 * This is the 'authenticate' validator as declared in rules().
-	 */
-	public function authenticate($attribute,$params)
-	{
-		if(!$this->hasErrors())  // we only want to authenticate when no input errors
-		{
-			$identity=new UserIdentity($this->username,$this->password);
-			$identity->authenticate();
-			switch($identity->errorCode)
-			{
-				case UserIdentity::ERROR_NONE:
-					$duration=$this->rememberMe ? Yii::$app->controller->module->rememberMeTime : 0;
-					Yii::$app->user->login($identity,$duration);
-					break;
-				case UserIdentity::ERROR_EMAIL_INVALID:
-					$this->addError("username",UserModule::t("Email is incorrect."));
-					break;
-				case UserIdentity::ERROR_USERNAME_INVALID:
-					$this->addError("username",UserModule::t("Username is incorrect."));
-					break;
-				case UserIdentity::ERROR_STATUS_NOTACTIV:
-					$this->addError("status",UserModule::t("You account is not activated."));
-					break;
-				case UserIdentity::ERROR_STATUS_BAN:
-					$this->addError("status",UserModule::t("You account is blocked."));
-					break;
-				case UserIdentity::ERROR_PASSWORD_INVALID:
-					$this->addError("password",UserModule::t("Password is incorrect."));
-					break;
-			}
-		}
-	}
+    /**
+     * Authenticates the password.
+     * This is the 'authenticate' validator as declared in rules().
+     */
+    public function authenticate()
+    {
+        if (!$this->hasErrors()) {
+            $user = new User;
+            $identity = $user->authenticate($this->username, $this->password);
+            switch ($identity->errorCode) {
+                case User::ERROR_NONE:
+                    $duration=$this->rememberMe ? Module::getInstance()->rememberMeTime : 0;
+                    Yii::$app->user->login($identity, $duration);
+                    break;
+                case User::ERROR_EMAIL_INVALID:
+                    $this->addError("username", Module::t("Email is incorrect."));
+                    break;
+                case User::ERROR_USERNAME_INVALID:
+                    $this->addError("username", Module::t("Username is incorrect."));
+                    break;
+                case User::ERROR_STATUS_NOTACTIV:
+                    $this->addError("status", Module::t("Your account is not activated."));
+                    break;
+                case User::ERROR_STATUS_BAN:
+                    $this->addError("status", Module::t("Your account is blocked."));
+                    break;
+                case User::ERROR_PASSWORD_INVALID:
+                    $this->addError("password", Module::t("Password is incorrect."));
+                    break;
+            }
+        }
+    }
 }

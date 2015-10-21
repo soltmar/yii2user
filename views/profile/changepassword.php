@@ -1,20 +1,20 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.UserModule::t("Change password");
+<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Change password");
 $this->breadcrumbs=array(
-	UserModule::t("Profile") => array('/user/profile'),
-	UserModule::t("Change password"),
+	Module::t("Profile") => array('/user/profile'),
+	Module::t("Change password"),
 );
 $this->menu=array(
-	((UserModule::isAdmin())
-		?array('label'=>UserModule::t('Manage Users'), 'url'=>array('/user/admin'))
+	((Module::isAdmin())
+		?array('label'=>Module::t('Manage Users'), 'url'=>array('/user/admin'))
 		:array()),
-    array('label'=>UserModule::t('List User'), 'url'=>array('/user')),
-    array('label'=>UserModule::t('Profile'), 'url'=>array('/user/profile')),
-    array('label'=>UserModule::t('Edit'), 'url'=>array('edit')),
-    array('label'=>UserModule::t('Logout'), 'url'=>array('/user/logout')),
+    array('label'=>Module::t('List User'), 'url'=>array('/user')),
+    array('label'=>Module::t('Profile'), 'url'=>array('/user/profile')),
+    array('label'=>Module::t('Edit'), 'url'=>array('edit')),
+    array('label'=>Module::t('Logout'), 'url'=>array('/user/logout')),
 );
 ?>
 
-<h1><?php echo UserModule::t("Change password"); ?></h1>
+<h1><?php echo Module::t("Change password"); ?></h1>
 
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -25,7 +25,7 @@ $this->menu=array(
 	),
 )); ?>
 
-	<p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
+	<p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 	<?php echo $form->errorSummary($model); ?>
 	
 	<div class="row">
@@ -39,7 +39,7 @@ $this->menu=array(
 	<?php echo $form->passwordField($model,'password'); ?>
 	<?php echo $form->error($model,'password'); ?>
 	<p class="hint">
-	<?php echo UserModule::t("Minimal password length 4 symbols."); ?>
+	<?php echo Module::t("Minimal password length 4 symbols."); ?>
 	</p>
 	</div>
 	
@@ -51,7 +51,7 @@ $this->menu=array(
 	
 	
 	<div class="row submit">
-	<?php echo CHtml::submitButton(UserModule::t("Save")); ?>
+	<?php echo CHtml::submitButton(Module::t("Save")); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

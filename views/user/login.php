@@ -1,61 +1,68 @@
 <?php
 
 use mariusz_soltys\yii2user\Module;
+use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-//$this->pageTitle=Yii::$app->name . ' - '.Module::t("Login");
-//$this->breadcrumbs=array(
-//	Module::t("Login"),
-//);
+/**
+ * @var mariusz_soltys\yii2user\models\UserLogin $model
+ * @var $this yii\web\View
+*/
+
+$this->title = 'Login';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<h1><?= Module::t("Login"); ?></h1>
+<h1><?= Html::encode(Module::t($this->title)) ?></h1>
 
-<?php if(Yii::$app->user->hasFlash('loginMessage')): ?>
+<?php if (Yii::$app->user->hasFlash('status')) : ?>
 
 <div class="success">
-	<?= Yii::$app->user->getFlash('loginMessage'); ?>
+	<?= Yii::$app->user->getFlash('status'); ?>
 </div>
 
 <?php endif; ?>
+<div class="site-login">
 
-<p><?= Module::t("Please fill out the following form with your login credentials:"); ?></p>
 
-<div class="form">
-<?= Html::beginForm(); ?>
+    <p><?= Module::t("Please fill out the following form with your login credentials:"); ?></p>
 
-	<p class="note"><?= Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
+    <?php $form = ActiveForm::begin([
+        'id' => 'login-form',
+        'options' => ['class' => 'form-horizontal'],
+        'fieldConfig' => [
+            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+        ],
+    ]); ?>
+    <!--
+	<p class="note"><?/*= Module::t('Fields with <span class="required">*</span> are required.'); */?></p>
+    -->
+	<?= $form->errorSummary($model); ?>
 
-	<?= Html::errorSummary($model); ?>
+    <?= $form->field($model, 'username') ?>
 
-	<div class="row">
-		<?= Html::activeLabel($model, 'username'); ?>
-		<?= Html::activeTextInput($model, 'username') ?>
-	</div>
+    <?= $form->field($model, 'password')->passwordInput() ?>
 
-	<div class="row">
-		<?= Html::activeLabel($model, 'password'); ?>
-		<?= Html::activePasswordInput($model, 'password') ?>
-	</div>
-
-	<div class="row">
-		<p class="hint">
-		<?= Html::a(Module::t("Register"), Yii::$app->getModule('user')->registrationUrl); ?>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-11">
+		<?= Html::a(Module::t("Register"), Module::getInstance()->registrationUrl); ?>
 			|
-		<?= Html::link(Module::t("Lost Password?"), Yii::$app->getModule('user')->recoveryUrl); ?>
-		</p>
+		<?= Html::a(Module::t("Lost Password?"), Module::getInstance()->recoveryUrl); ?>
+		</div>
 	</div>
 
-	<div class="row rememberMe">
-		<?= Html::activeCheckBox($model, 'rememberMe'); ?>
-		<?= Html::activeLabel($model, 'rememberMe'); ?>
-	</div>
+    <?= $form->field($model, 'rememberMe')->checkbox([
+        'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+    ]) ?>
 
-	<div class="row submit">
-		<?= Html::submitButton(Module::t("Login")); ?>
-	</div>
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-11">
+            <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+        </div>
+    </div>
 
-<?= Html::endForm(); ?>
+    <?php ActiveForm::end(); ?>
 </div><!-- form -->
 
 
