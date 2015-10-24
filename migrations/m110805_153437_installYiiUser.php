@@ -1,9 +1,7 @@
 <?php
 
-namespace mariusz_soltys\yii2user;
-
 use mariusz_soltys\yii2user\models\User;
-use Yii;
+use mariusz_soltys\yii2user\Module;
 use yii\db\Migration;
 
 class m110805_153437_installYiiUser extends Migration
@@ -13,7 +11,7 @@ class m110805_153437_installYiiUser extends Migration
 
     public function safeUp()
     {
-        if (!Module::getInstance()) {
+        if (!Yii::$app->getModule('user')) {
             echo "\n\nAdd to console.php :\n"
                 ."'modules'=>array(\n"
                 ."...\n"

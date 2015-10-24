@@ -1,4 +1,6 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Login"); ?>
+<?php use mariusz_soltys\yii2user\Module;
+
+$this->pageTitle=Yii::$app->name . ' - '.Module::t("Login"); ?>
 
 <h1><?php echo $title; ?></h1>
 

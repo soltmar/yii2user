@@ -7,7 +7,7 @@ class m110810_162301_userTimestampFix extends Migration
 {
     public function safeUp()
     {
-        if (!Module::getInstance()) {
+        if (!Yii::$app->getModule('user')) {
             echo "\n\nAdd to console.php :\n"
                 ."'modules'=>array(\n"
                 ."...\n"

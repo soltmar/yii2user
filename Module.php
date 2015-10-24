@@ -7,6 +7,7 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
+    public $mainLayout = '@app/views/layouts/main.php';
     /**
      * @var int
      * @desc items on page
@@ -157,10 +158,10 @@ class Module extends \yii\base\Module
      */
     public static function t($str = '', $params = array(), $dic = 'user')
     {
-        if (Yii::t("Module", $str)==$str) {
-            return Yii::t("Module.".$dic, $str, $params);
+        if (Yii::t("user", $str)==$str) {
+            return Yii::t("user.".$dic, $str, $params);
         } else {
-            return Yii::t("Module", $str, $params);
+            return Yii::t("user", $str, $params);
         }
     }
 

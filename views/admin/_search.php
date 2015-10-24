@@ -1,54 +1,49 @@
+<?php
+
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
+
+/**
+ * @var mariusz_soltys\yii2user\models\User $model
+ * @var $this yii\web\View
+ */
+
+?>
 <div class="wide form">
+<?php
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-    'action'=>Yii::$app->createUrl($this->route),
-    'method'=>'get',
-)); ?>
+$form = ActiveForm::begin([
+        'id' => 'login-form',
+        'options' => ['class' => 'form-horizontal'],
+        'fieldConfig' => [
+            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+        ],
+    ]); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'id'); ?>
-        <?php echo $form->textField($model,'id'); ?>
-    </div>
+    <?= $form->field($model, 'id'); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'username'); ?>
-        <?php echo $form->textField($model,'username',array('size'=>20,'maxlength'=>20)); ?>
-    </div>
+    <?= $form->field($model, 'username')->textInput(['size'=>20, 'maxlength'=>20]);  ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'email'); ?>
-        <?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>128)); ?>
-    </div>
+    <?= $form->field($model, 'email')->textInput(['size'=>60,'maxlength'=>128]); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'activkey'); ?>
-        <?php echo $form->textField($model,'activkey',array('size'=>60,'maxlength'=>128)); ?>
-    </div>
 
-    <div class="row">
-        <?php echo $form->label($model,'create_at'); ?>
-        <?php echo $form->textField($model,'create_at'); ?>
-    </div>
+    <?= $form->field($model, 'activkey')->textInput(['size'=>60, 'maxlength'=>128]); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'lastvisit_at'); ?>
-        <?php echo $form->textField($model,'lastvisit_at'); ?>
-    </div>
+    <?= $form->field($model, 'create_at'); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'superuser'); ?>
-        <?php echo $form->dropDownList($model,'superuser',$model->itemAlias('AdminStatus')); ?>
-    </div>
+    <?= $form->field($model, 'lastvisit_at'); ?>
 
-    <div class="row">
-        <?php echo $form->label($model,'status'); ?>
-        <?php echo $form->dropDownList($model,'status',$model->itemAlias('UserStatus')); ?>
-    </div>
+    <?= $form->field($model, 'superuser')->dropDownList($model->itemAlias('AdminStatus')); ?>
 
-    <div class="row buttons">
-        <?php echo CHtml::submitButton(Module::t('Search')); ?>
-    </div>
+    <?= $form->field($model, 'status')->dropDownList($model->itemAlias('UserStatus')); ?>
 
-<?php $this->endWidget(); ?>
+
+<div class="form-group">
+        <div class="col-lg-offset-1 col-lg-11">
+            <?= Html::submitButton(\mariusz_soltys\yii2user\Module::t('search'), ['class' => 'btn btn-primary']) ?>
+        </div>
+</div>
+<?php ActiveForm::end() ?>
 
 </div><!-- search-form -->
