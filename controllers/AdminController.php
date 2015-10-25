@@ -3,19 +3,19 @@
 namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\models\Profile;
+use mariusz_soltys\yii2user\models\search\UserSearch;
 use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\HttpException;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 class AdminController extends Controller
 {
     public $defaultAction = 'admin';
-    public $layout='//layouts/column2';
+    public $layout='column2';
 
     private $model;
 
@@ -43,15 +43,12 @@ class AdminController extends Controller
      */
     public function actionAdmin()
     {
-        $model=new User;
-        $model->scenario = $model::SCENARIO_SEARCH;  // clear any default values
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if (isset($_GET['User'])) {
-            $model->load($_GET['User']);
-        }
-
-        $this->render('index', array(
-            'model'=>$model,
+        return $this->render('index', array(
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
         ));
         /*$dataProvider=new CActiveDataProvider('User', array(
             'pagination'=>array(
@@ -71,7 +68,7 @@ class AdminController extends Controller
     public function actionView()
     {
         $model = $this->loadModel();
-        $this->render('view', [
+        return $this->render('view', [
             'model'=>$model,
         ]);
     }
@@ -102,7 +99,7 @@ class AdminController extends Controller
             }
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model'=>$model,
             'profile'=>$profile,
         ));
@@ -118,11 +115,11 @@ class AdminController extends Controller
         $profile=$model->profile;
         $this->performAjaxValidation([$model, $profile]);
         if (isset($_POST['User'])) {
-            $model->attributes=$_POST['User'];
-            $profile->attributes=$_POST['Profile'];
+            $model->load($_POST);
+            $profile->load($_POST);
 
             if ($model->validate()&&$profile->validate()) {
-                $old_password = User::findOne($model->id)->notsafe();
+                $old_password = User::find()->notsafe()->findbyPk($model->id)->one();
                 if ($old_password->password!=$model->password) {
                     $model->password=Yii::$app->controller->module->encrypting($model->password);
                     $model->activkey=Yii::$app->controller->module->encrypting(microtime().$model->password);
@@ -135,7 +132,7 @@ class AdminController extends Controller
             }
         }
 
-        $this->render('update', [
+        return $this->render('update', [
             'model'=>$model,
             'profile'=>$profile,
         ]);
@@ -175,9 +172,9 @@ class AdminController extends Controller
      */
     protected function performAjaxValidation($validate)
     {
-        if (isset($_POST['ajax']) && $_POST['ajax']==='user-form') {
-            echo ActiveForm::validateMultiple($validate);
-            Yii::$app->end();
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validateMultiple($validate);
         }
     }
 
@@ -192,7 +189,7 @@ class AdminController extends Controller
     {
         if ($this->model===null) {
             if (isset($_GET['id'])) {
-                $this->model = User::findOne($_GET['id'])->notsafe();
+                $this->model = User::find()->notsafe()->findbyPk($_GET['id'])->one();
             }
             if ($this->model===null) {
                 throw new HttpException(404, 'The requested page does not exist.');

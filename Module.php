@@ -64,6 +64,7 @@ class Module extends \yii\base\Module
         'foreColor'=>0x2040A0,
     );
 
+    private $menu = [];
 
     /**
      * @var int
@@ -302,6 +303,50 @@ class Module extends \yii\base\Module
             $_userByName[$username] = User::findOne(['username'=>$username]);
         }
         return $_userByName[$username];
+    }
+
+    public function initMenu()
+    {
+        if (Module::isAdmin()) {
+            $this->menu = [
+                ['label' => Module::t('Create User'), 'url' => ['/user/admin/create']],
+                ['label' => Module::t('Manage Users'), 'url' => ['/user/admin/admin']],
+                ['label' => Module::t('Manage Profile Field'), 'url' => ['/user/profile-field/admin']],
+                ['label' => Module::t('List User'), 'url' => ['/user']],
+            ];
+        }
+    }
+
+    public function getMenu()
+    {
+        if (empty($this->menu)) {
+            $this->initMenu();
+        }
+
+        return $this->menu;
+    }
+
+    /**
+     * Position is counted starting from number 1 (not 0 as in arrays)
+     * @param array $option
+     * @param false|int $position
+     */
+    public function addMenu($option, $position = 0)
+    {
+        if (empty($this->menu)) {
+            $this->initMenu();
+        }
+
+        if ($position !== 0) {
+            $this->menu = array_splice($this->menu, $position-1, 0, $option);
+        } else {
+            $this->menu[] = $option;
+        }
+    }
+
+    public function setMenu($options)
+    {
+        $this->menu = $options;
     }
 
 //	/**

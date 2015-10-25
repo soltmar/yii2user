@@ -1,4 +1,6 @@
-<?php use mariusz_soltys\yii2user\models\Profile;
+<?php
+
+use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\ProfileField;
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\Module;
@@ -13,16 +15,21 @@ use yii\helpers\Html;
 $this->title=Yii::$app->name . ' - '.Module::t("Profile");
 $this->params['breadcrumbs'][] = Module::t("Profile");
 
-$this->params['subnav']= [
-    ((Module::isAdmin())
-        ? ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']]
-        : []),
+$menu = [
     ['label'=>Module::t('List User'), 'url'=> ['/user']],
     ['label'=>Module::t('Edit'), 'url'=> ['edit']],
     ['label'=>Module::t('Change password'), 'url'=> ['changepassword']],
     ['label'=>Module::t('Logout'), 'url'=> ['/user/logout']],
 ];
-?><h1><?php echo Module::t('Your profile'); ?></h1>
+
+if (Module::isAdmin()) {
+    array_unshift($menu, ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']]);
+}
+
+Module::getInstance()->setMenu($menu);
+
+?>
+<h1><?= Module::t('Your profile'); ?></h1>
 
 <?php if (Yii::$app->user->hasFlash('profileMessage')) : ?>
     <div class="success">
@@ -31,8 +38,8 @@ $this->params['subnav']= [
 <?php endif; ?>
 <table class="dataGrid">
     <tr>
-        <th class="label"><?php echo Html::encode($model->getAttributeLabel('username')); ?></th>
-        <td><?php echo Html::encode($model->username); ?></td>
+        <th class="label"><?= Html::encode($model->getAttributeLabel('username')); ?></th>
+        <td><?= Html::encode($model->username); ?></td>
     </tr>
     <?php
     $profileFields = ProfileField::find()->forOwner()->sort()->all();
@@ -41,7 +48,7 @@ $this->params['subnav']= [
             /** $field */
             ?>
             <tr>
-                <th class="label"><?php echo Html::encode(Module::t($field->title)); ?></th>
+                <th class="label"><?= Html::encode(Module::t($field->title)); ?></th>
                 <td>
                     <?php
                     if ($field->widgetView($profile)) {
@@ -61,19 +68,19 @@ $this->params['subnav']= [
     }
     ?>
     <tr>
-        <th class="label"><?php echo Html::encode($model->getAttributeLabel('email')); ?></th>
-        <td><?php echo Html::encode($model->email); ?></td>
+        <th class="label"><?= Html::encode($model->getAttributeLabel('email')); ?></th>
+        <td><?= Html::encode($model->email); ?></td>
     </tr>
     <tr>
-        <th class="label"><?php echo Html::encode($model->getAttributeLabel('create_at')); ?></th>
-        <td><?php echo $model->create_at; ?></td>
+        <th class="label"><?= Html::encode($model->getAttributeLabel('create_at')); ?></th>
+        <td><?= $model->create_at; ?></td>
     </tr>
     <tr>
-        <th class="label"><?php echo Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
-        <td><?php echo $model->lastvisit_at; ?></td>
+        <th class="label"><?= Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
+        <td><?= $model->lastvisit_at; ?></td>
     </tr>
     <tr>
-        <th class="label"><?php echo Html::encode($model->getAttributeLabel('status')); ?></th>
-        <td><?php echo Html::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
+        <th class="label"><?= Html::encode($model->getAttributeLabel('status')); ?></th>
+        <td><?= Html::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
     </tr>
 </table>

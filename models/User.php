@@ -51,7 +51,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function tableName()
     {
-        return Module::getInstance()->tableUsers;
+        return Yii::$app->getModule('user')->tableUsers;
     }
 
     /**
@@ -144,17 +144,17 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function itemAlias($type, $code = null)
     {
-        $_items = array(
-            'UserStatus' => array(
+        $_items = [
+            'UserStatus' => [
                 self::STATUS_NOACTIVE => Module::t('Not active'),
                 self::STATUS_ACTIVE => Module::t('Active'),
                 self::STATUS_BANNED => Module::t('Banned'),
-            ),
-            'AdminStatus' => array(
+            ],
+            'AdminStatus' => [
                 '0' => Module::t('No'),
                 '1' => Module::t('Yes'),
-            ),
-        );
+            ],
+        ];
         if (isset($code)) {
             return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
         } else {
@@ -184,9 +184,9 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function afterSave($insert, $changedAttributes)
     {
-        if (get_class(Yii::$app)=='CWebApplication'&&Profile::$regMode==false) {
-            Yii::$app->user->updateSession();
-        }
+//        if (get_class(Yii::$app)=='CWebApplication'&&Profile::$regMode==false) {
+//            Yii::$app->user->updateSession();
+//        }
         return parent::afterSave($insert, $changedAttributes);
     }
 

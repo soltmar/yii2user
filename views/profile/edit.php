@@ -1,74 +1,85 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Profile");
-$this->breadcrumbs=array(
-	Module::t("Profile")=>array('profile'),
-	Module::t("Edit"),
-);
-$this->menu=array(
-	((Module::isAdmin())
-		?array('label'=>Module::t('Manage Users'), 'url'=>array('/user/admin'))
-		:array()),
-    array('label'=>Module::t('List User'), 'url'=>array('/user')),
-    array('label'=>Module::t('Profile'), 'url'=>array('/user/profile')),
-    array('label'=>Module::t('Change password'), 'url'=>array('changepassword')),
-    array('label'=>Module::t('Logout'), 'url'=>array('/user/logout')),
-);
-?><h1><?php echo Module::t('Edit profile'); ?></h1>
+<?php
 
-<?php if(Yii::$app->user->hasFlash('profileMessage')): ?>
-<div class="success">
-<?php echo Yii::$app->user->getFlash('profileMessage'); ?>
-</div>
+    use mariusz_soltys\yii2user\models\Profile;
+    use mariusz_soltys\yii2user\Module;
+    use yii\helpers\Html;
+    use yii\widgets\ActiveForm;
+
+    /* @var $this yii\web\View */
+    /* @var $model mariusz_soltys\yii2user\models\User */
+    /* @var $profile mariusz_soltys\yii2user\models\Profile */
+
+    $this->title=Yii::$app->name . ' - '.Module::t("Profile");
+    $this->params['breadcrumbs']= [
+        ['label' => Module::t("Profile"), 'url' => ['profile']],
+        Module::t("Edit"),
+    ];
+
+    $menu = [
+        ['label'=>Module::t('List User'), 'url'=> ['/user']],
+        ['label'=>Module::t('Profile'), 'url'=> ['/user/profile']],
+        ['label'=>Module::t('Change password'), 'url'=> ['changepassword']],
+        ['label'=>Module::t('Logout'), 'url'=> ['/user/logout']],
+    ];
+
+    if (Module::isAdmin()) {
+        array_unshift($menu, ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']]);
+    }
+
+    Module::getInstance()->setMenu($menu);
+
+?>
+<h1><?= Module::t('Edit profile'); ?></h1>
+
+<?php if (Yii::$app->user->hasFlash('profileMessage')) : ?>
+    <div class="success">
+        <?= Yii::$app->user->getFlash('profileMessage'); ?>
+    </div>
 <?php endif; ?>
 <div class="form">
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'profile-form',
-	'enableAjaxValidation'=>true,
-	'htmlOptions' => array('enctype'=>'multipart/form-data'),
-)); ?>
 
-	<p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
+    <?php $form = ActiveForm::begin([
+        'id'=>'profile-form',
+        'enableAjaxValidation'=>true,
+        'options' => ['enctype'=>'multipart/form-data'],
+    ]); ?>
 
-	<?php echo $form->errorSummary(array($model,$profile)); ?>
+    <p class="note"><?= Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
-<?php 
-		$profileFields=Profile::getFields();
-		if ($profileFields) {
-			foreach($profileFields as $field) {
-			?>
-	<div class="row">
-		<?php echo $form->labelEx($profile,$field->varname);
-		
-		if ($widgetEdit = $field->widgetEdit($profile)) {
-			echo $widgetEdit;
-		} elseif ($field->range) {
-			echo $form->dropDownList($profile,$field->varname,Profile::range($field->range));
-		} elseif ($field->field_type=="TEXT") {
-			echo $form->textArea($profile,$field->varname,array('rows'=>6, 'cols'=>50));
-		} else {
-			echo $form->textField($profile,$field->varname,array('size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)));
-		}
-		echo $form->error($profile,$field->varname); ?>
-	</div>	
-			<?php
-			}
-		}
-?>
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
+    <?= $form->errorSummary(array($model, $profile)); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>128)); ?>
-		<?php echo $form->error($model,'email'); ?>
-	</div>
+    <?php
+    $profileFields=Profile::getFields();
+    if ($profileFields) {
+        foreach ($profileFields as $field) {
+            /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
+            $input = $form->field($model, $field->varname);
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Module::t('Create') : Module::t('Save')); ?>
-	</div>
+            if ($widgetEdit = $field->widgetEdit($profile)) {
+                echo $widgetEdit;
+            } elseif ($field->range) {
+                echo $input->dropDownList(Profile::range($field->range));
+            } elseif ($field->field_type=="TEXT") {
+                echo $input->textarea(['rows'=>6, 'cols'=>50]);
+            } else {
+                echo $input->textInput(['size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)]);
+            }
+        }
+    }
+    ?>
 
-<?php $this->endWidget(); ?>
+    <?= $form->field($model, 'username'); ?>
+
+    <?= $form->field($model, 'email'); ?>
+
+    <div class="form-group">
+        <?=
+            Html::submitButton(
+                $model->isNewRecord ? Module::t('Create') : Module::t('Save'),
+                ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+            ); ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div><!-- form -->

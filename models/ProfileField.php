@@ -65,11 +65,11 @@ class ProfileField extends ActiveRecord
                 'message' => Module::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")
             ],
             ['varname', 'unique', 'message' => Module::t("This field already exists.")],
-            [['varname', 'field_type'], 'length', 'max'=>50],
-            [['field_size_min', 'required', 'position', 'visible'], 'numerical', 'integerOnly'=>true],
+            [['varname', 'field_type'], 'string', 'max'=>50],
+            [['field_size_min', 'required', 'position', 'visible'], 'number', 'integerOnly'=>true],
             ['field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['title', 'match', 'error_message', 'other_validator', 'default', 'widget'], 'length', 'max'=>255],
-            [['range', 'widgetparams'], 'length', 'max'=>5000],
+            [['title', 'match', 'error_message', 'other_validator', 'default', 'widget'], 'string', 'max'=>255],
+            [['range', 'widgetparams'], 'string', 'max'=>5000],
             [
                 [
                     'id',

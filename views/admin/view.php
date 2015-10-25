@@ -1,60 +1,85 @@
 <?php
-$this->breadcrumbs=array(
-	Module::t('Users')=>array('admin'),
-	$model->username,
-);
+    use mariusz_soltys\yii2user\models\Profile;
+    use mariusz_soltys\yii2user\models\ProfileField;
+    use mariusz_soltys\yii2user\models\User;
+    use mariusz_soltys\yii2user\Module;
+    use yii\widgets\DetailView;
 
+    /**
+     * @var \yii\web\View $this
+     * @var \mariusz_soltys\yii2user\models\User $model
+     */
 
-$this->menu=array(
-    array('label'=>Module::t('Create User'), 'url'=>array('create')),
-    array('label'=>Module::t('Update User'), 'url'=>array('update','id'=>$model->id)),
-    array('label'=>Module::t('Delete User'), 'url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>Module::t('Are you sure to delete this item?'))),
-    array('label'=>Module::t('Manage Users'), 'url'=>array('admin')),
-    array('label'=>Module::t('Manage Profile Field'), 'url'=>array('profileField/admin')),
-    array('label'=>Module::t('List User'), 'url'=>array('/user')),
-);
+    $this->params['breadcrumbs']= [
+        ['label' => Module::t('Users'), 'url' => ['admin']],
+        $model->username,
+    ];
+
+    Module::getInstance()->addMenu(['label'=>Module::t('Update User'), 'url'=> ['update','id'=>$model->id]], 3);
+    Module::getInstance()->addMenu([
+        'label'=>Module::t('Delete User'),
+        'url'=>'#',
+        'linkOptions'=> [
+            'submit'=> ['delete','id'=>$model->id],
+            'confirm'=>Module::t('Are you sure to delete this item?')
+        ]
+    ], 4);
+
+    $this->title = Module::t('View User').' "'.$model->username.'"';
 ?>
-<h1><?php echo Module::t('View User').' "'.$model->username.'"'; ?></h1>
+
+<h1><?= Module::t('View User').' "'.$model->username.'"'; ?></h1>
 
 <?php
- 
-	$attributes = array(
-		'id',
-		'username',
-	);
-	
-	$profileFields=ProfileField::model()->forOwner()->sort()->findAll();
-	if ($profileFields) {
-		foreach($profileFields as $field) {
-			array_push($attributes,array(
-					'label' => Module::t($field->title),
-					'name' => $field->varname,
-					'type'=>'raw',
-					'value' => (($field->widgetView($model->profile))?$field->widgetView($model->profile):(($field->range)?Profile::range($field->range,$model->profile->getAttribute($field->varname)):$model->profile->getAttribute($field->varname))),
-				));
-		}
-	}
-	
-	array_push($attributes,
-		'password',
-		'email',
-		'activkey',
-		'create_at',
-		'lastvisit_at',
-		array(
-			'name' => 'superuser',
-			'value' => User::itemAlias("AdminStatus",$model->superuser),
-		),
-		array(
-			'name' => 'status',
-			'value' => User::itemAlias("UserStatus",$model->status),
-		)
-	);
-	
-	$this->widget('zii.widgets.CDetailView', array(
-		'data'=>$model,
-		'attributes'=>$attributes,
-	));
-	
+
+    $attributes = [
+        'id',
+        'username',
+    ];
+
+    $profileFields = ProfileField::find()->forOwner()->sort()->all();
+    if ($profileFields) {
+        foreach ($profileFields as $field) {
+            $val = '';
+            if ($field->widgetView($model->profile)) {
+                $val = $field->widgetView($model->profile);
+            } else {
+                if ($field->range) {
+                    $val = Profile::range($field->range, $model->profile->getAttribute($field->varname));
+                } else {
+                    $val = $model->profile->getAttribute($field->varname);
+                }
+            }
+            array_push($attributes, [
+                'label' => Module::t($field->title),
+                'name' => $field->varname,
+                'type'=>'raw',
+                'value' => $val
+            ]);
+        }
+    }
+
+    array_push(
+        $attributes,
+        'password',
+        'email',
+        'activkey',
+        'create_at',
+        'lastvisit_at',
+        array(
+            'attribute' => 'superuser',
+            'value' => User::itemAlias("AdminStatus", $model->superuser),
+        ),
+        array(
+            'attribute' => 'status',
+            'value' => User::itemAlias("UserStatus", $model->status),
+        )
+    );
+
+    echo DetailView::widget([
+        'model' => $model,
+        'attributes'=>$attributes,
+    ]);
+
 
 ?>

@@ -1,13 +1,14 @@
 <?php
 
-namespace mariusz_soltys\yii2user\models;
+namespace mariusz_soltys\yii2user\models\search;
 
+use mariusz_soltys\yii2user\models\User;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * UserSearch represents the model behind the search form about `app\models\User`.
+ * UserSearch represents the model behind the search form about `mariusz_soltys/yii2user/models/User`.
  */
 class UserSearch extends User
 {
@@ -17,7 +18,7 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['username', 'email', 'create_at', 'lastvisit_at'], 'safe'],
+            [['username', 'email', 'create_at', 'lastvisit_at', 'superuser', 'status'], 'safe'],
         ];
     }
 
@@ -59,7 +60,9 @@ class UserSearch extends User
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email]);
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'superuser', $this->superuser])
+            ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }

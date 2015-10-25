@@ -123,8 +123,8 @@ class Profile extends ActiveRecord
             }
 
             array_push($rules, [$required, 'required']);
-            array_push($rules, [$numerical, 'numerical', 'integerOnly'=>true]);
-            array_push($rules, [$float, 'type', 'type'=>'float']);
+            array_push($rules, [$numerical, 'integer']);
+            array_push($rules, [$float, 'number']);
             array_push($rules, [$decimal, 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'
             ]);
             self::$rules = $rules;
@@ -237,9 +237,9 @@ class Profile extends ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if (get_class(Yii::$app)=='yii\web\Application'&&Profile::$regMode==false) {
-            Yii::$app->user->updateSession();
-        }
+//        if (get_class(Yii::$app)=='yii\web\Application'&&Profile::$regMode==false) {
+//            Yii::$app->user->updateSession();
+//        }
         return parent::afterSave($insert, $changedAttributes);
     }
 }

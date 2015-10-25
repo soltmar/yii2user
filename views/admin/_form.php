@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model mariusz_soltys\yii2user\models\User */
 /* @var $profile mariusz_soltys\yii2user\models\Profile */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="form">

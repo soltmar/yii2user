@@ -4,13 +4,12 @@ use mariusz_soltys\yii2user\Module;
 use yii\widgets\DetailView;
 
 $this->params['breadcrumbs']= [
-    Module::t('Users')=> ['index'],
+    ['label' => Module::t('Users'), 'url' => ['index']],
     $model->username,
 ];
-$this->layout='//layouts/column2';
-$this->menu=array(
-    array('label'=>Module::t('List User'), 'url'=>array('index')),
-);
+Module::getInstance()->setMenu([
+    ['label'=>Module::t('List User'), 'url'=> ['index']]
+]);
 ?>
 <h1><?php echo Module::t('View User').' "'.$model->username.'"'; ?></h1>
 <?php
@@ -25,7 +24,7 @@ $this->menu=array(
         foreach ($profileFields as $field) {
             array_push($attributes, [
                 'label' => Module::t($field->title),
-                'name' => $field->varname,
+                'attribute' => $field->varname,
                 'value' => (($field->widgetView($model->profile))?$field->widgetView($model->profile):(($field->range)?Profile::range($field->range,$model->profile->getAttribute($field->varname)):$model->profile->getAttribute($field->varname))),
 
             ]);
@@ -35,7 +34,7 @@ $this->menu=array(
         $attributes,
         'create_at',
         array(
-            'name' => 'lastvisit_at',
+            'attribute' => 'lastvisit_at',
             'value' => (($model->lastvisit_at!='0000-00-00 00:00:00')?$model->lastvisit_at:Module::t('Not visited')),
         )
     );

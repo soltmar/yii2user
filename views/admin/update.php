@@ -1,20 +1,22 @@
 <?php
-$this->breadcrumbs=array(
-	(Module::t('Users'))=>array('admin'),
-	$model->username=>array('view','id'=>$model->id),
-	(Module::t('Update')),
-);
-$this->menu=array(
-    array('label'=>Module::t('Create User'), 'url'=>array('create')),
-    array('label'=>Module::t('View User'), 'url'=>array('view','id'=>$model->id)),
-    array('label'=>Module::t('Manage Users'), 'url'=>array('admin')),
-    array('label'=>Module::t('Manage Profile Field'), 'url'=>array('profileField/admin')),
-    array('label'=>Module::t('List User'), 'url'=>array('/user')),
-);
+use mariusz_soltys\yii2user\Module;
+
+/**
+ * @var $this yii\web\View
+ * @var \mariusz_soltys\yii2user\models\User $model
+ * @var \mariusz_soltys\yii2user\models\Profile $profile
+ */
+
+$this->params['breadcrumbs']= [
+    ['label' => Module::t('Users'), 'url' => ['admin']],
+    ['label' => $model->username, 'url' => ['view','id'=>$model->id]],
+    Module::t('Update'),
+];
+Module::getInstance()->addMenu(['label'=>Module::t('View User'), 'url'=> ['view','id'=>$model->id]]);
 ?>
 
-<h1><?php echo  Module::t('Update User')." ".$model->id; ?></h1>
+    <h1><?php echo  Module::t('Update User')." ".$model->id; ?></h1>
 
-<?php
-	echo $this->renderPartial('_form', array('model'=>$model,'profile'=>$profile));
+<?=
+ $this->render('_form', array('model'=>$model,'profile'=>$profile));
 ?>

@@ -11,10 +11,6 @@ $this->params['breadcrumbs']= [
 ];
 if (Module::isAdmin()) {
     $this->context->layout='column2';
-    $this->params['menu']= [
-        ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']],
-        ['label'=>Module::t('Manage Profile Field'), 'url'=> ['profileField/admin']],
-    ];
 }
 ?>
 

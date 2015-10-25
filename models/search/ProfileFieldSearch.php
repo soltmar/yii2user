@@ -1,7 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user\models;
+namespace mariusz_soltys\yii2user\models\search;
 
+use mariusz_soltys\yii2user\models\ProfileField;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -11,6 +12,12 @@ use yii\data\ActiveDataProvider;
  */
 class ProfileFieldSearch extends ProfileField
 {
+    public function rules()
+    {
+        return [
+            [['varname', 'title', 'field_type', 'field_size', 'required', 'position', 'visible'], 'safe'],
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -29,7 +36,7 @@ class ProfileFieldSearch extends ProfileField
      */
     public function search($params)
     {
-        $query = ProfileField::find()->sort();
+        $query = ProfileField::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

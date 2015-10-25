@@ -16,6 +16,8 @@ class UserController extends Controller
      */
     private $model;
 
+    public $layout = 'column2';
+
     public function behaviors()
     {
         return [
@@ -25,7 +27,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['?'],
+                        //'roles' => ['?'],
                     ],
                 ],
             ],
@@ -38,7 +40,7 @@ class UserController extends Controller
     public function actionView()
     {
         $model = $this->loadModel();
-        $this->render('view', [
+        return $this->render('view', [
             'model'=>$model,
         ]);
     }
@@ -56,7 +58,7 @@ class UserController extends Controller
             ],
         ]);
 
-        $this->render('index', [
+        return $this->render('index', [
             'dataProvider'=>$provider,
         ]);
     }
