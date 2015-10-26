@@ -1,68 +1,69 @@
 <?php
 
-    namespace mariusz_soltys\yii2user\controllers;
+namespace mariusz_soltys\yii2user\controllers;
 
-    use mariusz_soltys\yii2user\models\search\ProfileFieldSearch;
-    use yii\base\Exception;
-    use mariusz_soltys\yii2user\models\Profile;
-    use mariusz_soltys\yii2user\models\ProfileField;
-    use mariusz_soltys\yii2user\Module;
-    use Yii;
-    use yii\filters\AccessControl;
-    use yii\helpers\ArrayHelper;
-    use yii\helpers\Html;
-    use yii\helpers\Json;
-    use yii\web\Controller;
-    use yii\web\HttpException;
-    use yii\web\Response;
-    use yii\widgets\ActiveForm;
+use mariusz_soltys\yii2user\assets\UserAssets;
+use mariusz_soltys\yii2user\models\search\ProfileFieldSearch;
+use yii\base\Exception;
+use mariusz_soltys\yii2user\models\Profile;
+use mariusz_soltys\yii2user\models\ProfileField;
+use mariusz_soltys\yii2user\Module;
+use Yii;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Json;
+use yii\web\Controller;
+use yii\web\HttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
-    class ProfileFieldController extends Controller
+class ProfileFieldController extends Controller
+{
+
+    /**
+     * @var ProfileField the currently loaded data model instance.
+     */
+    private $model;
+    private static $widgets = array();
+    public $defaultAction = 'admin';
+    public $layout='column2';
+
+    public function behaviors()
     {
-
-        /**
-         * @var ProfileField the currently loaded data model instance.
-         */
-        private $model;
-        private static $widgets = array();
-        public $defaultAction = 'admin';
-        public $layout='column2';
-
-        public function behaviors()
-        {
-            return [
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'only' => ['create','update','view','admin','delete'],
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'matchCallback'=>function () {
-                                return Yii::$app->user->isAdmin();
-                            },
-                        ],
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create','update','view','admin','delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'matchCallback'=>function () {
+                            return Yii::$app->user->isAdmin();
+                        },
                     ],
                 ],
-            ];
-        }
+            ],
+        ];
+    }
 
-        /**
-         * Displays a particular model.
-         */
-        public function actionView()
-        {
-            $this->render('view', [
-                'model'=>$this->loadModel(),
-            ]);
-        }
+    /**
+     * Displays a particular model.
+     */
+    public function actionView()
+    {
+        return $this->render('view', [
+            'model'=>$this->loadModel(),
+        ]);
+    }
 
-        /**
-         * Register Script
-         */
-        public function registerScript()
-        {
+    /**
+     * Register Script
+     */
+    public function registerScript()
+    {
 
-            //TODO populate assest somwhere else (Asset bundle? - where register)
+        //TODO populate assest somwhere else (Asset bundle? - where register)
 //        $basePath=Yii::getAlias('@vendor/');
 //        $baseUrl=Yii::$app->getAssetManager()->publish($basePath);
 //        $cs = Yii::$app->getClientScript();
@@ -73,32 +74,37 @@
 //        $cs->registerScriptFile($baseUrl.'/js/form.js');
 //        $cs->registerScriptFile($baseUrl.'/js/jquery.json.js');
 
-            $widgets = self::getWidgets();
+        UserAssets::register($this->view);
 
-            $wgByTypes = ProfileField::itemAlias('field_type');
-            foreach ($wgByTypes as $k => $v) {
-                $wgByTypes[$k] = array();
-            }
+        $widgets = self::getWidgets();
 
-            foreach ($widgets[1] as $widget) {
-                if (isset($widget['fieldType'])&&count($widget['fieldType'])) {
-                    foreach ($widget['fieldType'] as $type) {
-                        array_push($wgByTypes[$type], $widget['name']);
-                    }
+        $wgByTypes = ProfileField::itemAlias('field_type');
+        foreach ($wgByTypes as $k => $v) {
+            $wgByTypes[$k] = array();
+        }
+
+        foreach ($widgets[1] as $widget) {
+            if (isset($widget['fieldType'])&&count($widget['fieldType'])) {
+                foreach ($widget['fieldType'] as $type) {
+                    array_push($wgByTypes[$type], $widget['name']);
                 }
             }
-            //echo '<pre>'; print_r($widgets[1]); die();
-            /** @var string $js */
-            $js = "
+        }
+        //echo '<pre>'; print_r($widgets[1]); die();
+        /** @var string $js */
+        $js = "
 
 	var name = $('#name'),
 	value = $('#value'),
 	allFields = $([]).add(name).add(value),
 	tips = $('.validateTips');
 
-	var listWidgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[0]))."');
-	var widgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[1]))."');
+	console.log('".json_encode($wgByTypes)."');
+
+	////var listWidgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[0]))."');
+	///var widgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[1]))."');
 	var wgByType = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($wgByTypes))."');
+
 
 	var fieldType = {
 			'INTEGER':{
@@ -333,268 +339,257 @@
 	setFields($('#field_type').val());
 
 	";
-            //TODO delete this!
-            strtoupper($js);
-            //  $cs->registerScript(__CLASS__.'#dialog', $js);
+        $this->view->registerJs($js);
+
+        //  $cs->registerScript(__CLASS__.'#dialog', $js);
+    }
+
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionCreate()
+    {
+        $model=new ProfileField;
+        $scheme = get_class(Yii::$app->db->schema);
+        if (isset($_POST['ProfileField'])) {
+            $model->load($_POST['ProfileField']);
+
+            if ($model->validate()) {
+                $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` ';
+                $sql .= $this->fieldType($model->field_type);
+                if (
+                    $model->field_type!='TEXT'
+                    && $model->field_type!='DATE'
+                    && $model->field_type!='BOOL'
+                    && $model->field_type!='BLOB'
+                    && $model->field_type!='BINARY'
+                ) {
+                    $sql .= '(' . $model->field_size . ')';
+                }
+                $sql .= ' NOT NULL ';
+
+                if ($model->field_type!='TEXT'&&$model->field_type!='BLOB'||$scheme!='CMysqlSchema') {
+                    if ($model->default) {
+                        $sql .= " DEFAULT '".$model->default."'";
+                    } else {
+                        $sql .= ((
+                            $model->field_type=='TEXT'
+                            ||$model->field_type=='VARCHAR'
+                            ||$model->field_type=='BLOB'
+                            ||$model->field_type=='BINARY'
+                        )?" DEFAULT ''":(($model->field_type=='DATE')?" DEFAULT '0000-00-00'":" DEFAULT 0"));
+                    }
+                }
+                $model->getDb()->createCommand($sql)->execute();
+                $model->save();
+                $this->redirect(array('view','id'=>$model->id));
+            }
         }
 
-        /**
-         * Creates a new model.
-         * If creation is successful, the browser will be redirected to the 'view' page.
-         */
-        public function actionCreate()
-        {
-            $model=new ProfileField;
+        $this->registerScript();
+        return $this->render('create', [
+            'model'=>$model,
+        ]);
+    }
+
+    /**
+     * Updates a particular model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionUpdate()
+    {
+        $model=$this->loadModel();
+        if (isset($_POST['ProfileField'])) {
+            $model->attributes=$_POST['ProfileField'];
+            if ($model->save()) {
+                $this->redirect(array('view','id'=>$model->id));
+            }
+        }
+        $this->registerScript();
+
+        return $this->render('update', [
+            'model'=>$model,
+        ]);
+    }
+
+    /**
+     * Deletes a particular model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     */
+    public function actionDelete()
+    {
+        if (Yii::$app->request->isPost) {
+            // we only allow deletion via POST request
             $scheme = get_class(Yii::$app->db->schema);
-            if (isset($_POST['ProfileField'])) {
-                $model->load($_POST['ProfileField']);
+            $model = $this->loadModel();
+            if ($scheme=='CSqliteSchema') {
+                $attr = Profile::getFields();
+                unset($attr[$model->varname]);
+                $attr = array_keys($attr);
+                $connection=Yii::$app->db;
+                $transaction=$connection->beginTransaction();
+                $status=true;
+                try {
+                    $connection->createCommand(
+                        "CREATE TEMPORARY TABLE ".Profile::tableName()."_backup (".implode(',', $attr).")"
+                    )->execute();
 
-                if ($model->validate()) {
-                    $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` ';
-                    $sql .= $this->fieldType($model->field_type);
-                    if (
-                        $model->field_type!='TEXT'
-                        && $model->field_type!='DATE'
-                        && $model->field_type!='BOOL'
-                        && $model->field_type!='BLOB'
-                        && $model->field_type!='BINARY'
-                    ) {
-                        $sql .= '(' . $model->field_size . ')';
-                    }
-                    $sql .= ' NOT NULL ';
+                    $connection->createCommand(
+                        "INSERT INTO ".Profile::tableName()."_backup SELECT ".implode(',', $attr).
+                        " FROM ".Profile::tableName()
+                    )->execute();
 
-                    if ($model->field_type!='TEXT'&&$model->field_type!='BLOB'||$scheme!='CMysqlSchema') {
-                        if ($model->default) {
-                            $sql .= " DEFAULT '".$model->default."'";
-                        } else {
-                            $sql .= ((
-                                $model->field_type=='TEXT'
-                                ||$model->field_type=='VARCHAR'
-                                ||$model->field_type=='BLOB'
-                                ||$model->field_type=='BINARY'
-                            )?" DEFAULT ''":(($model->field_type=='DATE')?" DEFAULT '0000-00-00'":" DEFAULT 0"));
-                        }
-                    }
-                    $model->getDb()->createCommand($sql)->execute();
-                    $model->save();
-                    $this->redirect(array('view','id'=>$model->id));
+                    $connection->createCommand(
+                        "DROP TABLE ".Profile::tableName()
+                    )->execute();
+
+                    $connection->createCommand(
+                        "CREATE TABLE ".Profile::tableName()." (".implode(',', $attr).")"
+                    )->execute();
+
+                    $connection->createCommand(
+                        "INSERT INTO ".Profile::tableName()." SELECT ".implode(',', $attr).
+                        " FROM ".Profile::tableName()."_backup"
+                    )->execute();
+
+                    $connection->createCommand(
+                        "DROP TABLE ".Profile::tableName()."_backup"
+                    )->execute();
+
+                    $transaction->commit();
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    $status=false;
                 }
-            }
-
-            $this->registerScript();
-            $this->render('create', [
-                'model'=>$model,
-            ]);
-        }
-
-        /**
-         * Updates a particular model.
-         * If update is successful, the browser will be redirected to the 'view' page.
-         */
-        public function actionUpdate()
-        {
-            $model=$this->loadModel();
-            if (isset($_POST['ProfileField'])) {
-                $model->attributes=$_POST['ProfileField'];
-                if ($model->save()) {
-                    $this->redirect(array('view','id'=>$model->id));
-                }
-            }
-            $this->registerScript();
-
-            $this->render('update', [
-                'model'=>$model,
-            ]);
-        }
-
-        /**
-         * Deletes a particular model.
-         * If deletion is successful, the browser will be redirected to the 'index' page.
-         */
-        public function actionDelete()
-        {
-            if (Yii::$app->request->isPost) {
-                // we only allow deletion via POST request
-                $scheme = get_class(Yii::$app->db->schema);
-                $model = $this->loadModel();
-                if ($scheme=='CSqliteSchema') {
-                    $attr = Profile::getFields();
-                    unset($attr[$model->varname]);
-                    $attr = array_keys($attr);
-                    $connection=Yii::$app->db;
-                    $transaction=$connection->beginTransaction();
-                    $status=true;
-                    try {
-                        $connection->createCommand(
-                            "CREATE TEMPORARY TABLE ".Profile::tableName()."_backup (".implode(',', $attr).")"
-                        )->execute();
-
-                        $connection->createCommand(
-                            "INSERT INTO ".Profile::tableName()."_backup SELECT ".implode(',', $attr).
-                            " FROM ".Profile::tableName()
-                        )->execute();
-
-                        $connection->createCommand(
-                            "DROP TABLE ".Profile::tableName()
-                        )->execute();
-
-                        $connection->createCommand(
-                            "CREATE TABLE ".Profile::tableName()." (".implode(',', $attr).")"
-                        )->execute();
-
-                        $connection->createCommand(
-                            "INSERT INTO ".Profile::tableName()." SELECT ".implode(',', $attr).
-                            " FROM ".Profile::tableName()."_backup"
-                        )->execute();
-
-                        $connection->createCommand(
-                            "DROP TABLE ".Profile::tableName()."_backup"
-                        )->execute();
-
-                        $transaction->commit();
-                    } catch (Exception $e) {
-                        $transaction->rollBack();
-                        $status=false;
-                    }
-                    if ($status) {
-                        $model->delete();
-                    }
-
-                } else {
-                    $sql = 'ALTER TABLE '.Profile::tableName().' DROP `'.$model->varname.'`';
-                    if ($model->getDb()->createCommand($sql)->execute()) {
-                        $model->delete();
-                    }
+                if ($status) {
+                    $model->delete();
                 }
 
-                // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-                if (!isset($_POST['ajax'])) {
-                    $this->redirect(array('admin'));
-                }
             } else {
-                throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
+                $sql = 'ALTER TABLE '.Profile::tableName().' DROP `'.$model->varname.'`';
+                if ($model->getDb()->createCommand($sql)->execute()) {
+                    $model->delete();
+                }
             }
+
+            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            if (!isset($_POST['ajax'])) {
+                $this->redirect(array('admin'));
+            }
+        } else {
+            throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
         }
+    }
 
-        /**
-         * Manages all models.
-         */
-        public function actionAdmin()
-        {
-            $searchModel=new ProfileFieldSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    /**
+     * Manages all models.
+     */
+    public function actionAdmin()
+    {
+        $searchModel=new ProfileFieldSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('admin', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider
-            ]);
-            /*
-            $dataProvider=new CActiveDataProvider('ProfileField', array(
-                'pagination'=>array(
-                    'pageSize'=>Yii::$app->controller->module->fields_page_size,
-                ),
-                'sort'=>array(
-                    'defaultOrder'=>'position',
-                ),
-            ));
+        return $this->render('admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
+        ]);
+    }
 
-            return $this->render('admin',array(
-                'dataProvider'=>$dataProvider,
-            ));//*/
-        }
-
-        /**
-         * Returns the data model based on the primary key given in the GET variable.
-         * If the data model is not found, an HTTP exception will be raised.
-         */
-        public function loadModel()
-        {
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     */
+    public function loadModel()
+    {
+        if ($this->model === null) {
+            if (isset($_GET['id'])) {
+                $this->model=ProfileField::findOne($_GET['id']);
+            }
             if ($this->model === null) {
-                if (isset($_GET['id'])) {
-                    $this->model=ProfileField::findOne($_GET['id']);
-                }
-                if ($this->model === null) {
-                    throw new HttpException(404, 'The requested page does not exist.');
-                }
+                throw new HttpException(404, 'The requested page does not exist.');
             }
-            return $this->model;
         }
+        return $this->model;
+    }
 
-        /**
-         * MySQL field type
-         * @param $type string
-         * @return string
-         */
-        public function fieldType($type)
-        {
-            $type = str_replace('UNIX-DATE', 'INTEGER', $type);
-            return $type;
-        }
+    /**
+     * MySQL field type
+     * @param $type string
+     * @return string
+     */
+    public function fieldType($type)
+    {
+        $type = str_replace('UNIX-DATE', 'INTEGER', $type);
+        return $type;
+    }
 
-        public static function getWidgets($fieldType = '')
-        {
-            $basePath=Yii::getAlias('@mariusz_soltys/yii2user/components');
-            $widgets = array();
-            $list = array(''=>Module::t('No'));
-            if (self::$widgets) {
-                $widgets = self::$widgets;
-            } else {
-                $d = dir($basePath);
-                while (false !== ($file = $d->read())) {
-                    if (strpos($file, 'UW') === 0) {
-                        list($className) = explode('.', $file);
-                        if (class_exists($className)) {
-                            /**@var \mariusz_soltys\yii2user\components\UWfile $widgetClass - this is to trick IDEs*/
-                            $widgetClass = new $className;
-                            if ($widgetClass->init()) {
-                                $widgets[$className] = $widgetClass->init();
-                                if ($fieldType) {
-                                    if (in_array($fieldType, $widgets[$className]['fieldType'])) {
-                                        $list[$className] = $widgets[$className]['label'];
-                                    }
-                                } else {
+    public static function getWidgets($fieldType = '')
+    {
+        $basePath=Yii::getAlias('@mariusz_soltys/yii2user/components');
+        $widgets = array();
+        $list = array(''=>Module::t('No'));
+        if (self::$widgets) {
+            $widgets = self::$widgets;
+        } else {
+            $d = dir($basePath);
+            while (false !== ($file = $d->read())) {
+                if (strpos($file, 'UW') === 0) {
+                    list($className) = explode('.', $file);
+                    //$className = '\\mariusz_soltys\\yii2user\\components\\'.$className;
+                    if (class_exists('\\mariusz_soltys\\yii2user\\components\\'.$className)) {
+                        /**@var \mariusz_soltys\yii2user\components\UWfile $widgetClass - this is to trick IDEs*/
+                        $cs = '\\mariusz_soltys\\yii2user\\components\\'.$className;
+                        $widgetClass = new $cs;
+                        if ($widgetClass->init()) {
+                            $widgets[$className] = $widgetClass->init();
+                            if ($fieldType) {
+                                if (in_array($fieldType, $widgets[$className]['fieldType'])) {
                                     $list[$className] = $widgets[$className]['label'];
                                 }
+                            } else {
+                                $list[$className] = $widgets[$className]['label'];
                             }
                         }
                     }
                 }
-                $d->close();
             }
-            return array($list,$widgets);
+            $d->close();
         }
+        return array($list,$widgets);
+    }
 
-        /**
-         * Get Values for Dependent DropDownList.
-         * @author juan.gaviria@dsotogroup.com | Mariusz Soltys (https://github.com/marsoltys)
-         */
-        public function actionGetDroDownDepValues()
-        {
-            $post = $_POST;
-            /**@var \yii\db\ActiveRecord $model*/
-            $model = new $post['model'];
+    /**
+     * Get Values for Dependent DropDownList.
+     * @author juan.gaviria@dsotogroup.com | Mariusz Soltys (https://github.com/marsoltys)
+     */
+    public function actionGetDroDownDepValues()
+    {
+        $post = $_POST;
+        /**@var \yii\db\ActiveRecord $model*/
+        $model = new $post['model'];
 
-            $query = $model::findAll([$post['varname'] => $post[$post['varname']]]);
+        $query = $model::findAll([$post['varname'] => $post[$post['varname']]]);
 
-            $data = ArrayHelper::map($query, 'id', $post['optionDestName']);
-            echo Html::renderSelectOptions('', $data, $options = ['prompt' => 'Select...']);
-        }
+        $data = ArrayHelper::map($query, 'id', $post['optionDestName']);
+        echo Html::renderSelectOptions('', $data, $options = ['prompt' => 'Select...']);
+    }
 
-        /**
-         * Performs the AJAX validation.
-         * @param \yii\base\Model the model to be validated
-         */
-        protected function performAjaxValidation($model)
-        {
+    /**
+     * Performs the AJAX validation.
+     * @param \yii\base\Model the model to be validated
+     */
+    protected function performAjaxValidation($model)
+    {
 //        if(isset($_POST['ajax']) && $_POST['ajax'] === 'profile-field-form')
 //        {
 //            echo ActiveForm::validate($model);
 //        }
 
-            if (Yii::$app->request->isAjax && $model) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                echo ActiveForm::validate($model);
-                Yii::$app->end();
-            }
+        if (Yii::$app->request->isAjax && $model) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            echo ActiveForm::validate($model);
+            Yii::$app->end();
         }
     }
+}

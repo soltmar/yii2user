@@ -17,7 +17,7 @@
     );
     Module::getInstance()->setMenu([
         ['label'=>Module::t('Create Profile Field'), 'url'=> ['create']],
-        ['label'=>Module::t('Manage Profile Field'), 'url'=> ['admin']],
+        ['label'=>Module::t('Manage Profile Field'), 'url'=> ['/user/profile-field/admin']],
         ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']],
     ]);
 
