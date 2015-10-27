@@ -63,7 +63,7 @@ class Profile extends ActiveRecord
                 if ($field->field_type=='VARCHAR'||$field->field_type=='TEXT') {
                     $field_rule = [
                         $field->varname,
-                        'length',
+                        'string',
                         'max'=>$field->field_size,
                         'min' => $field->field_size_min
                     ];

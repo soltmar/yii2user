@@ -39,7 +39,7 @@ use yii\widgets\ActiveForm;
     if ($profileFields) {
         foreach ($profileFields as $field) {
             /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
-            $input = $form->field($model, $field->varname);
+            $input = $form->field($profile, $field->varname);
 
             if ($widgetEdit = $field->widgetEdit($profile)) {
                 echo $widgetEdit;

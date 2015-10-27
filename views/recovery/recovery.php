@@ -1,33 +1,41 @@
-<?php $this->pageTitle=Yii::$app->name . ' - '.Module::t("Restore");
-$this->breadcrumbs=array(
-	Module::t("Login") => array('/user/login'),
-	Module::t("Restore"),
-);
+<?php
+
+use mariusz_soltys\yii2user\Module;
+use yii\helpers\Html;
+
+/* @var $this yii\web\View */
+/* @var $form mariusz_soltys\yii2user\models\UserRecoveryForm */
+
+$this->title=Yii::$app->name . ' - '.Module::t("Restore");
+$this->params['breadcrumbs']= [
+    ['label' => Module::t("Login"), 'url' => ['/user/login']],
+    Module::t("Restore"),
+];
 ?>
 
-<h1><?php echo Module::t("Restore"); ?></h1>
+    <h1><?php echo Module::t("Restore"); ?></h1>
 
-<?php if(Yii::$app->user->hasFlash('recoveryMessage')): ?>
-<div class="success">
-<?php echo Yii::$app->user->getFlash('recoveryMessage'); ?>
-</div>
-<?php else: ?>
+<?php if (Yii::$app->user->hasFlash('recoveryMessage')) : ?>
+    <div class="success">
+        <?php echo Yii::$app->user->getFlash('recoveryMessage'); ?>
+    </div>
+<?php else : ?>
 
-<div class="form">
-<?php echo CHtml::beginForm(); ?>
+    <div class="form">
+        <?php echo Html::beginForm(); ?>
 
-	<?php echo CHtml::errorSummary($form); ?>
-	
-	<div class="row">
-		<?php echo CHtml::activeLabel($form,'login_or_email'); ?>
-		<?php echo CHtml::activeTextField($form,'login_or_email') ?>
-		<p class="hint"><?php echo Module::t("Please enter your login or email addres."); ?></p>
-	</div>
-	
-	<div class="row submit">
-		<?php echo CHtml::submitButton(Module::t("Restore")); ?>
-	</div>
+        <?php echo Html::errorSummary($form); ?>
 
-<?php echo CHtml::endForm(); ?>
-</div><!-- form -->
+        <div class="row">
+            <?php echo Html::activeLabel($form, 'login_or_email'); ?>
+            <?php echo Html::activeTextInput($form, 'login_or_email') ?>
+            <p class="hint"><?php echo Module::t("Please enter your login or email address."); ?></p>
+        </div>
+
+        <div class="row submit">
+            <?php echo Html::submitButton(Module::t("Restore")); ?>
+        </div>
+
+        <?php echo Html::endForm(); ?>
+    </div><!-- form -->
 <?php endif; ?>

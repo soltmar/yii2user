@@ -86,7 +86,8 @@ class ProfileFieldController extends Controller
         foreach ($widgets[1] as $widget) {
             if (isset($widget['fieldType'])&&count($widget['fieldType'])) {
                 foreach ($widget['fieldType'] as $type) {
-                    array_push($wgByTypes[$type], $widget['name']);
+                    $c = explode("\\", $widget['name']);
+                    array_push($wgByTypes[$type], $c[count($c)-1]);
                 }
             }
         }
@@ -99,11 +100,11 @@ class ProfileFieldController extends Controller
 	allFields = $([]).add(name).add(value),
 	tips = $('.validateTips');
 
-	console.log('".json_encode($wgByTypes)."');
 
-	////var listWidgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[0]))."');
-	///var widgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[1]))."');
-	var wgByType = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($wgByTypes))."');
+
+	var listWidgets = jQuery.parseJSON('".str_replace("'", "\'", Json::encode($widgets[0]))."');
+	var widgets = jQuery.parseJSON('".str_replace("'", "\'", str_replace("\\", "\\\\", Json::encode($widgets[1])))."');
+	var wgByType = jQuery.parseJSON('".str_replace("'", "\'", str_replace("\\", "\\\\", Json::encode($wgByTypes)))."');
 
 
 	var fieldType = {
@@ -190,11 +191,15 @@ class ProfileFieldController extends Controller
 			}
 		};
 
+
+
 	function showWidgetList(type) {
 		$('div.widget select').empty();
 		$('div.widget select').append('<option value=\"\">".Module::t('No')."</option>');
 		if (wgByType[type]) {
 			for (var k in wgByType[type]) {
+			    console.log(wgByType[type][k]);
+			    console.log(widgets);
 				$('div.widget select')
 				    .append('<option value=\"'+wgByType[type][k]+'\">'+widgets[wgByType[type][k]]['label']+'</option>');
 			}
@@ -253,10 +258,14 @@ class ProfileFieldController extends Controller
 				if ($.JSON.encode(wparam)!='{}') $('div.widgetparams input').val($.JSON.encode(wparam));
 				if ($.JSON.encode(fparam[tab])!='{}') $('div.other_validator input').val($.JSON.encode(fparam));
 
+		    $('#widgetparams').blur();
 				$(this).dialog('close');
+		    $('#widgetparams').blur();
 			},
 			'".Module::t('Cancel')."': function() {
+		    $('#widgetparams').blur();
 				$(this).dialog('close');
+		    $('#widgetparams').blur();
 			}
 		},
 		close: function() {
@@ -264,7 +273,7 @@ class ProfileFieldController extends Controller
 	});
 
 
-	$('#widgetparams').focus(function() {
+	$('#widgetparams').click(function() {
 		var widget = widgets[$('#widgetlist').val()];
 		var html = '';
 		var wparam = ($('div.widgetparams input').val())?$.JSON.decode($('div.widgetparams input').val()):{};

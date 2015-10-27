@@ -40,7 +40,7 @@ class ProfileFieldQuery extends \yii\db\ActiveQuery
      */
     public function forUser()
     {
-        return $this->andWhere(['visible' => ProfileField::VISIBLE_REGISTER_USER])->sort();
+        return $this->andWhere('visible >='.ProfileField::VISIBLE_REGISTER_USER)->sort();
     }
 
     /**
@@ -48,7 +48,7 @@ class ProfileFieldQuery extends \yii\db\ActiveQuery
      */
     public function forOwner()
     {
-        return $this->andWhere(['visible' => ProfileField::VISIBLE_ONLY_OWNER])->sort();
+        return $this->andWhere('visible >='.ProfileField::VISIBLE_ONLY_OWNER)->sort();
     }
 
     /**
