@@ -38,7 +38,7 @@ Module::getInstance()->setMenu($menu);
 <?php endif; ?>
 <table class="dataGrid">
     <tr>
-        <th class="label"><?= Html::encode($model->getAttributeLabel('username')); ?></th>
+        <th><?= Html::encode($model->getAttributeLabel('username')); ?></th>
         <td><?= Html::encode($model->username); ?></td>
     </tr>
     <?php
@@ -48,7 +48,7 @@ Module::getInstance()->setMenu($menu);
             /** $field */
             ?>
             <tr>
-                <th class="label"><?= Html::encode(Module::t($field->title)); ?></th>
+                <th ><?= Html::encode(Module::t($field->title)); ?></th>
                 <td>
                     <?php
                     if ($field->widgetView($profile)) {
@@ -57,7 +57,7 @@ Module::getInstance()->setMenu($menu);
                         if (Html::encode(($field->range))) {
                             echo Profile::range($field->range, $profile->getAttribute($field->varname));
                         } else {
-                            $profile->getAttribute($field->varname);
+                            echo $profile->getAttribute($field->varname);
                         }
                     }
                     ?>
@@ -68,19 +68,19 @@ Module::getInstance()->setMenu($menu);
     }
     ?>
     <tr>
-        <th class="label"><?= Html::encode($model->getAttributeLabel('email')); ?></th>
+        <th><?= Html::encode($model->getAttributeLabel('email')); ?></th>
         <td><?= Html::encode($model->email); ?></td>
     </tr>
     <tr>
-        <th class="label"><?= Html::encode($model->getAttributeLabel('create_at')); ?></th>
+        <th><?= Html::encode($model->getAttributeLabel('create_at')); ?></th>
         <td><?= $model->create_at; ?></td>
     </tr>
     <tr>
-        <th class="label"><?= Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
+        <th><?= Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
         <td><?= $model->lastvisit_at; ?></td>
     </tr>
     <tr>
-        <th class="label"><?= Html::encode($model->getAttributeLabel('status')); ?></th>
+        <th><?= Html::encode($model->getAttributeLabel('status')); ?></th>
         <td><?= Html::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
     </tr>
 </table>

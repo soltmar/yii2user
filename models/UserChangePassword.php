@@ -20,9 +20,9 @@ class UserChangePassword extends Model
     public function rules()
     {
         return Yii::$app->controller->id == 'recovery' ? [
-            ['password, verifyPassword', 'required'],
-            ['password, verifyPassword',
-                'length',
+            [['password', 'verifyPassword'], 'required'],
+            [['password', 'verifyPassword'],
+                'string',
                 'max'=>128,
                 'min' => 4,
                 'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
@@ -31,9 +31,9 @@ class UserChangePassword extends Model
                 'compareAttribute'=>'password',
                 'message' => Module::t("Retype Password is incorrect.")],
         ] : [
-            ['oldPassword, password, verifyPassword', 'required'],
-            ['oldPassword, password, verifyPassword',
-                'length',
+            [['oldPassword', 'password', 'verifyPassword'], 'required'],
+            [['oldPassword', 'password', 'verifyPassword'],
+                'string',
                 'max'=>128,
                 'min' => 4,
                 'message' => Module::t("Incorrect password (minimal length 4 symbols).")],
@@ -62,9 +62,9 @@ class UserChangePassword extends Model
      */
     public function verifyOldPassword($attribute, $params)
     {
-        $cond = User::find()->notsafe()->findByPk(Yii::$app->user->id)->one()->password
-            != Module::getInstance()->encrypting($this->$attribute);
-        if ($cond) {
+        $current = User::find()->notsafe()->findByPk(Yii::$app->user->id)->one()->password;
+        $cond = Yii::$app->security->validatePassword($this->$attribute, $current);
+        if (!$cond) {
             $this->addError($attribute, Module::t("Old Password is incorrect."));
         }
     }

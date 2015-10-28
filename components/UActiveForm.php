@@ -14,8 +14,9 @@ class UActiveForm extends ActiveForm
 
     public function run()
     {
-        if(is_array($this->focus))
-            $this->focus="#".Html::getInputId($this->focus[0],$this->focus[1]);
+        if (is_array($this->focus)) {
+            $this->focus="#".Html::getInputId($this->focus[0], $this->focus[1]);
+        }
 
         echo Html::endForm();
         $cs=Yii::$app->clientScript;
@@ -32,26 +33,29 @@ class UActiveForm extends ActiveForm
         }
 
         $options=$this->clientOptions;
-        if(isset($this->clientOptions['validationUrl']) && is_array($this->clientOptions['validationUrl']))
+        if (isset($this->clientOptions['validationUrl']) && is_array($this->clientOptions['validationUrl'])) {
             $options['validationUrl']=Url::toRoute($this->clientOptions['validationUrl']);
+        }
 
         $options['attributes']=array();
         foreach ($this->attributes as $attr => $item) {
-            if (in_array($attr,$this->disableAjaxValidationAttributes)===false) {
-                array_push($options['attributes'],$item);
+            if (in_array($attr, $this->disableAjaxValidationAttributes)===false) {
+                array_push($options['attributes'], $item);
             }
         }
 
-        if($this->summaryID!==null)
+        if ($this->summaryID!==null) {
             $options['summaryID']=$this->summaryID;
+        }
 
-        if($this->focus!==null)
+        if ($this->focus!==null) {
             $options['focus']=$this->focus;
+        }
 
         $options=\yii\helpers\Json::encode($options);
         $cs->registerCoreScript('yiiactiveform');
         $id=$this->id;
-        $cs->registerScript(__CLASS__.'#'.$id,"\$('#$id').yiiactiveform($options);");
+        $cs->registerScript(__CLASS__.'#'.$id, "\$('#$id').yiiactiveform($options);");
 
         /*
         parent::run();

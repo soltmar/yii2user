@@ -7,6 +7,7 @@ use mariusz_soltys\yii2user\models\UserChangePassword;
 use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 class ProfileController extends Controller
@@ -22,7 +23,7 @@ class ProfileController extends Controller
     public function actionProfile()
     {
         $model = $this->loadUser();
-       return  $this->render('profile', [
+        return  $this->render('profile', [
             'model'=>$model,
             'profile'=>$model->profile,
         ]);
@@ -37,17 +38,14 @@ class ProfileController extends Controller
     {
         $model = $this->loadUser();
         $profile=$model->profile;
+        $post = Yii::$app->request->post();
 
-        // ajax validator
-        if (isset($_POST['ajax']) && $_POST['ajax']==='profile-form') {
-            echo ActiveForm::validateMultiple([$model,$profile]);
-            Yii::$app->end();
+        if (Yii::$app->request->isAjax && $model->load($post) && $profile->load($post)) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
 
-        if (isset($_POST['User'])) {
-            $model->load($_POST['User']);
-            $profile->load($_POST['Profile']);
-
+        if ($model->load($post) && $profile->load($post)) {
             if ($model->validate()&&$profile->validate()) {
                 $model->save();
                 $profile->save();
@@ -58,7 +56,7 @@ class ProfileController extends Controller
             }
         }
 
-        $this->render('edit', [
+        return $this->render('edit', [
             'model'=>$model,
             'profile'=>$profile,
         ]);
@@ -73,14 +71,12 @@ class ProfileController extends Controller
         $model = new UserChangePassword;
 
         if (Yii::$app->user->id) {
-            // ajax validator
-            if (isset($_POST['ajax']) && $_POST['ajax']==='changepassword-form') {
-                echo ActiveForm::validate($model);
-                Yii::$app->end();
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
             }
 
-            if (isset($_POST['UserChangePassword'])) {
-                $model->load($_POST['UserChangePassword']);
+            if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate()) {
                     $new_password = User::find()->notsafe()->andWhere(['id'=>Yii::$app->user->id])->one();
                     $new_password->password = Module::encrypting($model->password);
@@ -90,7 +86,7 @@ class ProfileController extends Controller
                     $this->redirect(array("profile"));
                 }
             }
-            $this->render('changepassword', ['model'=>$model]);
+            return $this->render('changepassword', ['model'=>$model]);
         }
     }
 
