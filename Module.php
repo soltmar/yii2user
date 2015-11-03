@@ -8,6 +8,15 @@ use Yii;
 class Module extends \yii\base\Module
 {
     public $mainLayout = '@app/views/layouts/main.php';
+
+    public $urlPrefix = 'user';
+
+    /** @var array The rules to be used in URL management. */
+    public $urlRules = [
+        '<controller:\w+>/<id:\d+>' => '<controller>/view',
+        '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+        '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+    ];
     /**
      * @var int
      * @desc items on page
@@ -50,19 +59,19 @@ class Module extends \yii\base\Module
      */
     public $autoLogin=true;
 
-    public $registrationUrl = array("/user/registration");
-    public $recoveryUrl = array("/user/recovery/recovery");
-    public $loginUrl = array("/user/login");
-    public $logoutUrl = array("/user/logout");
-    public $profileUrl = array("/user/profile");
-    public $returnUrl = array("/user/profile");
-    public $returnLogoutUrl = array("/user/login");
+    public $registrationUrl = ["/user/registration"];
+    public $recoveryUrl = ["/user/recovery/recovery"];
+    public $loginUrl = ["/user/login"];
+    public $logoutUrl = ["/user/logout"];
+    public $profileUrl = ["/user/profile"];
+    public $returnUrl = ["/user/profile"];
+    public $returnLogoutUrl = ["/user/login"];
 
-    public $captchaParams = array(
+    public $captchaParams = [
         'class'=>'CCaptchaAction',
         'backColor'=>0xFFFFFF,
         'foreColor'=>0x2040A0,
-    );
+    ];
 
     private $menu = [];
 
@@ -114,6 +123,11 @@ class Module extends \yii\base\Module
      * @inheritdoc
      */
     public $controllerNamespace = 'mariusz_soltys\yii2user\controllers';
+
+    /**
+     * @inheritdoc
+     */
+    public $defaultRoute = 'user';
 
     /**
      * @return Module

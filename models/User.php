@@ -83,8 +83,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
                 'on' => self::SCENARION_INSERT],
             [['username', 'email', 'superuser', 'status'], 'required'],
             [['superuser', 'status'], 'integer'],
-            [['id', 'username', 'password', 'email', 'activkey', 'create_at', 'lastvisit_at', 'superuser', 'status'], 'safe',
-                'on' => self::SCENARIO_SEARCH],
+            [
+                ['id', 'username', 'password', 'email', 'activkey', 'create_at', 'lastvisit_at', 'superuser', 'status'],
+                'safe',
+                'on' => self::SCENARIO_SEARCH
+            ],
         ]:((Yii::$app->user->id==$this->id)?[
             [['username', 'email'], 'required'],
             ['username', 'string', 'max'=>20, 'min' => 3,

@@ -17,37 +17,31 @@ class LoginController extends Controller
         parent::init();
     }
 
-    public function actionIndex()
-    {
-        echo "Yoooo";
-    }
-
     /**
      * Displays the login page
      */
     public function actionLogin()
     {
-        if (Yii::$app->user->isGuest) {
-            /** @var $model UserLogin */
-            $model=new UserLogin();
-            // collect user input data
-            if (isset($_POST['UserLogin'])) {
-                $model->load(Yii::$app->request->post());
-                // validate user input and redirect to previous page if valid
-                if ($model->validate()) {
-                    $this->lastVisit();
-                    if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
-                        $this->redirect(Yii::$app->controller->module->returnUrl);
-                    } else {
-                        $this->redirect(Yii::$app->user->returnUrl);
-                    }
-                }
-            }
-            // display the login form
-            return $this->render('/user/login', ['model'=>$model]);
-        } else {
+        if (!Yii::$app->user->isGuest) {
             $this->redirect(Yii::$app->controller->module->returnUrl);
         }
+        /** @var $model UserLogin */
+        $model=new UserLogin();
+        // collect user input data
+        if (isset($_POST['UserLogin'])) {
+            $model->load(Yii::$app->request->post());
+            // validate user input and redirect to previous page if valid
+            if ($model->validate()) {
+                $this->lastVisit();
+                if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
+                    $this->redirect(Yii::$app->controller->module->returnUrl);
+                } else {
+                    $this->redirect(Yii::$app->user->returnUrl);
+                }
+            }
+        }
+        // display the login form
+        return $this->render('/user/login', ['model'=>$model]);
     }
 
     private function lastVisit()
