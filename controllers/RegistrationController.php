@@ -10,6 +10,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 class RegistrationController extends Controller
@@ -21,9 +22,9 @@ class RegistrationController extends Controller
      */
     public function actions()
     {
-        return array(
-            'captcha'=>Module::getInstance()->captchaParams,
-        );
+        return [
+            'captcha' => Module::getInstance()->captchaParams,
+        ];
     }
     /**
      * Registration user
@@ -35,19 +36,19 @@ class RegistrationController extends Controller
         $profile=new Profile;
 
         // ajax validator
-        if (Yii::$app->request->isAjax) {
-            if ($model->load(Yii::$app->request->post()) && $profile->load(Yii::$app->request->post())) {
-                echo ActiveForm::validateMultiple([$model, $profile]);
-                Yii::$app->end();
-            }
-        }
+//        if (Yii::$app->request->isAjax) {
+//            if ($model->load(Yii::$app->request->post()) && $profile->load(Yii::$app->request->post())) {
+//                Yii::$app->response->format = Response::FORMAT_JSON;
+//                return ActiveForm::validateMultiple([$model, $profile]);
+//            }
+//        }
 
         if (Yii::$app->user->id) {
             $this->redirect(Yii::$app->controller->module->profileUrl);
         } else {
             if (isset($_POST['RegistrationForm'])) {
-                $model->load($_POST['RegistrationForm']);
-                $profile->load(isset($_POST['Profile'])?$_POST['Profile']:array());
+                $model->load(Yii::$app->request->post());
+                $profile->load(Yii::$app->request->post());
                 if ($model->validate()&&$profile->validate()) {
                     $model->activkey=Module::encrypting(microtime().$model->password);
                     $model->password=Module::encrypting($model->password);
@@ -133,7 +134,7 @@ class RegistrationController extends Controller
                     $profile->validate();
                 }
             }
-            $this->render('/user/registration', ['model'=>$model,'profile'=>$profile]);
+            return $this->render('/user/registration', ['model'=>$model,'profile'=>$profile]);
         }
     }
 }

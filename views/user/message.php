@@ -1,10 +1,9 @@
 <?php use mariusz_soltys\yii2user\Module;
 
-$this->pageTitle=Yii::$app->name . ' - '.Module::t("Login"); ?>
+$this->title=Yii::$app->name . ' - '.Module::t("Login"); ?>
 
-<h1><?php echo $title; ?></h1>
+<h1><?= $title; ?></h1>
 
 <div class="form">
-<?php echo $content; ?>
-
+<?= $content; ?>
 </div><!-- yiiForm -->

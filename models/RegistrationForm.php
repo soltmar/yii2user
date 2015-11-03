@@ -14,20 +14,21 @@ class RegistrationForm extends User
     public $verifyPassword;
     public $verifyCode;
 
+
     public function rules()
     {
         $rules = [
-            ['username, password, verifyPassword, email', 'required'],
+            [['username', 'password', 'verifyPassword', 'email'], 'required'],
             [
                 'username',
-                'length',
+                'string',
                 'max'=>20,
                 'min' => 3,
                 'message' => Module::t("Incorrect username (length between 3 and 20 characters).")
             ],
             [
                 'password',
-                'length',
+                'string',
                 'max'=>128,
                 'min' => 4,
                 'message' => Module::t("Incorrect password (minimal length 4 symbols).")
@@ -35,31 +36,34 @@ class RegistrationForm extends User
             ['email', 'email'],
             ['username', 'unique', 'message' => Module::t("This user's name already exists.")],
             ['email', 'unique', 'message' => Module::t("This user's email address already exists.")],
-//            [
-//                'verifyPassword',
-//                'compare',
-//                'compareAttribute'=>'password',
-//                'message' => Module::t("Retype Password is incorrect.")
-//            ],
+            [
+                'verifyPassword',
+                'compare',
+                'compareAttribute'=>'password',
+                'message' => Module::t("Retype Password is incorrect.")
+            ],
             [
                 'username',
                 'match',
                 'pattern' => '/^[A-Za-z0-9_]+$/u','message' => Module::t("Incorrect symbols (A-z0-9).")
             ],
         ];
-        if (!(isset($_POST['ajax']) && $_POST['ajax']==='registration-form')) {
-            array_push($rules, ['verifyCode', 'captcha', 'allowEmpty'=>!Module::doCaptcha('registration')]);
-        }
-
-        array_push(
-            $rules,
-            [
-                'verifyPassword',
-                'compare',
-                'compareAttribute'=>'password',
-                'message' => Module::t("Retype Password is incorrect.")
-            ]
-        );
+      //  if (!(isset($_POST['ajax']) && $_POST['ajax']==='registration-form')) {
+            array_push($rules, [
+                'verifyCode',
+                'captcha']);
+            array_push($rules, ['verifyCode', 'required']);
+      //s  }
+//
+//        array_push(
+//            $rules,
+//            [
+//                'verifyPassword',
+//                'compare',
+//                'compareAttribute'=>'password',
+//                'message' => Module::t("Retype Password is incorrect.")
+//            ]
+//        );
 
         return $rules;
     }

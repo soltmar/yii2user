@@ -361,9 +361,7 @@ class ProfileFieldController extends Controller
     {
         $model=new ProfileField;
         $scheme = get_class(Yii::$app->db->schema);
-        if (isset($_POST['ProfileField'])) {
-            $model->load($_POST['ProfileField']);
-
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` ';
                 $sql .= $this->fieldType($model->field_type);
@@ -409,8 +407,7 @@ class ProfileFieldController extends Controller
     public function actionUpdate()
     {
         $model=$this->loadModel();
-        if (isset($_POST['ProfileField'])) {
-            $model->attributes=$_POST['ProfileField'];
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 $this->redirect(array('view','id'=>$model->id));
             }
