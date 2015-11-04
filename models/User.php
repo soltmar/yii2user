@@ -222,7 +222,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         ])->one();
 
         var_dump($this->status);
-
+        $t = Yii::$app->getSecurity()->validatePassword($password, $user->password);
         if (!$user) {
             $user->errorCode = self::ERROR_USERNAME_INVALID;
         } elseif (!Yii::$app->getSecurity()->validatePassword($password, $user->password)) {

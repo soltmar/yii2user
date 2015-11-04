@@ -5,6 +5,7 @@ namespace mariusz_soltys\yii2user\controllers;
 use mariusz_soltys\yii2user\models\Profile;
 use mariusz_soltys\yii2user\models\search\UserSearch;
 use mariusz_soltys\yii2user\models\User;
+use mariusz_soltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -79,30 +80,29 @@ class AdminController extends Controller
      */
     public function actionCreate()
     {
-        $model=new User;
-        $profile=new Profile;
+        $model = new User;
+        $profile = new Profile;
         $this->performAjaxValidation([$model,$profile]);
-        if (isset($_POST['User'])) {
-            $model->load($_POST['User']);
-            $model->activkey=Yii::$app->controller->module->encrypting(microtime().$model->password);
-            $profile->load($_POST['Profile']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->activkey = Module::getInstance()->encrypting(microtime().$model->password);
+            $profile->load(Yii::$app->request->post());
             $profile->user_id=0;
             if ($model->validate()&&$profile->validate()) {
-                $model->password=Yii::$app->controller->module->encrypting($model->password);
+                $model->password = Module::getInstance()->encrypting($model->password);
                 if ($model->save()) {
-                    $profile->user_id=$model->id;
+                    $profile->user_id = $model->id;
                     $profile->save();
                 }
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view', 'id'=>$model->id]);
             } else {
                 $profile->validate();
             }
         }
 
-        return $this->render('create', array(
+        return $this->render('create', [
             'model'=>$model,
             'profile'=>$profile,
-        ));
+        ]);
     }
 
     /**
@@ -114,19 +114,18 @@ class AdminController extends Controller
         $model=$this->loadModel();
         $profile=$model->profile;
         $this->performAjaxValidation([$model, $profile]);
-        if (isset($_POST['User'])) {
-            $model->load($_POST);
-            $profile->load($_POST);
+        if ($model->load(Yii::$app->request->post())) {
+            $profile->load(Yii::$app->request->post());
 
             if ($model->validate()&&$profile->validate()) {
                 $old_password = User::find()->notsafe()->findbyPk($model->id)->one();
-                if ($old_password->password!=$model->password) {
-                    $model->password=Yii::$app->controller->module->encrypting($model->password);
-                    $model->activkey=Yii::$app->controller->module->encrypting(microtime().$model->password);
+                if ($old_password->password != $model->password) {
+                    $model->password = Module::getInstance()->encrypting($model->password);
+                    $model->activkey = Module::getInstance()->encrypting(microtime().$model->password);
                 }
                 $model->save();
                 $profile->save();
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view', 'id'=>$model->id]);
             } else {
                 $profile->validate();
             }
@@ -145,7 +144,7 @@ class AdminController extends Controller
      */
     public function actionDelete()
     {
-        if (Yii::$app->request->isPostRequest) {
+        if (Yii::$app->request->isPost) {
             // we only allow deletion via POST request
             $model = $this->loadModel();
             /** @var Profile $profile */
@@ -158,7 +157,7 @@ class AdminController extends Controller
 
             $model->delete();
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-            if (!isset($_POST['ajax'])) {
+            if (!Yii::$app->request->isAjax) {
                 $this->redirect(array('/user/admin'));
             }
         } else {

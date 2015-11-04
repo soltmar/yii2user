@@ -16,7 +16,7 @@ $this->params['breadcrumbs']= [
     <h1><?php echo Module::t("Restore"); ?></h1>
 
 <?php if (Yii::$app->user->hasFlash('recoveryMessage')) : ?>
-    <div class="success">
+    <div class="alert alert-success" role="alert">
         <?php echo Yii::$app->user->getFlash('recoveryMessage'); ?>
     </div>
 <?php else : ?>

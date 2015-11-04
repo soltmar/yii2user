@@ -44,14 +44,13 @@ class RecoveryController extends Controller
                             $this->redirect($module->recoveryUrl);
                         }
                     }
-                    $this->render('changepassword', ['form'=>$form2]);
+                    return $this->render('changepassword', ['form'=>$form2]);
                 } else {
                     Yii::$app->user->setFlash('recoveryMessage', Module::t("Incorrect recovery link."));
-                    $this->redirect($module->recoveryUrl);
+                    return $this->redirect($module->recoveryUrl);
                 }
             } else {
-                if (isset($_POST['UserRecoveryForm'])) {
-                    $form->load($_POST['UserRecoveryForm']);
+                if ($form->load(Yii::$app->request->post())) {
                     if ($form->validate()) {
                         $user = User::find()->notsafe()->findbyPk($form->user_id)->one();
                         $activation_url = 'http://' . $_SERVER['HTTP_HOST'].
@@ -75,13 +74,13 @@ class RecoveryController extends Controller
                             ]
                         );
 
-                        Module::sendMail($user->email, $subject, $message);
+                        $return = Module::sendMail($user->email, $subject, $message);
 
                         Yii::$app->user->setFlash(
                             'recoveryMessage',
                             Module::t("Please check your email. An instructions was sent to your email address.")
                         );
-                        $this->refresh();
+                        return $this->refresh();
                     }
                 }
                 return $this->render('recovery', array('form'=>$form));

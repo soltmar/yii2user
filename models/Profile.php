@@ -8,13 +8,14 @@ use yii\db\ActiveRecord;
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Json;
 
+/**
+ * Class Profile
+ * @package mariusz_soltys\yii2user\models
+ * @property int $user_id
+ */
+
 class Profile extends ActiveRecord
 {
-    /**
-     * The followings are the available columns in table 'profiles':
-     * @var integer $user_id
-     * @var boolean $regMode
-     */
     public static $regMode = false;
 
     private static $model;
