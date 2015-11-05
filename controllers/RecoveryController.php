@@ -31,8 +31,7 @@ class RecoveryController extends Controller
                 $form2 = new UserChangePassword;
                 $find = User::find()->notsafe()->andWhere(['email'=>$email])->one();
                 if (isset($find) && $find->activkey == $activkey) {
-                    if (isset($_POST['UserChangePassword'])) {
-                        $form2->load($_POST['UserChangePassword']);
+                    if ($form2->load(Yii::$app->request->post())) {
                         if ($form2->validate()) {
                             $find->password = $module->encrypting($form2->password);
                             $find->activkey=$module->encrypting(microtime().$form2->password);
@@ -66,7 +65,7 @@ class RecoveryController extends Controller
                         );
                         $message = Module::t(
                             "You have requested the password recovery site {site_name}.
-                            To receive a new password, go to {activation_url}.",
+                            To receive a new password, go to <a href='{activation_url}'>{activation_url}</a>.",
                             [
                                 'site_name'=>Yii::$app->name,
                                 'activation_url'=>$activation_url,
