@@ -53,24 +53,23 @@ class RecoveryController extends Controller
                 if ($form->load(Yii::$app->request->post())) {
                     if ($form->validate()) {
                         $user = User::find()->notsafe()->findbyPk($form->user_id)->one();
-                        $activation_url = 'http://' . $_SERVER['HTTP_HOST'].
-                            Url::to(
-                                implode($module->recoveryUrl),
-                                ["activkey" => $user->activkey, "email" => $user->email]
-                            );
+                        $activation_url = Url::to(
+                            array_merge($module->recoveryUrl, ["activkey" => $user->activkey, "email" => $user->email]),
+                            true
+                        );
 
                         $subject = Module::t(
                             "You have requested the password recovery site {site_name}",
                             [
-                                '{site_name}'=>Yii::$app->name,
+                                'site_name'=>Yii::$app->name,
                             ]
                         );
                         $message = Module::t(
                             "You have requested the password recovery site {site_name}.
                             To receive a new password, go to {activation_url}.",
                             [
-                                '{site_name}'=>Yii::$app->name,
-                                '{activation_url}'=>$activation_url,
+                                'site_name'=>Yii::$app->name,
+                                'activation_url'=>$activation_url,
                             ]
                         );
 

@@ -8,10 +8,10 @@ use yii\helpers\Html;
  */
 
 $this->title=Yii::$app->name . ' - '.Module::t("Change password");
-$this->breadcrumbs=array(
-    Module::t("Login") => array('/user/login'),
+$this->params['breadcrumbs']= [
+    ['label' => Module::t("Login"), 'url' => ['/user/login']],
     Module::t("Change password"),
-);
+];
 ?>
 
 <h1><?php echo Module::t("Change password"); ?></h1>

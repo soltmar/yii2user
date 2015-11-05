@@ -171,7 +171,7 @@ class Module extends \yii\base\Module
      * @param $dic
      * @return string
      */
-    public static function t($str = '', $params = array(), $dic = 'user')
+    public static function t($str = '', $params = [], $dic = 'user')
     {
         if (Yii::t("user", $str)==$str) {
             return Yii::t("user.".$dic, $str, $params);
