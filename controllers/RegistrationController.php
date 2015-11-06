@@ -20,12 +20,12 @@ class RegistrationController extends Controller
     /**
      * Declares class-based actions.
      */
-    public function actions()
-    {
-        return [
-            'captcha' => Module::getInstance()->captchaParams,
-        ];
-    }
+//    public function actions()
+//    {
+//        return [
+//            'captcha' => Module::getInstance()->captchaParams,
+//        ];
+//    }
     /**
      * Registration user
      */
@@ -46,13 +46,13 @@ class RegistrationController extends Controller
         if (Yii::$app->user->id) {
             $this->redirect(Yii::$app->controller->module->profileUrl);
         } else {
-            if (isset($_POST['RegistrationForm'])) {
-                $model->load(Yii::$app->request->post());
+            if ($model->load(Yii::$app->request->post())) {
                 $profile->load(Yii::$app->request->post());
                 if ($model->validate()&&$profile->validate()) {
                     $model->activkey=Module::encrypting(microtime().$model->password);
-                    $model->password=Module::encrypting($model->password);
-                    $model->verifyPassword=Module::encrypting($model->verifyPassword);
+                   // $model->password=Module::encrypting($model->password);
+                   // $model->verifyPassword=Module::encrypting($model->verifyPassword);
+
                     $model->superuser=0;
                     $model->status=(
                         (Yii::$app->controller->module->activeAfterRegister)?User::STATUS_ACTIVE:User::STATUS_NOACTIVE
@@ -70,11 +70,11 @@ class RegistrationController extends Controller
                                 $model->email,
                                 Module::t(
                                     "You registered from {site_name}",
-                                    ['{site_name}'=>Yii::$app->name]
+                                    ['site_name'=>Yii::$app->name]
                                 ),
                                 Module::t(
                                     "Please activate you account go to {activation_url}",
-                                    ['{activation_url}'=>$activation_url]
+                                    ['{activation_url'=>$activation_url]
                                 )
                             );
                         }

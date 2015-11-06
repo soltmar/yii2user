@@ -16,7 +16,7 @@ $this->title=Yii::$app->name . ' - '.Module::t("Profile");
 $this->params['breadcrumbs'][] = Module::t("Profile");
 
 $menu = [
-    ['label'=>Module::t('List User'), 'url'=> ['/user']],
+    ['label'=>Module::t('List User'), 'url'=> ['/user/user/index']],
     ['label'=>Module::t('Edit'), 'url'=> ['edit']],
     ['label'=>Module::t('Change password'), 'url'=> ['changepassword']],
     ['label'=>Module::t('Logout'), 'url'=> ['/user/logout']],

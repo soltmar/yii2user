@@ -83,7 +83,10 @@ $('.search-form form').submit(function(){
             },
             'filter' => User::itemAlias("UserStatus"),
         ],
-        ['class' => 'yii\grid\ActionColumn'],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'header' => Module::t('Actions')
+        ],
     ]
 ]); ?>
 

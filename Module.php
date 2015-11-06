@@ -68,7 +68,7 @@ class Module extends \yii\base\Module
     public $returnLogoutUrl = ["/user/login"];
 
     public $captchaParams = [
-        'class'=>'CCaptchaAction',
+        'class'=>'yii\captcha\CaptchaAction',
         'backColor'=>0xFFFFFF,
         'foreColor'=>0x2040A0,
     ];
@@ -326,7 +326,7 @@ class Module extends \yii\base\Module
                 ['label' => Module::t('Create User'), 'url' => ['/user/admin/create']],
                 ['label' => Module::t('Manage Users'), 'url' => ['/user/admin/admin']],
                 ['label' => Module::t('Manage Profile Field'), 'url' => ['/user/profile-field/admin']],
-                ['label' => Module::t('List User'), 'url' => ['/user']],
+                ['label' => Module::t('List User'), 'url' => ['/user/user/index']],
             ];
         }
     }

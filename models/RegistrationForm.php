@@ -12,13 +12,32 @@ use mariusz_soltys\yii2user\Module;
 class RegistrationForm extends User
 {
     public $verifyPassword;
-    public $verifyCode;
+    public $captcha;
+
+//    public function rules()
+//    {
+//        $rules = parent::rules();
+//        $rules[] = [['captcha', 'verifyPassword'], 'required'];
+//        $rules[] = ['captcha', 'captcha'];
+//        $rules[] = [
+//            'verifyPassword',
+//            'compare',
+//            'compareAttribute'=>'password',
+//            'message' => Module::t("Retype Password is incorrect.")
+//        ];
+//        return $rules;
+//    }
 
 
     public function rules()
     {
+
         $rules = [
+            [
+                'captcha',
+                'captcha', 'captchaAction'=>'/site/captcha'],
             [['username', 'password', 'verifyPassword', 'email'], 'required'],
+            [['username', 'password', 'verifyPassword', 'email'], 'safe'],
             [
                 'username',
                 'string',
@@ -48,23 +67,13 @@ class RegistrationForm extends User
                 'pattern' => '/^[A-Za-z0-9_]+$/u','message' => Module::t("Incorrect symbols (A-z0-9).")
             ],
         ];
-      //  if (!(isset($_POST['ajax']) && $_POST['ajax']==='registration-form')) {
-            array_push($rules, [
-                'verifyCode',
-                'captcha']);
-            array_push($rules, ['verifyCode', 'required']);
-      //s  }
-//
-//        array_push(
-//            $rules,
-//            [
-//                'verifyPassword',
-//                'compare',
-//                'compareAttribute'=>'password',
-//                'message' => Module::t("Retype Password is incorrect.")
-//            ]
-//        );
 
         return $rules;
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->password = Module::encrypting($this->password);
+        return parent::beforeSave($insert);
     }
 }

@@ -63,9 +63,9 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
 
         <?php
         if (Module::doCaptcha('registration')) {
-            echo $form->field($model, 'verifyCode')->widget(\yii\captcha\Captcha::classname(), [
+            echo $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(), [
 
-                'captchaAction' => '/user/registration/captcha',
+                'captchaAction' => '/site/captcha',
             ])
                 ->hint(Module::t("Please enter the letters as they are shown in the image above.")
                     . "<br/>" . Module::t("Letters are not case-sensitive."));
