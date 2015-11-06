@@ -22,7 +22,7 @@ class ActivationController extends Controller
             $find = User::find()->notsafe()->andWhere(['email'=>$email])->one();
 
             if (isset($find)&&$find->status) {
-                $this->render(
+                return $this->render(
                     '/user/message',
                     [
                         'title'=>Module::t("User activation"),
@@ -34,7 +34,7 @@ class ActivationController extends Controller
                 $find->status = 1;
                 $find->save();
 
-                $this->render(
+                return $this->render(
                     '/user/message',
                     [
                         'title'=>Module::t("User activation"),
@@ -42,7 +42,7 @@ class ActivationController extends Controller
                     ]
                 );
             } else {
-                $this->render(
+                return $this->render(
                     '/user/message',
                     [
                         'title'=>Module::t("User activation"),
@@ -51,7 +51,7 @@ class ActivationController extends Controller
                 );
             }
         } else {
-            $this->render(
+            return $this->render(
                 '/user/message',
                 [
                     'title'=>Module::t("User activation"),

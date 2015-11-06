@@ -34,6 +34,7 @@ class RegistrationController extends Controller
         Profile::$regMode = true;
         $model = new RegistrationForm;
         $profile=new Profile;
+        $module = Module::getInstance();
 
         // ajax validator
 //        if (Yii::$app->request->isAjax) {
@@ -58,14 +59,21 @@ class RegistrationController extends Controller
                         (Yii::$app->controller->module->activeAfterRegister)?User::STATUS_ACTIVE:User::STATUS_NOACTIVE
                     );
 
-                    if ($model->save()) {
+                    if ($model->save(false)) {
                         $profile->user_id=$model->id;
-                        $profile->save();
+                        $profile->save(false);
                         if (Yii::$app->controller->module->sendActivationMail) {
-                            $activation_url = Url::to(
-                                '/user/activation/activation',
-                                ["activkey" => $model->activkey, "email" => $model->email]
+                            $url = Url::to(
+                                array_merge(
+                                    $module->activationUrl,
+                                    [
+                                        "activkey" => $model->activkey,
+                                        "email" => $model->email
+                                    ]
+                                ),
+                                true
                             );
+                            $activation_url = Html::a($url, $url);
                             Module::sendMail(
                                 $model->email,
                                 Module::t(
@@ -73,8 +81,8 @@ class RegistrationController extends Controller
                                     ['site_name'=>Yii::$app->name]
                                 ),
                                 Module::t(
-                                    "Please activate you account go to {activation_url}",
-                                    ['{activation_url'=>$activation_url]
+                                    "Please activate you account go to <a href='{activation_url}'>{activation_url}</a>",
+                                    ['activation_url'=>$activation_url]
                                 )
                             );
                         }
@@ -127,7 +135,7 @@ class RegistrationController extends Controller
                                     Module::t("Thank you for your registration. Please check your email.")
                                 );
                             }
-                            $this->refresh();
+                            return $this->refresh();
                         }
                     }
                 } else {

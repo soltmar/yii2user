@@ -61,8 +61,9 @@ class Module extends \yii\base\Module
 
     public $registrationUrl = ["/user/registration"];
     public $recoveryUrl = ["/user/recovery/recovery"];
-    public $loginUrl = ["/user/login"];
-    public $logoutUrl = ["/user/logout"];
+    public $activationUrl = ["/user/activation/activation"];
+    public $loginUrl = ["/user/security/login"];
+    public $logoutUrl = ["/user/security/logout"];
     public $profileUrl = ["/user/profile"];
     public $returnUrl = ["/user/profile"];
     public $returnLogoutUrl = ["/user/login"];

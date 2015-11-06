@@ -1,29 +1,40 @@
 <?php
+/**
+ *
+ * Project: Yii2User
+ * Date: 06/11/2015
+ * @author Mariusz Soltys.
+ * @version 1.0.0
+ * @license http://opensource.org/licenses/MIT
+ *
+ */
 
 namespace mariusz_soltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\models\UserLogin;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
+use mariusz_soltys\yii2user\models\User;
+use mariusz_soltys\yii2user\models\UserLogin;
+use mariusz_soltys\yii2user\Module;
 
-class LoginController extends Controller
+class SecurityController extends Controller
 {
     public $defaultAction = 'login';
 
-    public function init()
+    /**
+     * Logout the current user and redirect to returnLogoutUrl.
+     */
+    public function actionLogout()
     {
-        parent::init();
+        Yii::$app->user->logout();
+        $this->redirect(Module::getInstance()->returnLogoutUrl);
     }
 
-    /**
-     * Displays the login page
-     */
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            $this->redirect(Yii::$app->controller->module->returnUrl);
+            $this->redirect(Module::getInstance()->returnUrl);
         }
         /** @var $model UserLogin */
         $model=new UserLogin();
@@ -34,7 +45,7 @@ class LoginController extends Controller
             if ($model->validate()) {
                 $this->lastVisit();
                 if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
-                    $this->redirect(Yii::$app->controller->module->returnUrl);
+                    $this->redirect(Module::getInstance()->returnUrl);
                 } else {
                     $this->redirect(Yii::$app->user->returnUrl);
                 }
@@ -51,5 +62,4 @@ class LoginController extends Controller
         $lastVisit->lastvisit_at = date('Y-m-d H:i:s');
         $lastVisit->save();
     }
-
 }
