@@ -13,7 +13,6 @@ use yii\widgets\ActiveForm;
 class ProfileController extends Controller
 {
     public $defaultAction = 'profile';
-    public $layout='column2';
 
     /** @var \mariusz_soltys\yii2user\models\Profile the currently loaded data model instance. */
     private $model;

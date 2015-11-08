@@ -9,8 +9,8 @@ use yii\helpers\Html;
 $this->params['breadcrumbs']= [
     Module::t("Users"),
 ];
-if (Module::isAdmin()) {
-    $this->context->layout='column2';
+if (!Module::isAdmin()) {
+    $this->context->layout='main';
 }
 ?>
 

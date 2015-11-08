@@ -16,8 +16,6 @@ class UserController extends Controller
      */
     private $model;
 
-    public $layout = 'column2';
-
     public function behaviors()
     {
         return [

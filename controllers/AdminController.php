@@ -16,7 +16,6 @@ use yii\widgets\ActiveForm;
 class AdminController extends Controller
 {
     public $defaultAction = 'admin';
-    public $layout='column2';
 
     private $model;
 

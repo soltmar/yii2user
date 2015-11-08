@@ -7,7 +7,7 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
-    public $mainLayout = '@app/views/layouts/main.php';
+    public $mainLayout;// = '@app/views/layouts/main.php';
 
     public $urlPrefix = 'user';
 
@@ -59,9 +59,9 @@ class Module extends \yii\base\Module
      */
     public $autoLogin=true;
 
-    public $registrationUrl = ["/user/registration"];
-    public $recoveryUrl = ["/user/recovery/recovery"];
-    public $activationUrl = ["/user/activation/activation"];
+    public $registrationUrl = ["/user/registration/registration"];
+    public $recoveryUrl = ["/user/security/recovery"];
+    public $activationUrl = ["/user/security/activation"];
     public $loginUrl = ["/user/security/login"];
     public $logoutUrl = ["/user/security/logout"];
     public $profileUrl = ["/user/profile"];
@@ -144,6 +144,8 @@ class Module extends \yii\base\Module
         $this->setAliases([
             '@user-assets' => __DIR__ . '/views/assets',
         ]);
+
+        Yii::configure($this, require(__DIR__ . '/config.php'));
     }
 
     public function getBehaviorsFor($componentName)

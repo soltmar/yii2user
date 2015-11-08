@@ -27,7 +27,6 @@ class ProfileFieldController extends Controller
     private $model;
     private static $widgets = array();
     public $defaultAction = 'admin';
-    public $layout='column2';
 
     public function behaviors()
     {

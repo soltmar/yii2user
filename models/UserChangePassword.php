@@ -19,7 +19,7 @@ class UserChangePassword extends Model
 
     public function rules()
     {
-        return Yii::$app->controller->id == 'recovery' ? [
+        return Yii::$app->controller->id == 'security' ? [
             [['password', 'verifyPassword'], 'required'],
             [['password', 'verifyPassword'],
                 'string',

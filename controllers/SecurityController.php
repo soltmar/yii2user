@@ -11,24 +11,28 @@
 
 namespace mariusz_soltys\yii2user\controllers;
 
+use mariusz_soltys\yii2user\models\UserChangePassword;
+use mariusz_soltys\yii2user\models\UserRecoveryForm;
 use Yii;
 use yii\helpers\Url;
-use yii\web\Controller;
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\models\UserLogin;
 use mariusz_soltys\yii2user\Module;
+use yii\web\Controller;
 
 class SecurityController extends Controller
 {
     public $defaultAction = 'login';
 
-    /**
-     * Logout the current user and redirect to returnLogoutUrl.
-     */
-    public function actionLogout()
+    /**@var \yii\web\Request */
+    private $r;
+
+    public $layout = "//main";
+
+    public function init()
     {
-        Yii::$app->user->logout();
-        $this->redirect(Module::getInstance()->returnLogoutUrl);
+        parent::init();
+        $this->r = Yii::$app->request;
     }
 
     public function actionLogin()
@@ -40,19 +44,131 @@ class SecurityController extends Controller
         $model=new UserLogin();
         // collect user input data
         if (isset($_POST['UserLogin'])) {
-            $model->load(Yii::$app->request->post());
+            $model->load($this->r->post());
             // validate user input and redirect to previous page if valid
             if ($model->validate()) {
                 $this->lastVisit();
                 if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
-                    $this->redirect(Module::getInstance()->returnUrl);
+                    return $this->redirect(Module::getInstance()->returnUrl);
                 } else {
-                    $this->redirect(Yii::$app->user->returnUrl);
+                    return $this->redirect(Yii::$app->user->returnUrl);
                 }
             }
         }
         // display the login form
-        return $this->render('/user/login', ['model'=>$model]);
+        return $this->render('login', ['model'=>$model]);
+    }
+
+
+    /**
+     * Logout the current user and redirect to returnLogoutUrl.
+     */
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        $this->redirect(Module::getInstance()->returnLogoutUrl);
+    }
+
+    public function actionActivation()
+    {
+        $email = $this->r->get('email');
+        $activkey = $this->r->get('activkey');
+        $title = Module::t("User activation");
+        $content = Module::t("Incorrect activation URL.");
+
+        if ($email && $activkey) {
+            $find = User::find()->notsafe()->andWhere(['email'=>$email])->one();
+
+            if ($find  &&$find->status) {
+                $content = Module::t("Your account is active.");
+            } elseif (isset($find->activkey) && ($find->activkey==$activkey)) {
+                $find->activkey = Module::encrypting(microtime());
+                $find->status = 1;
+                $find->save();
+                $content = Module::t("Your account has been activated.");
+            } else {
+                $content = Module::t("Incorrect activation URL.");
+            }
+        }
+
+        return $this->render('message', ['title'=>$title,  'content'=>$content]);
+    }
+
+    public function actionRecovery()
+    {
+        /**@var Module $module*/
+        $module = Yii::$app->controller->module;
+        $form = new UserRecoveryForm;
+        if (Yii::$app->user->id) {
+            $this->redirect($module->returnUrl);
+        }
+
+        $email = $this->r->get('email');
+        $activkey = $this->r->get('activkey');
+        if ($email&&$activkey) {
+            $form2 = new UserChangePassword;
+            $find = User::find()->notsafe()->andWhere(['email'=>$email])->one();
+            if (isset($find) && $find->activkey == $activkey) {
+                if ($form2->load(Yii::$app->request->post())) {
+                    if ($form2->validate()) {
+                        $find->password = $module->encrypting($form2->password);
+                        $find->activkey=$module->encrypting(microtime().$form2->password);
+                        if ($find->status==0) {
+                            $find->status = 1;
+                        }
+                        $find->save();
+                        Yii::$app->user->setFlash('success', Module::t("New password has been saved."));
+                        return $this->redirect($module->loginUrl);
+                    }
+                }
+                return $this->render('changepassword', ['form'=>$form2]);
+            } else {
+                Yii::$app->user->setFlash('danger', Module::t("Incorrect recovery link."));
+                return $this->redirect($module->recoveryUrl);
+            }
+        }
+
+        if ($form->load($this->r->post())) {
+            if ($form->validate()) {
+                $user = User::find()->notsafe()->findbyPk($form->user_id)->one();
+                $activation_url = Url::to(
+                    array_merge($module->recoveryUrl, ["activkey" => $user->activkey, "email" => $user->email]),
+                    true
+                );
+
+                $subject = Module::t(
+                    "{site_name} password recovery.",
+                    [
+                        'site_name'=>Yii::$app->name,
+                    ]
+                );
+                $message = Module::t(
+                    "You have requested the password recovery site {site_name}.
+                    To receive a new password, go to <a href='{activation_url}'>{activation_url}</a>.",
+                    [
+                        'site_name'=>Yii::$app->name,
+                        'activation_url'=>$activation_url,
+                    ]
+                );
+
+                $mail = Module::sendMail($user->email, $subject, $message);
+
+                if ($mail) {
+                    Yii::$app->user->setFlash(
+                        'success',
+                        Module::t("Please check your email. An activation instructions was sent to your email address.")
+                    );
+                } else {
+                    Yii::$app->user->setFlash(
+                        'danger',
+                        Module::t("Oops! There was a problem with sending activation email.")
+                    );
+                }
+
+                return $this->refresh();
+            }
+        }
+        return $this->render('recovery', array('form'=>$form));
     }
 
     private function lastVisit()
