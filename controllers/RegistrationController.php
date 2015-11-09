@@ -49,13 +49,9 @@ class RegistrationController extends Controller
                 $profile->load(Yii::$app->request->post());
                 if ($model->validate()&&$profile->validate()) {
                     $model->activkey=Module::encrypting(microtime().$model->password);
-                   // $model->password=Module::encrypting($model->password);
-                   // $model->verifyPassword=Module::encrypting($model->verifyPassword);
 
                     $model->superuser=0;
-                    $model->status=(
-                        (Module::getInstance()->activeAfterRegister)?User::STATUS_ACTIVE:User::STATUS_NOACTIVE
-                    );
+                    $model->status=Module::getInstance()->activeAfterRegister?User::STATUS_ACTIVE:User::STATUS_NOACTIVE;
 
                     if ($model->save(false)) {
                         $profile->user_id=$model->id;
@@ -71,17 +67,20 @@ class RegistrationController extends Controller
                                 ),
                                 true
                             );
+
                             $activation_url = Html::a($url, $url);
+
                             Module::sendMail(
                                 $model->email,
                                 Module::t(
-                                    "You registered from {site_name}",
+                                    "{site_name} account activation",
                                     ['site_name'=>Yii::$app->name]
                                 ),
-                                Module::t(
-                                    "Please activate you account go to <a href='{activation_url}'>{activation_url}</a>",
-                                    ['activation_url'=>$activation_url]
-                                )
+                                'register',
+                                [
+                                    'activation_url' => $activation_url
+                                ]
+
                             );
                         }
 

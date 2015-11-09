@@ -15,6 +15,7 @@ return [
     'layout' => "rightmenu",
     'user_page_size' => 10,
     'fields_page_size' => 10,
+    'emailFrom' => Yii::$app->params['adminEmail'],
     'sendActivationMail' => true,
     'loginNotActiv' => false,
     'activeAfterRegister' => false,

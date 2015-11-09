@@ -4,10 +4,13 @@ namespace mariusz_soltys\yii2user;
 
 use mariusz_soltys\yii2user\models\User;
 use Yii;
+use yii\swiftmailer\Mailer;
 
 class Module extends \yii\base\Module
 {
-    public $mainLayout;// = '@app/views/layouts/main.php';
+    public $mainLayout = '@app/views/layouts/main.php';
+
+    public $mailViews = '@mariusz_soltys/yii2user/mail';
 
     public $urlPrefix = 'user';
 
@@ -34,6 +37,12 @@ class Module extends \yii\base\Module
      * @desc hash method (md5,sha1 or algo hash function http://www.php.net/manual/en/function.hash.php)
      */
     public $hash='md5';
+
+    /**
+     * @var string
+     * @desc Email address present in "From" field
+     */
+    public $emailFrom;
 
     /**
      * @var boolean
@@ -250,41 +259,42 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Send to user mail
-     * @param $email
-     * @param $subject
-     * @param $message
+     * Send emails to specified $email address
+     * @param string $email
+     * @param string $subject
+     * @param string $view
+     * @param array $params
      * @return bool
      */
-    public static function sendMail($email, $subject, $message)
+    public static function sendMail($email, $subject, $view, $params = [])
     {
-        $adminEmail = Yii::$app->params['adminEmail'];
-        $headers = "MIME-Version: 1.0\r\n";
-        $headers .= "From: $adminEmail\r\n";
-        $headers .= "Reply-To: $adminEmail\r\n";
-        $headers .= "Content-Type: text/html; charset=utf-8";
-        $message = wordwrap($message, 70);
-        $message = str_replace("\n.", "\n..", $message);
-        return mail($email, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $headers);
+        if (empty($params['from'])) {
+            $params['from'] = Yii::$app->params['adminEmail'];
+        }
+        /** @var  $mailer Mailer*/
+        $mailer = Yii::$app->mailer;
+        $view = Module::getInstance()->mailViews."/".$view;
+        $mailer->compose($view, $params)
+            ->setFrom($params['from'])
+            ->setTo($email)
+            ->setSubject($subject)
+            ->send();
+        return $mailer;
     }
 
     /**
-     * Send to user mail
-     * @param $user_id
-     * @param $subject
-     * @param $message
-     * @param string $from
+     * Send email to user based on user id
+     * @param int $user_id
+     * @param string $subject
+     * @param string $view
+     * @param array $params
      * @return bool
      */
-    public function sendMailToUser($user_id, $subject, $message, $from = '')
+    public function sendMailToUser($user_id, $subject, $view, $params = [])
     {
         /**@var User $user*/
         $user = User::findOne($user_id);
-        if (!$from) {
-            $from = Yii::$app->params['adminEmail'];
-        }
-        $headers="From: ".$from."\r\nReply-To: ".Yii::$app->params['adminEmail'];
-        return mail($user->email, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $headers);
+        return $this->sendMail($user->email, $subject, $view, $params);
     }
 
     /**

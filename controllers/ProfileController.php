@@ -62,34 +62,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Change password
-     */
-    public function actionChangepassword()
-    {
-        ///**@var UserChangePassword $model*/
-        $model = new UserChangePassword;
-
-        if (Yii::$app->user->id) {
-            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-
-            if ($model->load(Yii::$app->request->post())) {
-                if ($model->validate()) {
-                    $new_password = User::find()->notsafe()->andWhere(['id'=>Yii::$app->user->id])->one();
-                    $new_password->password = Module::encrypting($model->password);
-                    $new_password->activkey=Module::encrypting(microtime().$model->password);
-                    $new_password->save();
-                    Yii::$app->user->setFlash('profileMessage', Module::t("New password is saved."));
-                    $this->redirect(array("profile"));
-                }
-            }
-            return $this->render('changepassword', ['model'=>$model]);
-        }
-    }
-
-    /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      *

@@ -14,11 +14,14 @@ namespace mariusz_soltys\yii2user\controllers;
 use mariusz_soltys\yii2user\models\UserChangePassword;
 use mariusz_soltys\yii2user\models\UserRecoveryForm;
 use Yii;
+use yii\helpers\Html;
 use yii\helpers\Url;
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\models\UserLogin;
 use mariusz_soltys\yii2user\Module;
 use yii\web\Controller;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 class SecurityController extends Controller
 {
@@ -121,7 +124,7 @@ class SecurityController extends Controller
                         return $this->redirect($module->loginUrl);
                     }
                 }
-                return $this->render('changepassword', ['form'=>$form2]);
+                return $this->render('recoverpassword', ['form'=>$form2]);
             } else {
                 Yii::$app->user->setFlash('danger', Module::t("Incorrect recovery link."));
                 return $this->redirect($module->recoveryUrl);
@@ -131,10 +134,18 @@ class SecurityController extends Controller
         if ($form->load($this->r->post())) {
             if ($form->validate()) {
                 $user = User::find()->notsafe()->findbyPk($form->user_id)->one();
-                $activation_url = Url::to(
-                    array_merge($module->recoveryUrl, ["activkey" => $user->activkey, "email" => $user->email]),
+                $url = Url::to(
+                    array_merge(
+                        $module->recoveryUrl,
+                        [
+                            "activkey" => $user->activkey,
+                            "email" => $user->email
+                        ]
+                    ),
                     true
                 );
+
+                $activation_url = Html::a($url, $url);
 
                 $subject = Module::t(
                     "{site_name} password recovery.",
@@ -142,16 +153,10 @@ class SecurityController extends Controller
                         'site_name'=>Yii::$app->name,
                     ]
                 );
-                $message = Module::t(
-                    "You have requested the password recovery site {site_name}.
-                    To receive a new password, go to <a href='{activation_url}'>{activation_url}</a>.",
-                    [
-                        'site_name'=>Yii::$app->name,
-                        'activation_url'=>$activation_url,
-                    ]
-                );
 
-                $mail = Module::sendMail($user->email, $subject, $message);
+                $mail = Module::sendMail($user->email, $subject, 'recover', [
+                    'activation_url' => $activation_url
+                ]);
 
                 if ($mail) {
                     Yii::$app->user->setFlash(
@@ -169,6 +174,34 @@ class SecurityController extends Controller
             }
         }
         return $this->render('recovery', array('form'=>$form));
+    }
+
+    /**
+     * Change password
+     */
+    public function actionChangepassword()
+    {
+        ///**@var UserChangePassword $model*/
+        $model = new UserChangePassword;
+
+        if (Yii::$app->user->id) {
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->validate()) {
+                    $new_password = User::find()->notsafe()->andWhere(['id'=>Yii::$app->user->id])->one();
+                    $new_password->password = Module::encrypting($model->password);
+                    $new_password->activkey=Module::encrypting(microtime().$model->password);
+                    $new_password->save();
+                    Yii::$app->user->setFlash('profileMessage', Module::t("New password is saved."));
+                    $this->redirect(array("profile"));
+                }
+            }
+            return $this->render('changepassword', ['model'=>$model]);
+        }
     }
 
     private function lastVisit()

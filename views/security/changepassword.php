@@ -2,44 +2,63 @@
 
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Html;
-
-/**
- * @var $form \mariusz_soltys\yii2user\models\UserRecoveryForm
- */
+use yii\widgets\ActiveForm;
 
 $this->title=Yii::$app->name . ' - '.Module::t("Change password");
-$this->params['breadcrumbs']= [
-    ['label' => Module::t("Login"), 'url' => ['/user/login']],
+$this->params['breadcrumbs']=array(
+    ['label' => Module::t("Profile"), 'url' => array('/user/profile')],
     Module::t("Change password"),
+);
+$menu= [
+    ['label'=>Module::t('List User'), 'url'=> ['/user']],
+    ['label'=>Module::t('Profile'), 'url'=> ['/user/profile']],
+    ['label'=>Module::t('Edit'), 'url'=> ['/user/profile/edit']],
+    ['label'=>Module::t('Logout'), 'url'=> ['/user/logout']],
 ];
+
+if (Module::isAdmin()) {
+    array_unshift($menu, ['label'=>Module::t('Manage Users'), 'url'=> ['/user/admin']]);
+}
+
+Module::getInstance()->setMenu($menu);
 ?>
 
-<h1><?php echo Module::t("Change password"); ?></h1>
+<div class="change-password">
 
-
-<div class="form">
-    <?php echo Html::beginForm(); ?>
+    <h1><?php echo Module::t("Change password"); ?></h1>
 
     <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
-    <?php echo Html::errorSummary($form); ?>
 
-    <div class="row">
-        <?php echo Html::activeLabel($form, 'password'); ?>
-        <?php echo Html::activePasswordInput($form, 'password'); ?>
-        <p class="hint">
-            <?php echo Module::t("Minimal password length 4 symbols."); ?>
-        </p>
+    <div class="col-lg-4">
+
+        <?php $form = ActiveForm::begin([
+            'id'=>'changepassword-form',
+            'enableAjaxValidation'=>true,
+            'validateOnSubmit'=>true,
+            'options' => ['class' => 'form-horizontal'],
+            'fieldConfig' => [
+                //  'template' => "{label}\n<div class=\"col-lg-4\">{input}</div>\n<div class=\"col-lg-4\">{error}</div>",
+                'labelOptions' => ['class' => 'control-label'],
+            ],
+        ]); ?>
+
+        <?php echo $form->errorSummary($model); ?>
+
+        <?= $form->field($model, 'oldPassword')->passwordInput(); ?>
+
+        <?= $form->field($model, 'password')->passwordInput()
+            ->hint(Module::t("Minimal password length 4 symbols.")); ?>
+
+        <?= $form->field($model, 'verifyPassword')->passwordInput(); ?>
+
+        <div class="form-group">
+            <?=
+            Html::submitButton(
+                Module::t("Save"),
+                ['class' => 'btn btn-primary']
+            ); ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
     </div>
-
-    <div class="row">
-        <?php echo Html::activeLabel($form, 'verifyPassword'); ?>
-        <?php echo Html::activePasswordInput($form, 'verifyPassword'); ?>
-    </div>
-
-
-    <div class="row submit">
-        <?php echo Html::submitButton(Module::t("Save")); ?>
-    </div>
-
-    <?php echo Html::endForm(); ?>
 </div><!-- form -->

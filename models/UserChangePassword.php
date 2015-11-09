@@ -19,7 +19,7 @@ class UserChangePassword extends Model
 
     public function rules()
     {
-        return Yii::$app->controller->id == 'security' ? [
+        return Yii::$app->controller->action->id == 'recovery' ? [
             [['password', 'verifyPassword'], 'required'],
             [['password', 'verifyPassword'],
                 'string',
@@ -40,7 +40,7 @@ class UserChangePassword extends Model
             ['verifyPassword',
                 'compare',
                 'compareAttribute'=>'password',
-                'message' => Module::t("Retype Password is incorrect.")],
+                'message' => Module::t("Retyped Password is incorrect.")],
             ['oldPassword', 'verifyOldPassword'],
         ];
     }
@@ -52,7 +52,7 @@ class UserChangePassword extends Model
     {
         return [
             'oldPassword' => Module::t("Old Password"),
-            'password' => Module::t("password"),
+            'password' => Module::t("Password"),
             'verifyPassword' => Module::t("Retype Password"),
         ];
     }
