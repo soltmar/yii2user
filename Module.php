@@ -4,9 +4,11 @@ namespace mariusz_soltys\yii2user;
 
 use mariusz_soltys\yii2user\models\User;
 use Yii;
+use yii\base\BootstrapInterface;
 use yii\swiftmailer\Mailer;
+use yii\web\GroupUrlRule;
 
-class Module extends \yii\base\Module
+class Module extends \yii\base\Module implements BootstrapInterface
 {
     public $mainLayout = '@app/views/layouts/main.php';
 
@@ -15,10 +17,12 @@ class Module extends \yii\base\Module
     public $urlPrefix = 'user';
 
     /** @var array The rules to be used in URL management. */
-    public $urlRules = [
-        '<controller:\w+>/<id:\d+>' => '<controller>/view',
-        '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-        '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+    public $urlRules = ['class' => 'yii\web\GroupUrlRule',
+                        'prefix' => 'user',
+                        'rules' => [
+                            'login' => 'user/security/login',
+                            'logout' => 'user/security/logout',
+                        ],
     ];
     /**
      * @var int
@@ -75,7 +79,7 @@ class Module extends \yii\base\Module
     public $logoutUrl = ["/user/security/logout"];
     public $profileUrl = ["/user/profile"];
     public $returnUrl = ["/user/profile"];
-    public $returnLogoutUrl = ["/user/login"];
+    public $returnLogoutUrl = ["/user/security/login"];
 
     public $captchaParams = [
         'class'=>'yii\captcha\CaptchaAction',
@@ -139,9 +143,15 @@ class Module extends \yii\base\Module
      */
     public $defaultRoute = 'user';
 
+    public function bootstrap($app)
+    {
+        $rules = $this->urlRules;
+        $app->getUrlManager()->addRules($rules, true);
+    }
+
     /**
      * @return Module
-    */
+     */
     public static function getInstance()
     {
         return parent::getInstance();

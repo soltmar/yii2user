@@ -36,7 +36,7 @@ class UserRecoveryForm extends Model
     public function attributeLabels()
     {
         return array(
-            'login_or_email'=>Module::t("username or email"),
+            'login_or_email'=>Module::t("Username"),
         );
     }
 

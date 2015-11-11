@@ -21,4 +21,22 @@ return [
     'activeAfterRegister' => false,
     'autoLogin' => true,
     'rememberMeTime' => 2592000, // 30 days
+    'urlRules' => [
+        'login' => 'user/security/login',
+        'logout' => 'user/security/logout',
+        [
+            'class' => 'yii\web\GroupUrlRule',
+            'prefix' => 'user',
+            'rules' => [
+                '/' => 'user/index',
+                'registration' => 'registration/registration',
+//                'login' => 'security/login',
+//                'logout' => 'security/logout',
+                'admin/view/<id:\d+>' => 'admin/view',
+                'admin/update/<id:\d+>' => 'admin/update',
+                'admin' => 'admin/admin',
+                'profile-field/<id:\d+>' => 'profile-field/view',
+            ],
+        ]
+    ],
 ];

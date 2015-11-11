@@ -22,61 +22,63 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
 <?php else : ?>
 
     <div class="form">
+        <div class="col-lg-5">
 
-        <?php $form = ActiveForm::begin([
-            'id'=>'registration-form',
-            'enableClientValidation' => false,
-            //'options' => ['enctype'=>'multipart/form-data'],
-        ]); ?>
+            <?php $form = ActiveForm::begin([
+                'id'=>'registration-form',
+                'enableClientValidation' => false,
+                //'options' => ['enctype'=>'multipart/form-data'],
+            ]); ?>
 
-        <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
+            <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
-        <?php echo $form->errorSummary(array($model,$profile)); ?>
+            <?php echo $form->errorSummary(array($model,$profile)); ?>
 
-        <?= $form->field($model, 'username'); ?>
+            <?= $form->field($model, 'username'); ?>
 
-        <?= $form->field($model, 'password')->passwordInput()->hint(Module::t("Minimal password length 4 symbols.")); ?>
+            <?= $form->field($model, 'password')->passwordInput()->hint(Module::t("Minimal password length 4 symbols.")); ?>
 
-        <?= $form->field($model, 'verifyPassword')->passwordInput(); ?>
+            <?= $form->field($model, 'verifyPassword')->passwordInput(); ?>
 
-        <?= $form->field($model, 'email'); ?>
+            <?= $form->field($model, 'email'); ?>
 
-        <?php
-        $profileFields=Profile::getFields();
-        if ($profileFields) {
-            foreach ($profileFields as $field) {
-                /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
-                $input = $form->field($profile, $field->varname);
+            <?php
+            $profileFields=Profile::getFields();
+            if ($profileFields) {
+                foreach ($profileFields as $field) {
+                    /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
+                    $input = $form->field($profile, $field->varname);
 
-                if ($widgetEdit = $field->widgetEdit($profile)) {
-                    echo $widgetEdit;
-                } elseif ($field->range) {
-                    echo $input->dropDownList(Profile::range($field->range));
-                } elseif ($field->field_type=="TEXT") {
-                    echo $input->textarea(['rows'=>6, 'cols'=>50]);
-                } else {
-                    echo $input->textInput(['size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)]);
+                    if ($widgetEdit = $field->widgetEdit($profile)) {
+                        echo $widgetEdit;
+                    } elseif ($field->range) {
+                        echo $input->dropDownList(Profile::range($field->range));
+                    } elseif ($field->field_type=="TEXT") {
+                        echo $input->textarea(['rows'=>6, 'cols'=>50]);
+                    } else {
+                        echo $input->textInput(['size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)]);
+                    }
                 }
             }
-        }
-        ?>
+            ?>
 
-        <?php
-        if (Module::doCaptcha('registration')) {
-            echo $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(), [
+            <?php
+            if (Module::doCaptcha('registration')) {
+                echo $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(), [
 
-                'captchaAction' => '/site/captcha',
-            ])
-                ->hint(Module::t("Please enter the letters as they are shown in the image above.")
-                    . "<br/>" . Module::t("Letters are not case-sensitive."));
-        }
-        ?>
+                    'captchaAction' => '/site/captcha',
+                ])
+                    ->hint(Module::t("Please enter the letters as they are shown in the image above.")
+                        . "<br/>" . Module::t("Letters are not case-sensitive."));
+            }
+            ?>
 
-        <div class="form-group">
-            <?= Html::submitButton(Module::t('Register'), ['class' => 'btn btn-success']); ?>
+            <div class="form-group">
+                <?= Html::submitButton(Module::t('Register'), ['class' => 'btn btn-success']); ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
         </div>
-
-        <?php ActiveForm::end(); ?>
 
     </div><!-- form -->
 <?php endif; ?>

@@ -1,6 +1,7 @@
 <?php
 
 use mariusz_soltys\yii2user\Module;
+use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -9,33 +10,36 @@ use yii\helpers\Html;
 $this->title=Yii::$app->name . ' - '.Module::t("Restore");
 $this->params['breadcrumbs']= [
     ['label' => Module::t("Login"), 'url' => ['/user/login']],
-    Module::t("Restore"),
+    Module::t("Forgot your password?"),
 ];
 ?>
 
-    <h1><?php echo Module::t("Restore"); ?></h1>
+    <h1><?= Module::t("Forgot your password?"); ?></h1>
 
 <?php if (Yii::$app->user->hasFlash('recoveryMessage')) : ?>
     <div class="alert alert-success" role="alert">
-        <?php echo Yii::$app->user->getFlash('recoveryMessage'); ?>
+        <?= Yii::$app->user->getFlash('recoveryMessage'); ?>
     </div>
 <?php else : ?>
 
     <div class="form">
-        <?php echo Html::beginForm(); ?>
 
-        <?php echo Html::errorSummary($form); ?>
+        <div class="col-lg-4">
+            <?php $f = ActiveForm::begin(['id'=>'recover-password-form']); ?>
 
-        <div class="row">
-            <?php echo Html::activeLabel($form, 'login_or_email'); ?>
-            <?php echo Html::activeTextInput($form, 'login_or_email') ?>
-            <p class="hint"><?php echo Module::t("Please enter your login or email address."); ?></p>
+            <?= $f->errorSummary($form); ?>
+
+            <?= $f->field($form, 'login_or_email')->hint(Module::t("This can be your username or email address.")); ?>
+
+            <div class="form-group">
+                <?=
+                Html::submitButton(
+                    Module::t("Restore"),
+                    ['class' => 'btn btn-primary']
+                ); ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
         </div>
-
-        <div class="row submit">
-            <?php echo Html::submitButton(Module::t("Restore")); ?>
-        </div>
-
-        <?php echo Html::endForm(); ?>
     </div><!-- form -->
 <?php endif; ?>

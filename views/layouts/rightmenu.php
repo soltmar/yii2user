@@ -1,14 +1,15 @@
 <?php
 
 /* @var $this \yii\web\View */
+use mariusz_soltys\yii2user\assets\UserAssets;
 use mariusz_soltys\yii2user\Module;
-use mariusz_soltys\yii2user\UserAssets;
 use yii\bootstrap\Nav;
-use yii\widgets\Menu;
 
 //UserAssets::register($this);
 
 /* @var $content string */
+
+UserAssets::register($this);
 
 $this->beginContent(Module::getInstance()->mainLayout); ?>
 

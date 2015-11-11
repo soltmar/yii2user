@@ -125,12 +125,12 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             'id' => Module::t("Id"),
-            'username'=>Module::t("username"),
-            'password'=>Module::t("password"),
+            'username'=>Module::t("Username"),
+            'password'=>Module::t("Password"),
             'verifyPassword'=>Module::t("Retype Password"),
             'email'=>Module::t("E-mail"),
             'verifyCode'=>Module::t("Verification Code"),
-            'activkey' => Module::t("activation key"),
+            'activkey' => Module::t("Activation Key"),
             'createtime' => Module::t("Registration date"),
             'create_at' => Module::t("Registration date"),
 

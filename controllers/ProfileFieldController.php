@@ -197,8 +197,6 @@ class ProfileFieldController extends Controller
 		$('div.widget select').append('<option value=\"\">".Module::t('No')."</option>');
 		if (wgByType[type]) {
 			for (var k in wgByType[type]) {
-			    console.log(wgByType[type][k]);
-			    console.log(widgets);
 				$('div.widget select')
 				    .append('<option value=\"'+wgByType[type][k]+'\">'+widgets[wgByType[type][k]]['label']+'</option>');
 			}
@@ -362,8 +360,8 @@ class ProfileFieldController extends Controller
         $scheme = get_class(Yii::$app->db->schema);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
-                $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` ';
-                $sql .= $this->fieldType($model->field_type);
+                $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` '
+                    .$this->fieldType($model->field_type);
                 if (
                     $model->field_type!='TEXT'
                     && $model->field_type!='DATE'
