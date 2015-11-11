@@ -26,8 +26,7 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
 
             <?php $form = ActiveForm::begin([
                 'id'=>'registration-form',
-                'enableClientValidation' => false,
-                //'options' => ['enctype'=>'multipart/form-data'],
+                'enableClientValidation' => true,
             ]); ?>
 
             <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
@@ -36,7 +35,11 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
 
             <?= $form->field($model, 'username'); ?>
 
-            <?= $form->field($model, 'password')->passwordInput()->hint(Module::t("Minimal password length 4 symbols.")); ?>
+            <?=
+                $form->field($model, 'password')
+                    ->passwordInput()
+                    ->hint(Module::t("Minimal password length 4 symbols."));
+            ?>
 
             <?= $form->field($model, 'verifyPassword')->passwordInput(); ?>
 

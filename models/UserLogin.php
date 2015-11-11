@@ -39,9 +39,9 @@ class UserLogin extends \yii\base\Model
     public function attributeLabels()
     {
         return array(
-            'rememberMe'=>Module::t("Remember me next time"),
-            'username'=>Module::t("username or email"),
-            'password'=>Module::t("password"),
+            'rememberMe'=>Module::t("Remember me"),
+            'username'=>Module::t("Username"),
+            'password'=>Module::t("Password"),
         );
     }
 

@@ -16,8 +16,9 @@ class ProfileController extends Controller
 
     /** @var \mariusz_soltys\yii2user\models\Profile the currently loaded data model instance. */
     private $model;
+
     /**
-     * Shows a particular model.
+     * Shows a particular user profile.
      */
     public function actionProfile()
     {
@@ -45,9 +46,7 @@ class ProfileController extends Controller
         }
 
         if ($model->load($post) && $profile->load($post)) {
-            if ($model->validate()&&$profile->validate()) {
-                $model->save();
-                $profile->save();
+            if ($model->save()&&$profile->save()) {
                 Yii::$app->user->setFlash('profileMessage', Module::t("Changes is saved."));
                 $this->redirect(array('/user/profile'));
             } else {
@@ -71,10 +70,10 @@ class ProfileController extends Controller
     {
         if ($this->model===null) {
             if (Yii::$app->user->id) {
-                $this->model = Yii::$app->controller->module->user();
+                $this->model = Module::getInstance()->user();
             }
             if ($this->model===null) {
-                $this->redirect(Yii::$app->controller->module->loginUrl);
+                $this->redirect(Module::getInstance()->loginUrl);
             }
         }
         return $this->model;

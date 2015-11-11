@@ -16,15 +16,6 @@ class RegistrationController extends Controller
     public $defaultAction = 'registration';
 
     /**
-     * Declares class-based actions.
-     */
-//    public function actions()
-//    {
-//        return [
-//            'captcha' => Module::getInstance()->captchaParams,
-//        ];
-//    }
-    /**
      * Registration user
      */
     public function actionRegistration()
@@ -43,7 +34,7 @@ class RegistrationController extends Controller
 //        }
 
         if (Yii::$app->user->id) {
-            $this->redirect(Module::getInstance()->profileUrl);
+            $this->redirect($module->profileUrl);
         } else {
             if ($model->load(Yii::$app->request->post())) {
                 $profile->load(Yii::$app->request->post());
@@ -51,12 +42,12 @@ class RegistrationController extends Controller
                     $model->activkey=Module::encrypting(microtime().$model->password);
 
                     $model->superuser=0;
-                    $model->status=Module::getInstance()->activeAfterRegister?User::STATUS_ACTIVE:User::STATUS_NOACTIVE;
+                    $model->status=$module->activeAfterRegister?User::STATUS_ACTIVE:User::STATUS_NOACTIVE;
 
                     if ($model->save(false)) {
                         $profile->user_id=$model->id;
                         $profile->save(false);
-                        if (Module::getInstance()->sendActivationMail) {
+                        if ($module->sendActivationMail) {
                             $url = Url::to(
                                 array_merge(
                                     $module->activationUrl,
@@ -86,18 +77,18 @@ class RegistrationController extends Controller
 
                         if (
                             (
-                                Module::getInstance()->loginNotActiv ||(
-                                    Module::getInstance()->activeAfterRegister &&
-                                    Module::getInstance()->sendActivationMail==false
+                                $module->loginNotActiv ||(
+                                    $module->activeAfterRegister &&
+                                    $module->sendActivationMail==false
                                 )
-                            ) && Module::getInstance()->autoLogin
+                            ) && $module->autoLogin
                         ) {
                             Yii::$app->user->login($model);
-                            $this->redirect(Module::getInstance()->returnUrl);
+                            $this->redirect($module->returnUrl);
                         } else {
                             if (
-                                !Module::getInstance()->activeAfterRegister &&
-                                !Module::getInstance()->sendActivationMail
+                                !$module->activeAfterRegister &&
+                                !$module->sendActivationMail
                             ) {
                                 Yii::$app->user->setFlash(
                                     'registration',
@@ -106,8 +97,8 @@ class RegistrationController extends Controller
                                     )
                                 );
                             } elseif (
-                                Module::getInstance()->activeAfterRegister &&
-                                Module::getInstance()->sendActivationMail == false
+                                $module->activeAfterRegister &&
+                                $module->sendActivationMail == false
                             ) {
                                 Yii::$app->user->setFlash(
                                     'registration',
@@ -116,12 +107,12 @@ class RegistrationController extends Controller
                                         [
                                             '{{login}}'=>Html::a(
                                                 Module::t('Login'),
-                                                Module::getInstance()->loginUrl
+                                                $module->loginUrl
                                             )
                                         ]
                                     )
                                 );
-                            } elseif (Module::getInstance()->loginNotActiv) {
+                            } elseif ($module->loginNotActiv) {
                                 Yii::$app->user->setFlash(
                                     'registration',
                                     Module::t("Thank you for your registration. Please check your email or login.")

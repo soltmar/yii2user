@@ -37,7 +37,6 @@ class AdminController extends Controller
         ];
     }
 
-
     /**
      * Manages all models.
      */
@@ -50,15 +49,6 @@ class AdminController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
         ));
-        /*$dataProvider=new CActiveDataProvider('User', array(
-            'pagination'=>array(
-                'pageSize'=>Yii::$app->controller->module->user_page_size,
-            ),
-        ));
-
-        $this->render('index',array(
-            'dataProvider'=>$dataProvider,
-        ));//*/
     }
 
 
@@ -157,7 +147,7 @@ class AdminController extends Controller
             $model->delete();
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!Yii::$app->request->isAjax) {
-                $this->redirect(array('/user/admin'));
+                $this->redirect(['/user/admin']);
             }
         } else {
             throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
@@ -167,6 +157,7 @@ class AdminController extends Controller
     /**
      * Performs the AJAX validation.
      * @param $validate array the model to be validated
+     * @return array containing validation results for each of the models fields
      */
     protected function performAjaxValidation($validate)
     {

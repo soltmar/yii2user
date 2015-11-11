@@ -12,7 +12,7 @@
 return [
 
     'mainLayout' => '@app/views/layouts/main.php',
-    'layout' => "rightmenu",
+    'layout' => "topmenu",
     'user_page_size' => 10,
     'fields_page_size' => 10,
     'emailFrom' => Yii::$app->params['adminEmail'],

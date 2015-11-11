@@ -46,16 +46,12 @@ class SecurityController extends Controller
         /** @var $model UserLogin */
         $model=new UserLogin();
         // collect user input data
-        if (isset($_POST['UserLogin'])) {
-            $model->load($this->r->post());
-            // validate user input and redirect to previous page if valid
-            if ($model->validate()) {
-                $this->lastVisit();
-                if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
-                    return $this->redirect(Module::getInstance()->returnUrl);
-                } else {
-                    return $this->redirect(Yii::$app->user->returnUrl);
-                }
+        if ($model->load($this->r->post()) && $model->validate()) {
+            $this->lastVisit();
+            if (Url::base()."/index.php" === Yii::$app->user->returnUrl) {
+                return $this->redirect(Module::getInstance()->returnUrl);
+            } else {
+                return $this->redirect(Yii::$app->user->returnUrl);
             }
         }
         // display the login form
@@ -202,6 +198,8 @@ class SecurityController extends Controller
             }
             return $this->render('changepassword', ['model'=>$model]);
         }
+
+        return $this->redirect(Module::getInstance()->loginUrl);
     }
 
     private function lastVisit()

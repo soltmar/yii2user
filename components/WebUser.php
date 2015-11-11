@@ -2,25 +2,25 @@
 
 namespace mariusz_soltys\yii2user\components;
 
-use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\Module;
 use Yii;
-use yii\helpers\ArrayHelper;
-
 
 /**
  * @inheritdoc
  *
- * @property \app\models\User|\yii\web\IdentityInterface|null $identity The identity object associated with the currently logged-in user. null is returned if the user is not logged in (not authenticated).
+ * @property \mariusz_soltys\yii2user\models\User|\yii\web\IdentityInterface|null $identity
+ *      The identity object associated with the currently logged-in user.
+ *      null is returned if the user is not logged in (not authenticated).
  */
 
 class WebUser extends \yii\web\User
 {
 
     /**
-     * @var boolean whether to enable cookie-based login. Defaults to false.
+     * @var boolean whether to enable cookie-based login. Defaults to true.
      */
-    public $allowAutoLogin=true;
+    public $enableAutoLogin = true;
+
     /**
      * @var string|array the URL for login. If using array, the first element should be
      * the route to the login action, and the rest name-value pairs are GET parameters
@@ -28,9 +28,9 @@ class WebUser extends \yii\web\User
      * a 403 HTTP exception will be raised instead.
      * @see CController::createUrl
      */
-    public $loginUrl=array('/user/login');
+    public $loginUrl= ['/user/login'];
 
-    private $sessionKeys = array();
+    private $sessionKeys = [];
 
     /** @var Module $module */
     private $module;
@@ -70,7 +70,7 @@ class WebUser extends \yii\web\User
         parent::afterLogin($identity, $cookieBased, $duration);
        // $this->updateSession();
 
-        //TODO Check what user components properties needs to be stored in session
+        //TODO Check what user properties needs to be stored in session
     }
 
 //    public function updateSession() {
@@ -91,7 +91,7 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user id.
      * @param integer $id user id. Default - current user id.
-     * @return User
+     * @return \mariusz_soltys\yii2user\models\User
      */
     public function model($id = 0)
     {
@@ -101,9 +101,9 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user id.
      * @param integer $id user id. Default - current user id.
-     * @return User
+     * @return \mariusz_soltys\yii2user\models\User
      */
-    public function user($id=0)
+    public function user($id = 0)
     {
         return $this->model($id);
     }
@@ -111,7 +111,7 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user name.
      * @param string $username
-     * @return User
+     * @return \mariusz_soltys\yii2user\models\User
      */
     public function getUserByName($username)
     {
@@ -156,6 +156,10 @@ class WebUser extends \yii\web\User
         return Yii::$app->session->hasFlash("user.".$key);
     }
 
+    /**
+     * This is function here is to make it compatible with new Yii2 flash messages
+     * @return array
+     */
     public function getFlashes()
     {
         $messages = Yii::$app->session->getAllFlashes();
@@ -169,35 +173,40 @@ class WebUser extends \yii\web\User
             $messages[$nkey] = $value;
             unset($messages[$key]);
         }
+        return $messages;
     }
 
 
     /**
+     * Checks if current user is an Administrator
      * @return boolean
      */
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->module->isAdmin();
     }
 
-    public function __get($name){
-        try{
+    public function __get($name)
+    {
+        try {
             return parent::__get($name);
-        }catch (\yii\base\UnknownPropertyException $e){
-            if(in_array($name, $this->sessionKeys)){
+        } catch (\yii\base\UnknownPropertyException $e) {
+            if (in_array($name, $this->sessionKeys)) {
                 return \Yii::$app->session->get("user.$name");
-            }else{
+            } else {
                 throw $e;
             }
         }
     }
 
-    public function __set($name, $value){
+    public function __set($name, $value)
+    {
         try {
             parent::__set($name, $value);
-        }catch (\yii\base\UnknownPropertyException $e){
-            if(in_array($name, $this->sessionKeys)){
+        } catch (\yii\base\UnknownPropertyException $e) {
+            if (in_array($name, $this->sessionKeys)) {
                 \Yii::$app->session->set("user.$name", $value);
-            }else{
+            } else {
                 throw $e;
             }
         }

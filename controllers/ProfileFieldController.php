@@ -15,6 +15,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -61,18 +62,6 @@ class ProfileFieldController extends Controller
      */
     public function registerScript()
     {
-
-        //TODO populate assest somwhere else (Asset bundle? - where register)
-//        $basePath=Yii::getAlias('@vendor/');
-//        $baseUrl=Yii::$app->getAssetManager()->publish($basePath);
-//        $cs = Yii::$app->getClientScript();
-//        $cs->registerCoreScript('jquery');
-//        $cs->registerCssFile($baseUrl.'/css/redmond/jquery-ui.css');
-//        $cs->registerCssFile($baseUrl.'/css/style.css');
-//        $cs->registerScriptFile($baseUrl.'/js/jquery-ui.min.js');
-//        $cs->registerScriptFile($baseUrl.'/js/form.js');
-//        $cs->registerScriptFile($baseUrl.'/js/jquery.json.js');
-
         UserAssets::register($this->view);
 
         $widgets = self::getWidgets();
@@ -477,7 +466,7 @@ class ProfileFieldController extends Controller
             }
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-            if (!isset($_POST['ajax'])) {
+            if (!Yii::$app->request->isAjax) {
                 $this->redirect(array('admin'));
             }
         } else {
@@ -506,11 +495,11 @@ class ProfileFieldController extends Controller
     public function loadModel()
     {
         if ($this->model === null) {
-            if (isset($_GET['id'])) {
-                $this->model=ProfileField::findOne($_GET['id']);
+            if (Yii::$app->request->get('id')) {
+                $this->model=ProfileField::findOne(Yii::$app->request->get('id'));
             }
             if ($this->model === null) {
-                throw new HttpException(404, 'The requested page does not exist.');
+                throw new NotFoundHttpException('The requested page does not exist.');
             }
         }
         return $this->model;
@@ -539,7 +528,6 @@ class ProfileFieldController extends Controller
             while (false !== ($file = $d->read())) {
                 if (strpos($file, 'UW') === 0) {
                     list($className) = explode('.', $file);
-                    //$className = '\\mariusz_soltys\\yii2user\\components\\'.$className;
                     if (class_exists('\\mariusz_soltys\\yii2user\\components\\'.$className)) {
                         /**@var \mariusz_soltys\yii2user\components\UWfile $widgetClass - this is to trick IDEs*/
                         $cs = '\\mariusz_soltys\\yii2user\\components\\'.$className;
@@ -584,11 +572,6 @@ class ProfileFieldController extends Controller
      */
     protected function performAjaxValidation($model)
     {
-//        if(isset($_POST['ajax']) && $_POST['ajax'] === 'profile-field-form')
-//        {
-//            echo ActiveForm::validate($model);
-//        }
-
         if (Yii::$app->request->isAjax && $model) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             echo ActiveForm::validate($model);
