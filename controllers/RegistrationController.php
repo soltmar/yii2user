@@ -91,7 +91,7 @@ class RegistrationController extends Controller
                                 !$module->sendActivationMail
                             ) {
                                 Yii::$app->user->setFlash(
-                                    'registration',
+                                    'success',
                                     Module::t(
                                         "Thank you for your registration. Contact Admin to activate your account."
                                     )
@@ -101,7 +101,7 @@ class RegistrationController extends Controller
                                 $module->sendActivationMail == false
                             ) {
                                 Yii::$app->user->setFlash(
-                                    'registration',
+                                    'success',
                                     Module::t(
                                         "Thank you for your registration. Please {{login}}.",
                                         [
@@ -114,12 +114,12 @@ class RegistrationController extends Controller
                                 );
                             } elseif ($module->loginNotActiv) {
                                 Yii::$app->user->setFlash(
-                                    'registration',
+                                    'success',
                                     Module::t("Thank you for your registration. Please check your email or login.")
                                 );
                             } else {
                                 Yii::$app->user->setFlash(
-                                    'registration',
+                                    'success',
                                     Module::t("Thank you for your registration. Please check your email.")
                                 );
                             }

@@ -9,9 +9,7 @@ use yii\bootstrap\Nav;
 
 /* @var $content string */
 
-UserAssets::register($this);
-
-$this->beginContent(Module::getInstance()->mainLayout); ?>
+$this->beginContent('@mariusz_soltys/yii2user/views/layouts/main.php'); ?>
 
     <div class="row">
         <div class="col-md-2">

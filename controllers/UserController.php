@@ -89,8 +89,8 @@ class UserController extends Controller
     public function loadUser($id = null)
     {
         if ($this->model===null) {
-            if ($id!==null || isset($_GET['id'])) {
-                $this->model=User::findOne($id!==null ? $id : $_GET['id']);
+            if ($id!==null || Yii::$app->request->get('id')) {
+                $this->model=User::findOne($id!==null ? $id : Yii::$app->request->get('id'));
             }
             if ($this->model===null) {
                 throw new HttpException(404, 'The requested page does not exist.');

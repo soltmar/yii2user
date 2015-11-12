@@ -5,7 +5,7 @@ use mariusz_soltys\yii2user\models\ProfileField;
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model mariusz_soltys\yii2user\models\ProfileField */
@@ -110,7 +110,7 @@ use yii\widgets\ActiveForm;
     </div>
 
 </div><!-- form -->
-<div id="dialog-form" title="<?= Module::t('Widget parameters'); ?>">
+<div id="dialog-form" title="<?= Module::t('Widgets parameters'); ?>">
     <form>
         <fieldset>
             <label for="name">Name</label>

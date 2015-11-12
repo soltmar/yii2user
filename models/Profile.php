@@ -31,21 +31,22 @@ class Profile extends ActiveRecord
     }
 
     /**
+     * Takes Profile validation rules from database
      * @return array validation rules for model attributes.
      */
     public function rules()
     {
         if (!self::$rules) {
-            $required = array();
-            $numerical = array();
-            $float = array();
-            $decimal = array();
-            $rules = array();
+            $required = [];
+            $numerical = [];
+            $float = [];
+            $decimal = [];
+            $rules = [];
 
             $model=self::getFields();
 
             foreach ($model as $field) {
-                $field_rule = array();
+                $field_rule = [];
 
                 $cond = $field->required == ProfileField::REQUIRED_YES_NOT_SHOW_REG
                     || $field->required == ProfileField::REQUIRED_YES_SHOW_REG;
@@ -133,8 +134,7 @@ class Profile extends ActiveRecord
         return self::$rules;
     }
 
-    /*  Relations    */
-
+    /**  User model relation  */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
@@ -171,6 +171,7 @@ class Profile extends ActiveRecord
         return $rules;
     }
 
+    /** Range validator */
     public static function range($str, $fieldValue = null)
     {
         $rules = explode(';', $str);
@@ -238,9 +239,7 @@ class Profile extends ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-//        if (get_class(Yii::$app)=='yii\web\Application'&&Profile::$regMode==false) {
-//            Yii::$app->user->updateSession();
-//        }
+        //TODO update user session if anything from profile is present in it
         return parent::afterSave($insert, $changedAttributes);
     }
 }

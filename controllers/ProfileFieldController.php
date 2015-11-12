@@ -2,7 +2,7 @@
 
 namespace mariusz_soltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\assets\UserAssets;
+use mariusz_soltys\yii2user\assets\ProfileFieldAssets;
 use mariusz_soltys\yii2user\models\search\ProfileFieldSearch;
 use yii\base\Exception;
 use mariusz_soltys\yii2user\models\Profile;
@@ -62,7 +62,7 @@ class ProfileFieldController extends Controller
      */
     public function registerScript()
     {
-        UserAssets::register($this->view);
+        ProfileFieldAssets::register($this->view);
 
         $widgets = self::getWidgets();
 

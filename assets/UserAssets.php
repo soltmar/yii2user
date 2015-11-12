@@ -14,8 +14,8 @@ class UserAssets extends AssetBundle
         'js/jquery.json.js'
     ];
     public $depends = [
+        'yii\web\JqueryAsset',
         'yii\web\YiiAsset',
-        'yii\jui\JuiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
     ];
 }

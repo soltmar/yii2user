@@ -14,7 +14,7 @@ use mariusz_soltys\yii2user\Module;
 ?>
 
 <?= Module::t(
-    "You have requested the password recovery site {site_name}.<br><br>
+    "You have requested the password recovery on {site_name} site.<br><br>
      To receive a new password, go to {activation_url}.",
     [
         'site_name'=>Yii::$app->name,

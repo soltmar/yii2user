@@ -14,21 +14,6 @@ class RegistrationForm extends User
     public $verifyPassword;
     public $captcha;
 
-//    public function rules()
-//    {
-//        $rules = parent::rules();
-//        $rules[] = [['captcha', 'verifyPassword'], 'required'];
-//        $rules[] = ['captcha', 'captcha'];
-//        $rules[] = [
-//            'verifyPassword',
-//            'compare',
-//            'compareAttribute'=>'password',
-//            'message' => Module::t("Retype Password is incorrect.")
-//        ];
-//        return $rules;
-//    }
-
-
     public function rules()
     {
 
@@ -71,6 +56,7 @@ class RegistrationForm extends User
         return $rules;
     }
 
+    /** Encrypt password before saving to database */
     public function beforeSave($insert)
     {
         $this->password = Module::encrypting($this->password);

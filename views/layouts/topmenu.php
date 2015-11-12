@@ -11,7 +11,7 @@ use yii\bootstrap\Nav;
 
 UserAssets::register($this);
 
-$this->beginContent(Module::getInstance()->mainLayout); ?>
+$this->beginContent('@mariusz_soltys/yii2user/views/layouts/main.php'); ?>
 
     <div class="row">
         <div class="col-md-12">

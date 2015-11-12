@@ -81,7 +81,7 @@ class SecurityController extends Controller
             if ($find  &&$find->status) {
                 $content = Module::t("Your account is active.");
             } elseif (isset($find->activkey) && ($find->activkey==$activkey)) {
-                $find->activkey = Module::encrypting(microtime());
+                $find->activkey = Yii::$app->security->generateRandomString(); //Module::encrypting(microtime());
                 $find->status = 1;
                 $find->save();
                 $content = Module::t("Your account has been activated.");
@@ -111,8 +111,8 @@ class SecurityController extends Controller
                 if ($form2->load(Yii::$app->request->post())) {
                     if ($form2->validate()) {
                         $find->password = $module->encrypting($form2->password);
-                        $find->activkey=$module->encrypting(microtime().$form2->password);
-                        if ($find->status==0) {
+                        $find->activkey = Yii::$app->security->generateRandomString(); //$module->encrypting(microtime().$form2->password);
+                        if ($find->status == 0) {
                             $find->status = 1;
                         }
                         $find->save();
@@ -120,7 +120,7 @@ class SecurityController extends Controller
                         return $this->redirect($module->loginUrl);
                     }
                 }
-                return $this->render('recoverpassword', ['form'=>$form2]);
+                return $this->render('recoverpassword', ['form' => $form2]);
             } else {
                 Yii::$app->user->setFlash('danger', Module::t("Incorrect recovery link."));
                 return $this->redirect($module->recoveryUrl);
@@ -146,7 +146,7 @@ class SecurityController extends Controller
                 $subject = Module::t(
                     "{site_name} password recovery.",
                     [
-                        'site_name'=>Yii::$app->name,
+                        'site_name' => Yii::$app->name,
                     ]
                 );
 
@@ -169,7 +169,7 @@ class SecurityController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('recovery', array('form'=>$form));
+        return $this->render('recovery', array('form' => $form));
     }
 
     /**
@@ -192,7 +192,7 @@ class SecurityController extends Controller
                     $new_password->password = Module::encrypting($model->password);
                     $new_password->activkey=Module::encrypting(microtime().$model->password);
                     $new_password->save();
-                    Yii::$app->user->setFlash('profileMessage', Module::t("New password is saved."));
+                    Yii::$app->user->setFlash('success', Module::t("New password has been saved."));
                     $this->redirect(array("profile"));
                 }
             }

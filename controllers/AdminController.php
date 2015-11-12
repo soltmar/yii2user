@@ -73,7 +73,8 @@ class AdminController extends Controller
         $profile = new Profile;
         $this->performAjaxValidation([$model,$profile]);
         if ($model->load(Yii::$app->request->post())) {
-            $model->activkey = Module::getInstance()->encrypting(microtime().$model->password);
+            $model->activkey = Yii::$app->security->generateRandomString();
+            //Module::getInstance()->encrypting(microtime().$model->password);
             $profile->load(Yii::$app->request->post());
             $profile->user_id=0;
             if ($model->validate()&&$profile->validate()) {
@@ -81,8 +82,14 @@ class AdminController extends Controller
                 if ($model->save()) {
                     $profile->user_id = $model->id;
                     $profile->save();
+                    Yii::$app->user->setFlash(
+                        'success',
+                        Module::t(
+                            "User has been created successfully."
+                        )
+                    );
                 }
-                $this->redirect(['view', 'id'=>$model->id]);
+                return $this->redirect(['view', 'id'=>$model->id]);
             } else {
                 $profile->validate();
             }
@@ -110,11 +117,11 @@ class AdminController extends Controller
                 $old_password = User::find()->notsafe()->findbyPk($model->id)->one();
                 if ($old_password->password != $model->password) {
                     $model->password = Module::getInstance()->encrypting($model->password);
-                    $model->activkey = Module::getInstance()->encrypting(microtime().$model->password);
+                    $model->activkey = Yii::$app->security->generateRandomString();//Module::getInstance()->encrypting(microtime().$model->password);
                 }
                 $model->save();
                 $profile->save();
-                $this->redirect(['view', 'id'=>$model->id]);
+                return $this->redirect(['view', 'id'=>$model->id]);
             } else {
                 $profile->validate();
             }
@@ -147,7 +154,7 @@ class AdminController extends Controller
             $model->delete();
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!Yii::$app->request->isAjax) {
-                $this->redirect(['/user/admin']);
+                return $this->redirect(['/user/admin']);
             }
         } else {
             throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
@@ -177,7 +184,7 @@ class AdminController extends Controller
     public function loadModel()
     {
         if ($this->model===null) {
-            if (isset($_GET['id'])) {
+            if (Yii::$app->request->get('id')) {
                 $this->model = User::find()->notsafe()->findbyPk($_GET['id'])->one();
             }
             if ($this->model===null) {

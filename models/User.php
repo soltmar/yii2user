@@ -187,6 +187,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function afterSave($insert, $changedAttributes)
     {
+        //TODO update user session if user is logged in
 //        if (get_class(Yii::$app)=='CWebApplication'&&Profile::$regMode==false) {
 //            Yii::$app->user->updateSession();
 //        }
