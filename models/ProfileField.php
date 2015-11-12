@@ -57,7 +57,7 @@ class ProfileField extends ActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return [
-            [['varname', 'title', 'field_type'], 'required'],
+            [['varname', 'title', 'field_type', 'field_size_min'], 'required'],
             [
                 'varname',
                 'match',
