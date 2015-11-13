@@ -199,7 +199,7 @@ class ProfileFieldController extends Controller
 				$('#widgetlist option:first').attr('selected', 'selected');
 			}
 
-			$('div.row').addClass('toshow').removeClass('tohide');
+			$('div.form-group').addClass('toshow').removeClass('tohide');
 			if (fieldType[type].hide.length) {
 			    $('div.'+fieldType[type].hide.join(', div.')).addClass('tohide').removeClass('toshow');
 			}
@@ -235,7 +235,7 @@ class ProfileFieldController extends Controller
 					if ($(this).val()) wparam[$(this).attr('name')] = $(this).val();
 				});
 
-				var tab = $('#tabs ul li.ui-tabs-selected').text();
+				var tab = $('#tabs ul li.ui-tabs-active').text();
 				fparam[tab] = {};
 				$('#dialog-form fieldset .tab-'+tab).each(function(){
 					if ($(this).val()) fparam[tab][$(this).attr('name')] = $(this).val();
@@ -326,7 +326,7 @@ class ProfileFieldController extends Controller
 	// show all function
 	$('div.form p.note').append('<br/><a href=\"#\" id=\"showAll\">".Module::t('Show all')."</a>');
  	$('#showAll').click(function(){
-		$('div.row').show(500);
+		$('div.form-group').show(500);
 		return false;
 	});
 
@@ -348,6 +348,7 @@ class ProfileFieldController extends Controller
         $model=new ProfileField;
         $scheme = get_class(Yii::$app->db->schema);
         if ($model->load(Yii::$app->request->post())) {
+            $model;
             if ($model->validate()) {
                 $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` '
                     .$this->fieldType($model->field_type);
@@ -360,10 +361,10 @@ class ProfileFieldController extends Controller
                 ) {
                     $sql .= '(' . $model->field_size . ')';
                 }
-                $sql .= ' NOT NULL ';
+                $sql .= ' NOT NULL';
 
-                if ($model->field_type!='TEXT'&&$model->field_type!='BLOB'||$scheme!='CMysqlSchema') {
-                    if ($model->default) {
+                if ($model->field_type!='TEXT'&&$model->field_type!='BLOB'||$scheme!='yii\db\mysql\Schema') {
+                    if (!empty($model->default)) {
                         $sql .= " DEFAULT '".$model->default."'";
                     } else {
                         $sql .= ((

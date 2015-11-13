@@ -57,7 +57,7 @@ class ProfileField extends ActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return [
-            [['varname', 'title', 'field_type', 'field_size_min'], 'required'],
+            [['varname', 'title', 'field_type'], 'required'],
             [
                 'varname',
                 'match',
@@ -68,8 +68,8 @@ class ProfileField extends ActiveRecord
             [['varname', 'field_type'], 'string', 'max'=>50],
             [['field_size_min', 'required', 'position', 'visible'], 'number', 'integerOnly'=>true],
             ['field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
-            [['title', 'match', 'error_message', 'other_validator', 'default', 'widget'], 'string', 'max'=>255],
-            [['range', 'widgetparams'], 'string', 'max'=>5000],
+            [['title', 'match', 'error_message', 'default', 'widget'], 'string', 'max'=>255],
+            [['range', 'widgetparams', 'other_validator'], 'string', 'max'=>5000],
             [
                 [
                     'id',
@@ -126,13 +126,22 @@ class ProfileField extends ActiveRecord
         return new ProfileFieldQuery(get_called_class());
     }
 
+    public function beforeSave($insert)
+    {
+        if (empty($this->position)) {
+            $this->position = $this->find()->count()+1;
+        }
+        return parent::beforeSave($insert);
+    }
+
     /**
      * @param ActiveRecord $model
      * @return string formated value
      */
     public function widgetView($model)
     {
-        if ($this->widget && class_exists($this->widget)) {
+        if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
+            $this->widget = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
             $widgetClass = new $this->widget;
 
             $arr = $this->widgetparams;
@@ -156,7 +165,8 @@ class ProfileField extends ActiveRecord
 
     public function widgetEdit($model, $params = [])
     {
-        if ($this->widget && class_exists($this->widget)) {
+        if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
+            $this->widget = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
             $widgetClass = new $this->widget;
 
             $arr = $this->widgetparams;

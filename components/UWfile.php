@@ -30,29 +30,33 @@ class UWfile
      */
     public function init()
     {
-        return array(
+        return [
             'name'=>__CLASS__,
             'label'=>Module::t('File field'),
-            'fieldType'=>array('VARCHAR'),
+            'fieldType'=> ['VARCHAR'],
             'params'=>$this->params,
-            'paramsLabels' => array(
+            'paramsLabels' => [
                 'path'=>Module::t('Upload path'),
-            ),
-            'other_validator'=>array(
-                'file'=>array(
-                    'allowEmpty'=>array('','false','true'),
-                    'maxFiles'=>'',
-                    'maxSize'=>'',
-                    'minSize'=>'',
-                    'tooLarge'=>'',
-                    'tooMany'=>'',
-                    'tooSmall'=>'',
-                    'types'=>'',
-                    'wrongType'=>'',
-                    'safe'=>array('true','false'),
-                ),
-            ),
-        );
+            ],
+            'other_validator'=> [
+                'file'=> [
+                    'skipOnEmpty' => ['','false','true'],
+                    'maxFiles' => '',
+                    'maxSize' => '',
+                    'minSize' => '',
+                    'extensions' => '',
+                    'mimeTypes' => [''],
+                    'checkExtensionByMimeType' => ['true','false'],
+                    'message' => '',
+                    'tooBig' => '',
+                    'tooMany' => '',
+                    'tooSmall' => '',
+                    'uploadRequired' => '',
+                    'wrongExtension' => '',
+                    'wrongMimeType' => '',
+                ],
+            ],
+        ];
     }
     
     /**

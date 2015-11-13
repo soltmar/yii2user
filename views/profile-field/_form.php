@@ -70,7 +70,7 @@ use yii\bootstrap\ActiveForm;
         <?= $form->field($model, 'other_validator', ['options' => ['class'=>'form-group other_validator']])
             ->textInput(['size'=>60, 'maxlength'=>255])
             ->hint(Module::t('JSON string (example: {example}).', [
-                '{example}'=> Json::encode(
+                'example'=> Json::encode(
                     ['file'=> ['types'=>'jpg, gif, png']]
                 )])); ?>
 
