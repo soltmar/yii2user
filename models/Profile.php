@@ -2,8 +2,8 @@
 
 namespace mariusz_soltys\yii2user\models;
 
+use mariusz_soltys\yii2user\components\UActiveRecord;
 use Yii;
-use yii\db\ActiveRecord;
 
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Json;
@@ -14,7 +14,7 @@ use yii\helpers\Json;
  * @property int $user_id
  */
 
-class Profile extends ActiveRecord
+class Profile extends UActiveRecord
 {
     public static $regMode = false;
 

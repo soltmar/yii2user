@@ -281,17 +281,39 @@ class ProfileFieldController extends Controller
 				li += '<li'+((fparam[t])?' class=\"ui-tabs-selected\"':'')+'><a href=\"#tab-'+t+'\">'+t+'</a></li>';
 
 				for (var k in widget.other_validator[t]) {
-					tabs += '<label for=\"name\">'+((widget.paramsLabels[k])?widget.paramsLabels[k]:k)+'</label>';
-					if (isArray(widget.other_validator[t][k])) {
-						tabs += '<select type=\"text\" name=\"'+k+'\" id=\"filter_'+k+
-						'\" class=\"text fparam ui-widget-content ui-corner-all tab-'+t+'\">';
-						for (var i in widget.other_validator[t][k]) {
-							tabs += '<option value=\"'+widget.other_validator[t][k][i]+'\"'+
-							((fparam[t]&&fparam[t][k])?' selected=\"selected\"':'')+'>'+
-							widget.other_validator[t][k][i]+'</option>';
-						}
-						tabs += '</select>';
+				    var property = widget.other_validator[t][k];
+					if (typeof property == 'object' && !isArray(property)) {
+					    if(property['label']) {
+					        tabs += '<label for=\"name\">'+(property['label'])+'</label>';
+					    } else {
+					        tabs += '<label for=\"name\">'+((widget.paramsLabels[k])?widget.paramsLabels[k]:k)+'</label>';
+					    }
+
+					    if (isArray(property['value'])) {
+                            tabs += '<select type=\"text\" name=\"'+k+'\" id=\"filter_'+k+
+                            '\" class=\"text fparam ui-widget-content ui-corner-all tab-'+t+'\">';
+                            for (var i in property['value']) {
+                                tabs += '<option value=\"'+property['value'][i]+'\"'+
+                                ((fparam[t]&&fparam[t][k])?' selected=\"selected\"':'')+'>'+
+                                property['value'][i]+'</option>';
+                            }
+                            tabs += '</select>';
+						} else {
+						    tabs += '<input type=\"text\" name=\"'+k+'\" id=\"filter_'+k+
+                            '\" class=\"text fparam ui-widget-content ui-corner-all tab-'+t+'\" value=\"'+
+                            ((fparam[t]&&fparam[t][k])?fparam[t][k]:property['value'])+'\" />';
+                        }
+					} else if (isArray(property)) {
+                            tabs += '<select type=\"text\" name=\"'+k+'\" id=\"filter_'+k+
+                            '\" class=\"text fparam ui-widget-content ui-corner-all tab-'+t+'\">';
+                            for (var i in property) {
+                                tabs += '<option value=\"'+property[i]+'\"'+
+                                ((fparam[t]&&fparam[t][k])?' selected=\"selected\"':'')+'>'+
+                                property['value'][i]+'</option>';
+                            }
+                            tabs += '</select>';
 					} else {
+					    tabs += '<label for=\"name\">'+((widget.paramsLabels[k])?widget.paramsLabels[k]:k)+'</label>';
 						tabs += '<input type=\"text\" name=\"'+k+'\" id=\"filter_'+k+
 						'\" class=\"text fparam ui-widget-content ui-corner-all tab-'+t+'\" value=\"'+
 						((fparam[t]&&fparam[t][k])?fparam[t][k]:widget.other_validator[t][k])+'\" />';
@@ -348,7 +370,7 @@ class ProfileFieldController extends Controller
         $model=new ProfileField;
         $scheme = get_class(Yii::$app->db->schema);
         if ($model->load(Yii::$app->request->post())) {
-            $model;
+            $model->loadDefaultValues(true);
             if ($model->validate()) {
                 $sql = 'ALTER TABLE '.Profile::tableName().' ADD `'.$model->varname.'` '
                     .$this->fieldType($model->field_type);

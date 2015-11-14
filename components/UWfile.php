@@ -7,6 +7,7 @@ use Yii;
 use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 class UWfile
@@ -40,13 +41,21 @@ class UWfile
             ],
             'other_validator'=> [
                 'file'=> [
-                    'skipOnEmpty' => ['','false','true'],
+                    'skipOnEmpty' => [
+                        'label' => Module::t('Allow empty?'),
+                        'value' => ['','false','true']
+                    ],
                     'maxFiles' => '',
-                    'maxSize' => '',
+                    'maxSize' => [
+                        'label' => Module::t('Max file size (bytes)'),
+                        'value' => ''
+                    ],
                     'minSize' => '',
                     'extensions' => '',
-                    'mimeTypes' => [''],
-                    'checkExtensionByMimeType' => ['true','false'],
+                    'mimeTypes' => '',
+                    'checkExtensionByMimeType' => [
+                        'value' => ['true','false']
+                    ],
                     'message' => '',
                     'tooBig' => '',
                     'tooMany' => '',
@@ -70,8 +79,8 @@ class UWfile
         $this->new_file_path = $this->old_file_path = $model->getAttribute($field_varname);
         
         if ($this->file_instance = UploadedFile::getInstance($model, $field_varname)) {
-            $model->on(ActiveRecord::EVENT_AFTER_INSERT, 'processFile', null, false);
-            $model->on(ActiveRecord::EVENT_AFTER_UPDATE, 'processFile', null, false);
+            $model->on(ActiveRecord::EVENT_AFTER_INSERT, [$this, 'processFile'], null, false);
+            $model->on(ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'processFile'], null, false);
 
             $file_name = str_replace(' ', '-', $this->file_instance->name);
             $this->new_file_path = $this->params['path'].'/';
@@ -86,8 +95,8 @@ class UWfile
             
         } else {
             if (isset($_POST[get_class($model)]['uwfdel'][$field_varname])&&$_POST[get_class($model)]['uwfdel'][$field_varname]) {
-                $model->on(ActiveRecord::EVENT_AFTER_INSERT, 'processFile', null, false);
-                $model->on(ActiveRecord::EVENT_AFTER_UPDATE, 'processFile', null, false);
+                $model->on(ActiveRecord::EVENT_AFTER_INSERT, [$this, 'processFile'], null, false);
+                $model->on(ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'processFile'], null, false);
                 $path = '';
             }
         }
@@ -103,8 +112,12 @@ class UWfile
     {
         $file = $model->getAttribute($field->varname);
         if ($file) {
-            $file = Yii::$app->baseUrl.'/'.$file;
-            return Html::a(pathinfo($file, PATHINFO_FILENAME), $file);
+            $path = Url::base().'/'.$file;
+            if (exif_imagetype($file)) {
+                return Html::img($path);
+            } else {
+                return Html::a(pathinfo($path, PATHINFO_FILENAME), $path);
+            }
         }
 
         return '';

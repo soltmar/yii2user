@@ -52,7 +52,8 @@ Module::getInstance()->setMenu($menu);
                 <td>
                     <?php
                     if ($field->widgetView($profile)) {
-                        echo $field->widgetView($profile);
+                        $html = $field->widgetView($profile);
+                        echo $html;
                     } else {
                         if (Html::encode(($field->range))) {
                             echo Profile::range($field->range, $profile->getAttribute($field->varname));

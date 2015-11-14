@@ -67,6 +67,7 @@ class ProfileField extends ActiveRecord
             ['varname', 'unique', 'message' => Module::t("This field already exists.")],
             [['varname', 'field_type'], 'string', 'max'=>50],
             [['field_size_min', 'required', 'position', 'visible'], 'number', 'integerOnly'=>true],
+            [['field_size_min', 'required', 'position', 'visible'], 'default', 'value' => 0],
             ['field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'],
             [['title', 'match', 'error_message', 'default', 'widget'], 'string', 'max'=>255],
             [['range', 'widgetparams', 'other_validator'], 'string', 'max'=>5000],
@@ -140,9 +141,10 @@ class ProfileField extends ActiveRecord
      */
     public function widgetView($model)
     {
+        $w = $this->widget;
         if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
-            $this->widget = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
-            $widgetClass = new $this->widget;
+            $widgetClass = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
+            $widgetClass = new $widgetClass;
 
             $arr = $this->widgetparams;
             if ($arr) {
