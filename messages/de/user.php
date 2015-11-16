@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Registrierung',
 	'Register' => 'Registrieren',
 	'Login' => 'Login',
@@ -124,4 +124,4 @@ return array(
 	'The value of the default field (database).' => 'Der Wert des Standardbereichs (Datenbank).',
 	'Display order of fields.' => 'Anzeige Reihenfolge der Felder.',
 	'Not visited' => 'Nicht besucht',
-);
+];

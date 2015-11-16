@@ -5,6 +5,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Json;
+use yii\widgets\ActiveForm;
 
 /**
  * The followings are the available columns in table 'profiles_fields':
@@ -98,7 +99,7 @@ class ProfileField extends ActiveRecord
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'id' => Module::t('Id'),
             'varname' => Module::t('Variable name'),
             'title' => Module::t('Title'),
@@ -115,7 +116,7 @@ class ProfileField extends ActiveRecord
             'widgetparams' => Module::t('Widget parametrs'),
             'position' => Module::t('Position'),
             'visible' => Module::t('Visible'),
-        );
+        ];
     }
 
     /**
@@ -167,6 +168,7 @@ class ProfileField extends ActiveRecord
 
     public function widgetEdit($model, $params = [])
     {
+        $mod = $this->widget;
         if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
             $this->widget = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
             $widgetClass = new $this->widget;
@@ -198,8 +200,8 @@ class ProfileField extends ActiveRecord
 
     public static function itemAlias($type, $code = null)
     {
-        $_items = array(
-            'field_type' => array(
+        $_items = [
+            'field_type' => [
                 'INTEGER' => Module::t('INTEGER'),
                 'VARCHAR' => Module::t('VARCHAR'),
                 'TEXT'=> Module::t('TEXT'),
@@ -209,25 +211,45 @@ class ProfileField extends ActiveRecord
                 'BOOL'=> Module::t('BOOL'),
                 'BLOB'=> Module::t('BLOB'),
                 'BINARY'=> Module::t('BINARY'),
-            ),
-            'required' => array(
+            ],
+            'required' => [
                 self::REQUIRED_NO => Module::t('No'),
                 self::REQUIRED_NO_SHOW_REG => Module::t('No, but show on registration form'),
                 self::REQUIRED_YES_SHOW_REG => Module::t('Yes and show on registration form'),
                 self::REQUIRED_YES_NOT_SHOW_REG => Module::t('Yes'),
-            ),
-            'visible' => array(
+            ],
+            'visible' => [
                 self::VISIBLE_ALL => Module::t('For all'),
                 self::VISIBLE_REGISTER_USER => Module::t('Registered users'),
                 self::VISIBLE_ONLY_OWNER => Module::t('Only owner'),
                 self::VISIBLE_NO => Module::t('Hidden'),
-            ),
-        );
+            ],
+        ];
 
         if (isset($code)) {
             return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
         } else {
             return isset($_items[$type]) ? $_items[$type] : false;
+        }
+    }
+
+    /**
+     * @param $profile Profile
+     * @param $form ActiveForm
+     * @return string
+     */
+    public function renderField($profile, $form)
+    {
+        $input = $form->field($profile, $this->varname);
+
+        if ($widgetEdit = $this->widgetEdit($profile, ['formField' => $input])) {
+            return $widgetEdit;
+        } elseif ($this->range) {
+            return $input->dropDownList(Profile::range($this->range));
+        } elseif ($this->field_type=="TEXT") {
+            return $input->textarea(['rows'=>6, 'cols'=>50]);
+        } else {
+            return $input->textInput(['size'=>60,'maxlength'=>(($this->field_size)?$this->field_size:255)]);
         }
     }
 }

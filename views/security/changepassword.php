@@ -5,10 +5,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title=Yii::$app->name . ' - '.Module::t("Change password");
-$this->params['breadcrumbs']=array(
-    ['label' => Module::t("Profile"), 'url' => array('/user/profile')],
+$this->params['breadcrumbs']= [
+    ['label' => Module::t("Profile"), 'url' => ['/user/profile']],
     Module::t("Change password"),
-);
+];
 $menu= [
     ['label'=>Module::t('List User'), 'url'=> ['/user']],
     ['label'=>Module::t('Profile'), 'url'=> ['/user/profile']],

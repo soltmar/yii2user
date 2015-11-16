@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Regisztráció',
 	'Register' => 'Regisztráció',
 	'Login' => 'Bejelentkezés',
@@ -123,4 +123,4 @@ return array(
 	'The value of the default field (database).' => 'Az alapértelmezett mező értéke (Adatbázis).',
 	'Display order of fields.' => 'Mezők sorrendjének megjelenítése.',
 	'Not visited' => 'Nem látogatott',
-);
+];

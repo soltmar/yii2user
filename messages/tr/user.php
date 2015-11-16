@@ -6,7 +6,7 @@
 * http://twitter.com/medreee
 *
 */
-return array(
+return [
 	'Registration' => 'Kayıt İşlemi',
 	'Register' => 'Kayıt',
 	'Login' => 'Giriş',
@@ -130,4 +130,4 @@ return array(
 	'The value of the default field (database).' => 'Ön tanımlı alan değeri (veritabanındaki).',
 	'Display order of fields.' => 'Alanların sıralamasını göster.',
     'Not visited' => 'Ziyaret etmedi',
-);
+];

@@ -6,30 +6,30 @@ use mariusz_soltys\yii2user\Module;
 
 class UWrelBelongsTo {
 	
-	public $params = array(
+	public $params = [
 		'modelName'=>'',
 		'optionName'=>'',
 		'emptyField'=>'',
 		'relationName'=>'',
-	);
+	];
 	
 	/**
 	 * Widget initialization
 	 * @return array
 	 */
 	public function init() {
-		return array(
+		return [
 			'name'=>__CLASS__,
-			'label'=>Module::t('Relation Belongs To',array(),__CLASS__),
-			'fieldType'=>array('INTEGER'),
+			'label'=>Module::t('Relation Belongs To', [],__CLASS__),
+			'fieldType'=> ['INTEGER'],
 			'params'=>$this->params,
-			'paramsLabels' => array(
-				'modelName'=>Module::t('Model Name',array(),__CLASS__),
-				'optionName'=>Module::t('Lable field name',array(),__CLASS__),
-				'emptyField'=>Module::t('Empty item name',array(),__CLASS__),
-				'relationName'=>Module::t('Profile model relation name',array(),__CLASS__),
-			),
-		);
+			'paramsLabels' => [
+				'modelName'=>Module::t('Model Name', [],__CLASS__),
+				'optionName'=>Module::t('Lable field name', [],__CLASS__),
+				'emptyField'=>Module::t('Empty item name', [],__CLASS__),
+				'relationName'=>Module::t('Profile model relation name', [],__CLASS__),
+			],
+		];
 	}
 	
 	/**
@@ -68,14 +68,14 @@ class UWrelBelongsTo {
 	 * @param $params - htmlOptions
 	 * @return string
 	 */
-	public function editAttribute($model,$field,$htmlOptions=array()) {
-		$list = array();
+	public function editAttribute($model,$field,$htmlOptions= []) {
+		$list = [];
 		if ($this->params['emptyField']) $list[0] = $this->params['emptyField'];
 		
 		$models = CActiveRecord::model($this->params['modelName'])->findAll();
 		foreach ($models as $m)
 			$list[$m->id] = (($this->params['optionName'])?$m->getAttribute($this->params['optionName']):$m->id);
-		return CHtml::activeDropDownList($model,$field->varname,$list,$htmlOptions=array());
+		return CHtml::activeDropDownList($model,$field->varname,$list,$htmlOptions= []);
 	}
 	
 }

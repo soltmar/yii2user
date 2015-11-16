@@ -3,7 +3,7 @@
  * @author Ricardo Obregón <robregonm@gmail.com>
  * @author Carlos Ramos <carlos@ramoscarlos.com>
  */
-return array(
+return [
     "Length of ' + n + ' must be between '+min+' and '+max+'."=>"Longitud de ' + n + ' debe estar entre '+min+' y '+max+'.",
     'activation key' => "Clave de activación",
     'Active' => 'Activo',
@@ -127,4 +127,4 @@ return array(
     'You account is not activated.' => "Su cuenta no está activada.",
     'You registered from {site_name}' => 'Se registró a partir {site_name}',
     'Your profile' => 'Su perfil',
-);
+];

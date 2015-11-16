@@ -32,10 +32,10 @@ return [
                 'registration' => 'registration/registration',
 //                'login' => 'security/login',
 //                'logout' => 'security/logout',
-                'admin/view/<id:\d+>' => 'admin/view',
-                'admin/update/<id:\d+>' => 'admin/update',
+                'admin/<action:(view|update|delete)>/<id:\d+>' => 'admin/<action>',
                 'admin' => 'admin/admin',
                 'profile-field/<id:\d+>' => 'profile-field/view',
+                'profile-field/<action:(view|update|delete)>/<id:\d+>' => 'profile-field/<action>'
             ],
         ]
     ],

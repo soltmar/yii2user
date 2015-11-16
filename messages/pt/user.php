@@ -2,7 +2,7 @@
 /**
  * @author Ricardo Obregón <robregonm@gmail.com>
  */
-return array(
+return [
     'Registration' => 'Cadastro',
 	'Register' => 'Cadastre-se',
     'Login' => 'Login',
@@ -126,4 +126,4 @@ return array(
     'Display order of fields.' => 'Mostrar ordenação dos campos',
 	'Not visited' => 'Não visitou',
 
-);
+];

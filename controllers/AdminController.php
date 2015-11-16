@@ -45,10 +45,10 @@ class AdminController extends Controller
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', array(
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
-        ));
+        ]);
     }
 
 
@@ -109,7 +109,10 @@ class AdminController extends Controller
     {
         $model=$this->loadModel();
         $profile=$model->profile;
-        $this->performAjaxValidation([$model, $profile]);
+        $validation = $this->performAjaxValidation([$model, $profile]);
+        if ($validation!==false) {
+            return $validation;
+        }
         if ($model->load(Yii::$app->request->post())) {
             $profile->load(Yii::$app->request->post());
 
@@ -170,8 +173,17 @@ class AdminController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validateMultiple($validate);
+            if (is_array($validate)) {
+                $results = [];
+                foreach ($validate as $model) {
+                    $results = array_merge($results, ActiveForm::validate($model));
+                }
+                return $results;
+            }
+            return ActiveForm::validate($validate);
         }
+
+        return false;
     }
 
 

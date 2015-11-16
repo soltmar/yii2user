@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
 
             <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
-            <?php echo $form->errorSummary(array($model,$profile)); ?>
+            <?php echo $form->errorSummary([$model,$profile]); ?>
 
             <?= $form->field($model, 'username'); ?>
 

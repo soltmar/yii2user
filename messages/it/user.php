@@ -3,7 +3,7 @@
 /**
  * @author Ricardo Obregón <robregonm@gmail.com>
  */
-return array(
+return [
     'Registration' => 'Registrazione',
     'Register' => 'Registrati',
     'Login' => 'Login',
@@ -126,4 +126,4 @@ return array(
     'The value of the default field (database).' => 'Valore di default nel database',
     'Display order of fields.' => 'Mostra l\'ordine dei campi',
     'Not visited' => 'Non visitato',
-);
+];

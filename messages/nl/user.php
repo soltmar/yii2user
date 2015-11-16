@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Registratie',
 	'Register' => 'Registreren',
 	'Login' => 'Inloggen',
@@ -124,4 +124,4 @@ return array(
 	'The value of the default field (database).' => 'De waarde van het standaard veld (database).',
 	'Display order of fields.' => 'Geef volgorde van velden weer.',
 	'Not visited' => 'Niet bezocht',
-);
+];

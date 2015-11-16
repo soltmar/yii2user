@@ -27,7 +27,7 @@ class m110805_153437_installYiiUser extends Migration
         //*
         switch ($this->dbType()) {
             case "mysql":
-                $this->createTable(Module::getInstance()->tableUsers, array(
+                $this->createTable(Module::getInstance()->tableUsers, [
                     "id" => "pk",
                     "username" => "varchar(20) NOT NULL DEFAULT ''",
                     "password" => "varchar(128) NOT NULL DEFAULT ''",
@@ -37,14 +37,14 @@ class m110805_153437_installYiiUser extends Migration
                     "lastvisit" => "int(10) NOT NULL DEFAULT 0",
                     "superuser" => "int(1) NOT NULL DEFAULT 0",
                     "status" => "int(1) NOT NULL DEFAULT 0",
-                ), $this->MySqlOptions);
+                ], $this->MySqlOptions);
                 $this->createIndex('user_username', Module::getInstance()->tableUsers, 'username', true);
                 $this->createIndex('user_email', Module::getInstance()->tableUsers, 'email', true);
-                $this->createTable(Module::getInstance()->tableProfiles, array(
+                $this->createTable(Module::getInstance()->tableProfiles, [
                     'user_id' => 'pk',
                     'first_name' => 'string',
                     'last_name' => 'string',
-                ), $this->MySqlOptions);
+                ], $this->MySqlOptions);
                 $this->addForeignKey(
                     'user_profile_id',
                     Module::getInstance()->tableProfiles,
@@ -54,7 +54,7 @@ class m110805_153437_installYiiUser extends Migration
                     'CASCADE',
                     'RESTRICT'
                 );
-                $this->createTable(Module::getInstance()->tableProfileFields, array(
+                $this->createTable(Module::getInstance()->tableProfileFields, [
                     "id" => "pk",
                     "varname" => "varchar(50) NOT NULL DEFAULT ''",
                     "title" => "varchar(255) NOT NULL DEFAULT ''",
@@ -71,11 +71,11 @@ class m110805_153437_installYiiUser extends Migration
                     "widgetparams" => "text",
                     "position" => "int(3) NOT NULL DEFAULT 0",
                     "visible" => "int(1) NOT NULL DEFAULT 0",
-                ), $this->MySqlOptions);
+                ], $this->MySqlOptions);
                 break;
 
             case "pgsql":
-                $this->createTable(Module::getInstance()->tableUsers, array(
+                $this->createTable(Module::getInstance()->tableUsers, [
                     "id" => "pk",
                     "username" => "varchar(20) NOT NULL DEFAULT ''",
                     "password" => "varchar(128) NOT NULL DEFAULT ''",
@@ -85,16 +85,16 @@ class m110805_153437_installYiiUser extends Migration
                     "lastvisit" => "int NOT NULL DEFAULT 0",
                     "superuser" => "int NOT NULL DEFAULT 0",
                     "status" => "int NOT NULL DEFAULT 0",
-                ));
+                ]);
                 // Since the admin user will be added with id = 1 we need to fix the sequence counter
                 $this->execute("select setval('".Module::getInstance()->tableUsers."_id_seq',1);");
                 $this->createIndex('user_username', Module::getInstance()->tableUsers, 'username', true);
                 $this->createIndex('user_email', Module::getInstance()->tableUsers, 'email', true);
-                $this->createTable(Module::getInstance()->tableProfiles, array(
+                $this->createTable(Module::getInstance()->tableProfiles, [
                     'user_id' => 'pk',
                     'first_name' => 'string',
                     'last_name' => 'string',
-                ));
+                ]);
                 $this->addForeignKey(
                     'user_profile_id',
                     Module::getInstance()->tableProfiles,
@@ -104,7 +104,7 @@ class m110805_153437_installYiiUser extends Migration
                     'CASCADE',
                     'RESTRICT'
                 );
-                $this->createTable(Module::getInstance()->tableProfileFields, array(
+                $this->createTable(Module::getInstance()->tableProfileFields, [
                     "id" => "pk",
                     "varname" => "varchar(50) NOT NULL DEFAULT ''",
                     "title" => "varchar(255) NOT NULL DEFAULT ''",
@@ -121,12 +121,12 @@ class m110805_153437_installYiiUser extends Migration
                     "widgetparams" => "text",
                     "position" => "int NOT NULL DEFAULT 0",
                     "visible" => "int NOT NULL DEFAULT 0",
-                ));
+                ]);
                 break;
 
             case "sqlite":
             default:
-                $this->createTable(Module::getInstance()->tableUsers, array(
+                $this->createTable(Module::getInstance()->tableUsers, [
                     "id" => "pk",
                     "username" => "varchar(20) NOT NULL",
                     "password" => "varchar(128) NOT NULL",
@@ -136,15 +136,15 @@ class m110805_153437_installYiiUser extends Migration
                     "lastvisit" => "int(10) NOT NULL",
                     "superuser" => "int(1) NOT NULL",
                     "status" => "int(1) NOT NULL",
-                ));
+                ]);
                 $this->createIndex('user_username', Module::getInstance()->tableUsers, 'username', true);
                 $this->createIndex('user_email', Module::getInstance()->tableUsers, 'email', true);
-                $this->createTable(Module::getInstance()->tableProfiles, array(
+                $this->createTable(Module::getInstance()->tableProfiles, [
                     'user_id' => 'pk',
                     'first_name' => 'string',
                     'last_name' => 'string',
-                ));
-                $this->createTable(Module::getInstance()->tableProfileFields, array(
+                ]);
+                $this->createTable(Module::getInstance()->tableProfileFields, [
                     "id" => "pk",
                     "varname" => "varchar(50) NOT NULL",
                     "title" => "varchar(255) NOT NULL",
@@ -161,7 +161,7 @@ class m110805_153437_installYiiUser extends Migration
                     "widgetparams" => "text NOT NULL",
                     "position" => "int(3) NOT NULL",
                     "visible" => "int(1) NOT NULL",
-                ));
+                ]);
 
                 break;
         }//*/
@@ -179,7 +179,7 @@ class m110805_153437_installYiiUser extends Migration
             $this->readStdinUser('Admin password', 'password', 'admin');
         }
 
-        $this->insert(Module::getInstance()->tableUsers, array(
+        $this->insert(Module::getInstance()->tableUsers, [
             "id" => "1",
             "username" => $this->model->username,
             "password" => Module::getInstance()->encrypting($this->model->password),
@@ -189,15 +189,15 @@ class m110805_153437_installYiiUser extends Migration
             "lastvisit" => "0",
             "superuser" => "1",
             "status" => "1",
-        ));
+        ]);
 
-        $this->insert(Module::getInstance()->tableProfiles, array(
+        $this->insert(Module::getInstance()->tableProfiles, [
             "user_id" => "1",
             "first_name" => "Administrator",
             "last_name" => "Admin",
-        ));
+        ]);
 
-        $this->insert(Module::getInstance()->tableProfileFields, array(
+        $this->insert(Module::getInstance()->tableProfileFields, [
             "id" => "1",
             "varname" => "first_name",
             "title" => "First Name",
@@ -214,8 +214,8 @@ class m110805_153437_installYiiUser extends Migration
             "widgetparams" => "",
             "position" => "1",
             "visible" => "3",
-        ));
-        $this->insert(Module::getInstance()->tableProfileFields, array(
+        ]);
+        $this->insert(Module::getInstance()->tableProfileFields, [
             "id" => "2",
             "varname" => "last_name",
             "title" => "Last Name",
@@ -232,7 +232,7 @@ class m110805_153437_installYiiUser extends Migration
             "widgetparams" => "",
             "position" => "2",
             "visible" => "3",
-        ));
+        ]);
 
         return true;
 
@@ -275,7 +275,7 @@ class m110805_153437_installYiiUser extends Migration
             $this->model = new User;
         }
 
-        while (!isset($input) || !$this->model->validate(array($field))) {
+        while (!isset($input) || !$this->model->validate([$field])) {
             echo $prompt.(($default)?" [$default]":'').': ';
             $input = (trim(fgets(STDIN)));
             if (empty($input) && !empty($default)) {

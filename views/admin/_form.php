@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
 
         <p class="note"><?php echo Module::t('Fields with <span class="required">*</span> are required.'); ?></p>
 
-        <?php echo $form->errorSummary(array($model,$profile)); ?>
+        <?php echo $form->errorSummary([$model,$profile]); ?>
 
         <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
@@ -39,18 +39,7 @@ use yii\widgets\ActiveForm;
         $profileFields=Profile::getFields();
         if ($profileFields) {
             foreach ($profileFields as $field) {
-                /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
-                $input = $form->field($profile, $field->varname);
-
-                if ($widgetEdit = $field->widgetEdit($profile)) {
-                    echo $widgetEdit;
-                } elseif ($field->range) {
-                    echo $input->dropDownList(Profile::range($field->range));
-                } elseif ($field->field_type=="TEXT") {
-                    echo $input->textarea(['rows'=>6, 'cols'=>50]);
-                } else {
-                    echo $input->textInput(['size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)]);
-                }
+                echo $field->renderField($profile, $form);
             }
         }
         ?>

@@ -10,7 +10,7 @@ use yii\helpers\Json;
 
 class UWjuiAutoComplete {
 	
-	public $params = array(
+	public $params = [
 		'ui-theme'=>'base',
 		'modelName'=>'',
 		'optionName'=>'',
@@ -18,27 +18,27 @@ class UWjuiAutoComplete {
 		'emptyFieldValue'=>0,
 		'relationName'=>'',
 		'minLength'=>'',
-	);
+	];
 	
 	/**
 	 * Widget initialization
 	 * @return array
 	 */
 	public function init() {
-		return array(
+		return [
 			'name'=>__CLASS__,
-			'label'=>Module::t('jQueryUI autocomplete',array(),__CLASS__),
-			'fieldType'=>array('INTEGER'),
+			'label'=>Module::t('jQueryUI autocomplete', [],__CLASS__),
+			'fieldType'=> ['INTEGER'],
 			'params'=>$this->params,
-			'paramsLabels' => array(
-				'modelName'=>Module::t('Model Name',array(),__CLASS__),
-				'optionName'=>Module::t('Lable field name',array(),__CLASS__),
-				'emptyFieldLabel'=>Module::t('Empty item name',array(),__CLASS__),
-				'emptyFieldValue'=>Module::t('Empty item value',array(),__CLASS__),
-				'relationName'=>Module::t('Profile model relation name',array(),__CLASS__),
-				'minLength'=>Module::t('minimal start research length',array(),__CLASS__),
-			),
-		);
+			'paramsLabels' => [
+				'modelName'=>Module::t('Model Name', [],__CLASS__),
+				'optionName'=>Module::t('Lable field name', [],__CLASS__),
+				'emptyFieldLabel'=>Module::t('Empty item name', [],__CLASS__),
+				'emptyFieldValue'=>Module::t('Empty item value', [],__CLASS__),
+				'relationName'=>Module::t('Profile model relation name', [],__CLASS__),
+				'minLength'=>Module::t('minimal start research length', [],__CLASS__),
+			],
+		];
 	}
 	
 	/**
@@ -80,16 +80,16 @@ class UWjuiAutoComplete {
 	 * @param $htmlOptions - htmlOptions
 	 * @return string
 	 */
-	public function editAttribute($model,$field,$htmlOptions=array()) {
+	public function editAttribute($model,$field,$htmlOptions= []) {
 
         /** @var ActiveRecord $modelName */
         $modelName = $this->params['modelName'];
 
-		$list = array();
-		if (isset($this->params['emptyFieldValue'])) $list[]=array('id'=>$this->params['emptyFieldValue'],'label'=>$this->params['emptyFieldLabel']);
+		$list = [];
+		if (isset($this->params['emptyFieldValue'])) $list[]= ['id' =>$this->params['emptyFieldValue'], 'label' =>$this->params['emptyFieldLabel']];
 			$models = $modelName->find()->all();
 		foreach ($models as $m)
-			$list[] = (($this->params['optionName'])?array('label'=>$m->getAttribute($this->params['optionName']),'id'=>$m->id):array('label'=>$m->id,'id'=>$m->id));
+			$list[] = (($this->params['optionName'])? ['label' =>$m->getAttribute($this->params['optionName']), 'id' =>$m->id] : ['label' =>$m->id, 'id' =>$m->id]);
 		
 		if (!isset($htmlOptions['id'])) $htmlOptions['id'] = $field->varname;
 		$id = $htmlOptions['id'];

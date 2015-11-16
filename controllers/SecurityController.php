@@ -169,7 +169,7 @@ class SecurityController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('recovery', array('form' => $form));
+        return $this->render('recovery', ['form' => $form]);
     }
 
     /**
@@ -193,7 +193,7 @@ class SecurityController extends Controller
                     $new_password->activkey=Module::encrypting(microtime().$model->password);
                     $new_password->save();
                     Yii::$app->user->setFlash('success', Module::t("New password has been saved."));
-                    $this->redirect(array("profile"));
+                    $this->redirect(["profile"]);
                 }
             }
             return $this->render('changepassword', ['model'=>$model]);

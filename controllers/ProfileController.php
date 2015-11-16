@@ -48,7 +48,7 @@ class ProfileController extends Controller
         if ($model->load($post) && $profile->load($post)) {
             if ($model->save()&&$profile->save()) {
                 Yii::$app->user->setFlash('success', Module::t("Changes has been saved"));
-                $this->redirect(array('/user/profile'));
+                return $this->redirect(['/user/profile']);
             } else {
                 $profile->validate();
             }

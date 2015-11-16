@@ -8,39 +8,39 @@ use yii\helpers\Html;
 
 class UHtml extends Html
 {
-    public static function activeTimeField($model, $attribute, $htmlOptions = array())
+    public static function activeTimeField($model, $attribute, $htmlOptions = [])
     {
         // SET UP ARRAYS OF OPTIONS FOR DAY, MONTH, YEAR
         $x = 0;
 
-        $hourOptions = array('0'=>' - ');
+        $hourOptions = ['0' =>' - '];
         while ($x < 24) {
             $hourOptions[$x] = (($x<10)?'0':'').$x;
             $x++;
         }
 
         $x = 0;
-        $minuteOptions = array('0'=>' - ');
+        $minuteOptions = ['0' =>' - '];
         while ($x < 61) {
             $minuteOptions[$x] = (($x<10)?'0':'').$x;
             $x++;
         }
 
         $x = 0;
-        $secondOptions = array('0'=>' - ');
+        $secondOptions = ['0' =>' - '];
         while ($x < 61) {
             $secondOptions[$x] = (($x<10)?'0':'').$x;
             $x++;
         }
 
         $x = 1;
-        $dayOptions = array('0'=>' - ');
+        $dayOptions = ['0' =>' - '];
         while ($x < 31) {
             $dayOptions[$x] = $x;
             $x++;
         }
 
-        $monthOptions = array(
+        $monthOptions = [
             '0' => ' - ',
             '1'=> Module::t('January'),
             '2'=> Module::t('February'),
@@ -54,9 +54,9 @@ class UHtml extends Html
             '10'=> Module::t('October'),
             '11'=> Module::t('November'),
             '12'=> Module::t('December'),
-        );
+        ];
 
-        $yearOptions = array('0'=>' - ');
+        $yearOptions = ['0' =>' - '];
         $x = 1901;
         while ($x < 2030) {
             $yearOptions[$x] = $x;
@@ -110,17 +110,17 @@ class UHtml extends Html
         return $return;
     }
 
-    public static function activeDateField($model, $attribute, $htmlOptions = array())
+    public static function activeDateField($model, $attribute, $htmlOptions = [])
     {
         // SET UP ARRAYS OF OPTIONS FOR DAY, MONTH, YEAR
         $x = 1;
-        $dayOptions = array('00'=>' - ');
+        $dayOptions = ['00' =>' - '];
         while ($x < 31) {
             $dayOptions[(($x<10)?'0':'').$x] = $x;
             $x++;
         }
 
-        $monthOptions = array(
+        $monthOptions = [
             '00' => ' - ',
             '01'=> Module::t('January'),
             '02'=> Module::t('February'),
@@ -134,9 +134,9 @@ class UHtml extends Html
             '10'=> Module::t('October'),
             '11'=> Module::t('November'),
             '12'=> Module::t('December'),
-        );
+        ];
 
-        $yearOptions = array('0000'=>' - ');
+        $yearOptions = ['0000' =>' - '];
         $x = 1901;
         while ($x < 2030) {
             $yearOptions[$x] = $x;

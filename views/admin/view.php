@@ -66,14 +66,14 @@
         'activkey',
         'create_at',
         'lastvisit_at',
-        array(
+        [
             'attribute' => 'superuser',
             'value' => User::itemAlias("AdminStatus", $model->superuser),
-        ),
-        array(
+        ],
+        [
             'attribute' => 'status',
             'value' => User::itemAlias("UserStatus", $model->status),
-        )
+        ]
     );
 
     echo DetailView::widget([

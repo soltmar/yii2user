@@ -10,6 +10,11 @@ use yii\web\GroupUrlRule;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
+    const ALERT_ERROR = 'danger';
+    const ALERT_INFO = 'info';
+    const ALERT_WARNING = 'warning';
+    const ALERT_SUCCESS = 'success';
+
     public $mainLayout = '@app/views/layouts/main.php';
 
     public $mailViews = '@mariusz_soltys/yii2user/mail';
@@ -101,12 +106,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var array
      * @desc Profile model relation from other models
      */
-    public $profileRelations = array();
+    public $profileRelations = [];
 
     /**
      * @var array
      */
-    public $captcha = array('registration'=>true);
+    public $captcha = ['registration' =>true];
 
     /**
      * @var boolean
@@ -117,13 +122,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public $tableProfiles = '{{profiles}}';
     public $tableProfileFields = '{{profiles_fields}}';
 
-    public $defaultScope = array(
-        'with'=>array('profile'),
-    );
+    public $defaultScope = [
+        'with'=> ['profile'],
+    ];
 
     static private $user;
-    static private $users=array();
-    static private $userByName=array();
+    static private $users= [];
+    static private $userByName= [];
     static private $admin;
     static private $admins;
 
@@ -131,7 +136,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var array
      * @desc Behaviors for models
      */
-    public $componentBehaviors=array();
+    public $componentBehaviors= [];
 
     /**
      * @inheritdoc
@@ -172,7 +177,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         if (isset($this->componentBehaviors[$componentName])) {
             return $this->componentBehaviors[$componentName];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -259,11 +264,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
     {
         if (!self::$admins) {
             $admins = User::find()->active()->superuser()->all();
-            $return_name = array();
+            $return_name = [];
             foreach ($admins as $admin) {
                 array_push($return_name, $admin->username);
             }
-            self::$admins = ($return_name)?$return_name:array('');
+            self::$admins = ($return_name)?$return_name: [''];
         }
         return self::$admins;
     }

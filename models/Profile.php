@@ -20,7 +20,7 @@ class Profile extends UActiveRecord
 
     private static $model;
     private static $modelReg;
-    private static $rules = array();
+    private static $rules = [];
 
     /**
      * @return string the associated database table name
@@ -78,7 +78,7 @@ class Profile extends UActiveRecord
                     if (strpos($field->other_validator, '{') === 0) {
                         $validator = Json::decode($field->other_validator, true);
                         foreach ($validator as $name => $val) {
-                            $field_rule = array($field->varname, $name);
+                            $field_rule = [$field->varname, $name];
                             $field_rule = array_merge($field_rule, (array)$validator[$name]);
                             if ($field->error_message) {
                                 $field_rule['message'] = Module::t($field->error_message);
@@ -86,37 +86,47 @@ class Profile extends UActiveRecord
                             array_push($rules, $field_rule);
                         }
                     } else {
-                        $field_rule = array($field->varname, $field->other_validator);
+                        $field_rule = [$field->varname, $field->other_validator];
                         if ($field->error_message) {
                             $field_rule['message'] = Module::t($field->error_message);
                         }
                         array_push($rules, $field_rule);
                     }
                 } elseif ($field->field_type=='DATE') {
-                    if ($field->required) {
-                        $field_rule = array($field->varname, 'date', 'format' => array('yyyy-mm-dd'));
-                    } else {
-                        $field_rule = [
-                            $field->varname,
-                            'date',
-                            'format' => ['yyyy-mm-dd','0000-00-00'],
-                            'allowEmpty'=>true];
-                    }
+                    $field_rule = [
+                        $field->varname,
+                        'date',
+                        'timestampAttributeFormat' => 'yyyy-mm-dd',
+                        'timestampAttribute' => $field->varname,
+                        ];
 
                     if ($field->error_message) {
                         $field_rule['message'] = Module::t($field->error_message);
                     }
+
+                    if (!$field->required) {
+                        $field_rule['skipOnEmpty'] = true;
+                        $default = [
+                            $field->varname,
+                            'default',
+                            'value' => null
+                        ];
+                        //array_push($rules, $default);
+                    }
+
+
                     array_push($rules, $field_rule);
+
                 }
                 if ($field->match) {
-                    $field_rule = array($field->varname, 'match', 'pattern' => $field->match);
+                    $field_rule = [$field->varname, 'match', 'pattern' => $field->match];
                     if ($field->error_message) {
                         $field_rule['message'] = Module::t($field->error_message);
                     }
                     array_push($rules, $field_rule);
                 }
                 if ($field->range) {
-                    $field_rule = array($field->varname, 'in', 'range' => self::rangeRules($field->range));
+                    $field_rule = [$field->varname, 'in', 'range' => self::rangeRules($field->range)];
                     if ($field->error_message) {
                         $field_rule['message'] = Module::t($field->error_message);
                     }
@@ -145,14 +155,14 @@ class Profile extends UActiveRecord
      */
     public function attributeLabels()
     {
-        $labels = array(
+        $labels = [
             'user_id' => Module::t('User ID'),
-        );
+        ];
         $model=self::getFields();
 
         foreach ($model as $field) {
             if (Module::getInstance()->fieldsMessage) {
-                $l = Module::t($field->title, array(), Module::getInstance()->fieldsMessage);
+                $l = Module::t($field->title, [], Module::getInstance()->fieldsMessage);
             } else {
                 $l = Module::t($field->title);
             }
@@ -175,7 +185,7 @@ class Profile extends UActiveRecord
     public static function range($str, $fieldValue = null)
     {
         $rules = explode(';', $str);
-        $array = array();
+        $array = [];
         for ($i=0; $i < count($rules); $i++) {
             $item = explode("==", $rules[$i]);
             if (isset($item[0])) {
@@ -195,7 +205,7 @@ class Profile extends UActiveRecord
 
     public function widgetAttributes()
     {
-        $data = array();
+        $data = [];
         $model=self::getFields();
 
         foreach ($model as $field) {
@@ -208,7 +218,7 @@ class Profile extends UActiveRecord
 
     public function widgetParams($fieldName)
     {
-        $data = array();
+        $data = [];
         $model=self::getFields();
 
         foreach ($model as $field) {

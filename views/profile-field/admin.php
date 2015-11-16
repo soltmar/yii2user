@@ -11,10 +11,10 @@
      * @var \yii\data\ActiveDataProvider $dataProvider
      */
 
-    $this->params['breadcrumbs']=array(
+    $this->params['breadcrumbs']= [
         ['label' => Module::t('Profile Fields'), 'url' => ['admin']],
         Module::t('Manage'),
-    );
+    ];
     Module::getInstance()->setMenu([
         ['label'=>Module::t('Create Profile Field'), 'url'=> ['create']],
         ['label'=>Module::t('Manage Profile Field'), 'url'=> ['/user/profile-field/admin']],

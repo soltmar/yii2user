@@ -23,14 +23,14 @@ class UserLogin extends \yii\base\Model
      */
     public function rules()
     {
-        return array(
+        return [
             // username and password are required
-            array(['username', 'password'], 'required'),
+            [['username', 'password'], 'required'],
             // rememberMe needs to be a boolean
-            array('rememberMe', 'boolean'),
+            ['rememberMe', 'boolean'],
             // password needs to be authenticated
-            array('password', 'authenticate'),
-        );
+            ['password', 'authenticate'],
+        ];
     }
 
     /**
@@ -38,11 +38,11 @@ class UserLogin extends \yii\base\Model
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'rememberMe'=>Module::t("Remember me"),
             'username'=>Module::t("Username"),
             'password'=>Module::t("Password"),
-        );
+        ];
     }
 
     /**

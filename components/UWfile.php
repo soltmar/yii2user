@@ -17,7 +17,7 @@ class UWfile
      * @var array
      * @desc widget parameters
      */
-    public $params = array('path'=>'assets');
+    public $params = ['path' =>'assets'];
 
     /** @var \yii\web\UploadedFile */
     private $file_instance;
@@ -127,10 +127,10 @@ class UWfile
      * @param ActiveRecord $model
      * @return string
      */
-    public function editAttribute($model, $field, $params = array())
+    public function editAttribute($model, $field, $params = [])
     {
         if (!isset($params['options'])) {
-            $params['options'] = array();
+            $params['options'] = [];
         }
         $options = $params['options'];
         unset($params['options']);

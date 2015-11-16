@@ -5,7 +5,7 @@
  *
  */
 
-return array(
+return [
         'Registration' => 'Rejestracja',
         'Register' => "Zarejestruj",
         'Login' => 'Logowanie',
@@ -130,4 +130,4 @@ return array(
         'The value of the default field (database).' => 'Wartość domyślnego pola (baza danych).',
         'Display order of fields.' => 'Wyświetl kolejność pól.',
         'Not visited' => 'Nie odwiedzane',
-);
+];

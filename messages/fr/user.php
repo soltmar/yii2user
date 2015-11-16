@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
         'Registration' => 'Inscription',
         'Register' => "S'inscrire",
         'Login' => 'Connexion',
@@ -127,4 +127,4 @@ return array(
         'The value of the default field (database).' => 'La valeur du champ par défaut (base de données).',
         'Display order of fields.' => 'Ordre d\'affichage des champs.',
         'Not visited' => 'Non visité',
-);
+];

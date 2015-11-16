@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'ユーザー登録',
 	'Register' => 'ユーザー登録',
 	'Login' => 'ログイン',
@@ -125,4 +125,4 @@ return array(
 	'The value of the default field (database).' => 'データベースのフィールドのデフォルト値。',
 	'Display order of fields.' => 'フォームでの項目の表示順。',
 	'Not visited' => '訪問無し',
-);
+];

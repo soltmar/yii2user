@@ -15,9 +15,9 @@ Module::getInstance()->setMenu([
 <?php
 
     // For all users
-    $attributes = array(
+    $attributes = [
         'username',
-    );
+    ];
 
     $profileFields=ProfileField::find()->forAll()->sort()->all();
     if ($profileFields) {
@@ -33,10 +33,10 @@ Module::getInstance()->setMenu([
     array_push(
         $attributes,
         'create_at',
-        array(
+        [
             'attribute' => 'lastvisit_at',
             'value' => (($model->lastvisit_at!='0000-00-00 00:00:00')?$model->lastvisit_at:Module::t('Not visited')),
-        )
+        ]
     );
 
     echo DetailView::widget([

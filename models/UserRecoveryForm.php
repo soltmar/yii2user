@@ -22,22 +22,22 @@ class UserRecoveryForm extends Model
      */
     public function rules()
     {
-        return array(
+        return [
             // username and password are required
-            array('login_or_email', 'required'),
+            ['login_or_email', 'required'],
        //     array('login_or_email', 'match', 'pattern' => '^[A-Za-z0-9@.-_\s,]+$','message' => Module::t("Incorrect symbols (A-z0-9).")),
             // password needs to be authenticated
-            array('login_or_email', 'checkexists'),
-        );
+            ['login_or_email', 'checkexists'],
+        ];
     }
     /**
      * Declares attribute labels.
      */
     public function attributeLabels()
     {
-        return array(
+        return [
             'login_or_email'=>Module::t("Username"),
-        );
+        ];
     }
 
     public function checkexists()

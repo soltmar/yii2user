@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Εγγραφή',
 	'Register' => 'Εγγραφή',
 	'Login' => 'Είσοδος',
@@ -131,4 +131,4 @@ return array(
 	'Display order of fields.' => 'Σειρά εμφάνισης των πεδίων.',
 	'Not visited' => 'Δεν έχει επισκεφθεί',
 	'Birthday'=>'Ημερομηνία Γέννησης'
-);
+];

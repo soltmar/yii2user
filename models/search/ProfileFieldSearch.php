@@ -40,9 +40,9 @@ class ProfileFieldSearch extends ProfileField
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>array(
+            'pagination'=> [
                 'pageSize'=>Yii::$app->controller->module->fields_page_size,
-            ),
+            ],
         ]);
 
         $this->load($params);

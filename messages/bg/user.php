@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Регистрация',
 	'Register' => 'Регистрирай се',
 	'Login' => 'Влез',
@@ -124,4 +124,4 @@ return array(
 	'The value of the default field (database).' => 'Стойността на полето по подразбиране (база данни).',
 	'Display order of fields.' => 'Показване на реда на полетата.',
 	'Not visited' => 'Непосетен',
-);
+];

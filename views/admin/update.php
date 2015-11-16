@@ -18,5 +18,5 @@ Module::getInstance()->addMenu(['label'=>Module::t('View User'), 'url'=> ['view'
     <h1><?php echo  Module::t('Update User')." ".$model->id; ?></h1>
 
 <?=
- $this->render('_form', array('model'=>$model,'profile'=>$profile));
+ $this->render('_form', ['model' =>$model, 'profile' =>$profile]);
 ?>

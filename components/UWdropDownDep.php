@@ -104,7 +104,7 @@ class UWdropDownDep
         /** @var ActiveRecord $modelName */
         $modelName = $this->params['modelName'];
 
-        $list = array();
+        $list = [];
         if ($this->params['emptyField']) {
             $list[0] = $this->params['emptyField'];
         }

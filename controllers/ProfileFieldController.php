@@ -3,6 +3,7 @@
 namespace mariusz_soltys\yii2user\controllers;
 
 use mariusz_soltys\yii2user\assets\ProfileFieldAssets;
+use mariusz_soltys\yii2user\components\WebUser;
 use mariusz_soltys\yii2user\models\search\ProfileFieldSearch;
 use yii\base\Exception;
 use mariusz_soltys\yii2user\models\Profile;
@@ -26,7 +27,7 @@ class ProfileFieldController extends Controller
      * @var ProfileField the currently loaded data model instance.
      */
     private $model;
-    private static $widgets = array();
+    private static $widgets = [];
     public $defaultAction = 'admin';
 
     public function behaviors()
@@ -68,7 +69,7 @@ class ProfileFieldController extends Controller
 
         $wgByTypes = ProfileField::itemAlias('field_type');
         foreach ($wgByTypes as $k => $v) {
-            $wgByTypes[$k] = array();
+            $wgByTypes[$k] = [];
         }
 
         foreach ($widgets[1] as $widget) {
@@ -399,7 +400,7 @@ class ProfileFieldController extends Controller
                 }
                 $model->getDb()->createCommand($sql)->execute();
                 $model->save();
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view', 'id' =>$model->id]);
             }
         }
 
@@ -418,7 +419,7 @@ class ProfileFieldController extends Controller
         $model=$this->loadModel();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                $this->redirect(array('view','id'=>$model->id));
+                $this->redirect(['view', 'id' =>$model->id]);
             }
         }
         $this->registerScript();
@@ -438,7 +439,7 @@ class ProfileFieldController extends Controller
             // we only allow deletion via POST request
             $scheme = get_class(Yii::$app->db->schema);
             $model = $this->loadModel();
-            if ($scheme=='CSqliteSchema') {
+            if ($scheme=='yii\db\sqlite\Schema') {
                 $attr = Profile::getFields();
                 unset($attr[$model->varname]);
                 $attr = array_keys($attr);
@@ -482,15 +483,21 @@ class ProfileFieldController extends Controller
                 }
 
             } else {
-                $sql = 'ALTER TABLE '.Profile::tableName().' DROP `'.$model->varname.'`';
-                if ($model->getDb()->createCommand($sql)->execute()) {
-                    $model->delete();
+                try {
+                    $model->getDb()->createCommand()
+                        ->dropColumn(Profile::tableName(), $model->varname)->execute();
+                } catch (\yii\db\Exception $e) {
+                    Yii::$app->user->setFlash(
+                        Module::ALERT_ERROR,
+                        Module::t('Error deleteing Profile table column {column}', ['column' => $model->varname])
+                    );
                 }
+                $model->delete();
             }
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!Yii::$app->request->isAjax) {
-                $this->redirect(array('admin'));
+                $this->redirect(['admin']);
             }
         } else {
             throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
@@ -542,8 +549,8 @@ class ProfileFieldController extends Controller
     public static function getWidgets($fieldType = '')
     {
         $basePath=Yii::getAlias('@mariusz_soltys/yii2user/components');
-        $widgets = array();
-        $list = array(''=>Module::t('No'));
+        $widgets = [];
+        $list = ['' =>Module::t('No')];
         if (self::$widgets) {
             $widgets = self::$widgets;
         } else {
@@ -570,7 +577,7 @@ class ProfileFieldController extends Controller
             }
             $d->close();
         }
-        return array($list,$widgets);
+        return [$list,$widgets];
     }
 
     /**

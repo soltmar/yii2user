@@ -3,7 +3,7 @@
 * (c) Vitaliy Stepanenko,
 * (c) Alexander Listunov
 */
-return array(
+return [
 	'Registration' => 'Реєстрація',
 	'Register' => 'Зареєструватися',
 	'Login' => 'Вхід',
@@ -128,9 +128,5 @@ return array(
 	'Display order of fields.' => 'Порядок відображення полів.',
     'Not visited' => 'Користувач не відвідував сайт',
 
-    
-    
-    
-    
-    
-);
+
+];

@@ -70,7 +70,7 @@ class m110810_162301_userTimestampFix extends Migration
                 );
                 $this->execute("ALTER TABLE '".Module::getInstance()->tableUsers."' "
                 ."RENAME TO '".__CLASS__."_".Module::getInstance()->tableUsers."'");
-                $this->createTable(Module::getInstance()->tableUsers, array(
+                $this->createTable(Module::getInstance()->tableUsers, [
                     "id" => "pk",
                     "username" => "varchar(20) NOT NULL",
                     "password" => "varchar(128) NOT NULL",
@@ -80,7 +80,7 @@ class m110810_162301_userTimestampFix extends Migration
                     "status" => "int(1) NOT NULL",
                     "create_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP",
                     "lastvisit_at" => "TIMESTAMP",
-                ));
+                ]);
                 $this->execute(
                     'INSERT INTO "'.Module::getInstance()->tableUsers.'" "'
                     .'SELECT "id","username","password","email","activkey","superuser","status","create_at","lastvisit_at" FROM "'.__CLASS__.'_'.Module::getInstance()->tableUsers.'"'
@@ -114,7 +114,7 @@ class m110810_162301_userTimestampFix extends Migration
                 $this->addColumn(Module::getInstance()->tableUsers, 'lastvisit', "int(10)");
                 $this->execute("UPDATE ".Module::getInstance()->tableUsers." SET createtime = strftime('%s',create_at), lastvisit = strftime('%s',lastvisit_at)");
                 $this->execute('ALTER TABLE "'.Module::getInstance()->tableUsers.'" RENAME TO "'.__CLASS__.'_'.Module::getInstance()->tableUsers.'"');
-                $this->createTable(Module::getInstance()->tableUsers, array(
+                $this->createTable(Module::getInstance()->tableUsers, [
                     "id" => "pk",
                     "username" => "varchar(20) NOT NULL",
                     "password" => "varchar(128) NOT NULL",
@@ -124,7 +124,7 @@ class m110810_162301_userTimestampFix extends Migration
                     "lastvisit" => "int(10) NOT NULL",
                     "superuser" => "int(1) NOT NULL",
                     "status" => "int(1) NOT NULL",
-                ));
+                ]);
                 $this->execute('INSERT INTO "'.Module::getInstance()->tableUsers.'" SELECT "id","username","password","email","activkey","createtime","lastvisit","superuser","status" FROM "'.__CLASS__.'_'.Module::getInstance()->tableUsers.'"');
                 $this->execute('DROP TABLE "'.__CLASS__.'_'.Module::getInstance()->tableUsers.'"');
                 break;

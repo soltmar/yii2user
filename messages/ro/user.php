@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'Registration' => 'Inregistrare',
 	'Register' => 'Inregistrare',
 	'Login' => 'Conectare',
@@ -125,4 +125,4 @@ return array(
 	'Display order of fields.' => 'Afisare ordinea campurilor.',
 	'Not visited' => 'Nevizitat',
 	'Birthday'=>'Data nasterii',
-);
+];
