@@ -52,7 +52,7 @@
     $profileFields=Profile::getFields();
     if ($profileFields) {
         foreach ($profileFields as $field) {
-            $field->renderField($profile, $form);
+            echo $field->renderField($profile, $form);
         }
     }
     ?>

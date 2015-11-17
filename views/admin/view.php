@@ -50,10 +50,16 @@
                     $val = $model->profile->getAttribute($field->varname);
                 }
             }
+
+            $type = 'html';
+
+            if ($field->field_type == "DATE" || $field->widget=="UWjuidate") {
+                $type = 'date';
+            }
             array_push($attributes, [
                 'label' => Module::t($field->title),
                 'name' => $field->varname,
-                'type'=>'raw',
+                'format'=> $type,
                 'value' => $val
             ]);
         }
@@ -62,10 +68,10 @@
     array_push(
         $attributes,
         'password',
-        'email',
+        'email:email',
         'activkey',
-        'create_at',
-        'lastvisit_at',
+        'create_at:date',
+        'lastvisit_at:date',
         [
             'attribute' => 'superuser',
             'value' => User::itemAlias("AdminStatus", $model->superuser),

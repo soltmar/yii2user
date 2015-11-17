@@ -42,7 +42,7 @@ class ProfileController extends Controller
 
         if (Yii::$app->request->isAjax && $model->load($post) && $profile->load($post)) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
+            return ActiveForm::validate($profile);
         }
 
         if ($model->load($post) && $profile->load($post)) {

@@ -5,6 +5,7 @@ use mariusz_soltys\yii2user\models\ProfileField;
 use mariusz_soltys\yii2user\models\User;
 use mariusz_soltys\yii2user\Module;
 use yii\helpers\Html;
+use yii\widgets\DetailView;
 
 /**
  * @var $this yii\web\View
@@ -29,59 +30,47 @@ if (Module::isAdmin()) {
 Module::getInstance()->setMenu($menu);
 
 ?>
-<h1><?= Module::t('Your profile'); ?></h1>
+    <h1><?= Module::t('Your profile'); ?></h1>
 
-<?php if (Yii::$app->user->hasFlash('profileMessage')) : ?>
-    <div class="success">
-        <?php echo Yii::$app->user->getFlash('profileMessage'); ?>
-    </div>
-<?php endif; ?>
-<table class="dataGrid">
-    <tr>
-        <th><?= Html::encode($model->getAttributeLabel('username')); ?></th>
-        <td><?= Html::encode($model->username); ?></td>
-    </tr>
-    <?php
-    $profileFields = ProfileField::find()->forOwner()->sort()->all();
-    if ($profileFields) {
-        foreach ($profileFields as $field) {
-            /** $field */
-            ?>
-            <tr>
-                <th ><?= Html::encode(Module::t($field->title)); ?></th>
-                <td>
-                    <?php
-                    if ($field->widgetView($profile)) {
-                        $html = $field->widgetView($profile);
-                        echo $html;
-                    } else {
-                        if (Html::encode(($field->range))) {
-                            echo Profile::range($field->range, $profile->getAttribute($field->varname));
-                        } else {
-                            echo $profile->getAttribute($field->varname);
-                        }
-                    }
-                    ?>
-                </td>
-            </tr>
-            <?php
-        }//$profile->getAttribute($field->varname)
+<?php
+
+$attributes = [
+    'username',
+    'email:email',
+    'create_at:date',
+    'lastvisit_at:date'
+];
+
+$profileFields = ProfileField::find()->forOwner()->sort()->all();
+if ($profileFields) {
+    foreach ($profileFields as $field) {
+        $val = '';
+        if ($field->widgetView($model->profile)) {
+            $val = $field->widgetView($model->profile);
+        } else {
+            if ($field->range) {
+                $val = Profile::range($field->range, $model->profile->getAttribute($field->varname));
+            } else {
+                $val = $model->profile->getAttribute($field->varname);
+            }
+        }
+
+        $type = 'html';
+
+        if ($field->field_type == "DATE" || $field->widget=="UWjuidate") {
+            $type = 'date';
+        }
+        array_push($attributes, [
+            'label' => Module::t($field->title),
+            'name' => $field->varname,
+            'format'=> $type,
+            'value' => $val
+        ]);
     }
-    ?>
-    <tr>
-        <th><?= Html::encode($model->getAttributeLabel('email')); ?></th>
-        <td><?= Html::encode($model->email); ?></td>
-    </tr>
-    <tr>
-        <th><?= Html::encode($model->getAttributeLabel('create_at')); ?></th>
-        <td><?= $model->create_at; ?></td>
-    </tr>
-    <tr>
-        <th><?= Html::encode($model->getAttributeLabel('lastvisit_at')); ?></th>
-        <td><?= $model->lastvisit_at; ?></td>
-    </tr>
-    <tr>
-        <th><?= Html::encode($model->getAttributeLabel('status')); ?></th>
-        <td><?= Html::encode(User::itemAlias("UserStatus", $model->status)); ?></td>
-    </tr>
-</table>
+}
+
+
+echo DetailView::widget([
+    'model' => $model,
+    'attributes'=>$attributes,
+]);

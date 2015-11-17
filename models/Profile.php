@@ -96,7 +96,7 @@ class Profile extends UActiveRecord
                     $field_rule = [
                         $field->varname,
                         'date',
-                        'timestampAttributeFormat' => 'yyyy-mm-dd',
+                        'timestampAttributeFormat' => 'yyyy-MM-dd',
                         'timestampAttribute' => $field->varname,
                         ];
 

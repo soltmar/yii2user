@@ -109,24 +109,23 @@ class AdminController extends Controller
     {
         $model=$this->loadModel();
         $profile=$model->profile;
-        $validation = $this->performAjaxValidation([$model, $profile]);
-        if ($validation!==false) {
-            return $validation;
-        }
-        if ($model->load(Yii::$app->request->post())) {
-            $profile->load(Yii::$app->request->post());
+        $post = Yii::$app->request->post();
 
-            if ($model->validate()&&$profile->validate()) {
+        if ($model->load($post) && $profile->load($post)) {
+            $validation = $this->performAjaxValidation([$model, $profile]);
+            if ($validation!==false) {
+                return $validation;
+            }
+
+            if ($model->validate()&&$profile->save()) {
                 $old_password = User::find()->notsafe()->findbyPk($model->id)->one();
                 if ($old_password->password != $model->password) {
                     $model->password = Module::getInstance()->encrypting($model->password);
                     $model->activkey = Yii::$app->security->generateRandomString();//Module::getInstance()->encrypting(microtime().$model->password);
                 }
-                $model->save();
-                $profile->save();
-                return $this->redirect(['view', 'id'=>$model->id]);
-            } else {
-                $profile->validate();
+                if ($model->save(true)) {
+                    return $this->redirect(['view', 'id'=>$model->id]);
+                }
             }
         }
 
@@ -197,7 +196,7 @@ class AdminController extends Controller
     {
         if ($this->model===null) {
             if (Yii::$app->request->get('id')) {
-                $this->model = User::find()->notsafe()->findbyPk($_GET['id'])->one();
+                $this->model = User::find()->notsafe()->findbyPk(Yii::$app->request->get('id'))->one();
             }
             if ($this->model===null) {
                 throw new HttpException(404, 'The requested page does not exist.');
