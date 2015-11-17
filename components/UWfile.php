@@ -51,8 +51,9 @@ class UWfile
                         'value' => ''
                     ],
                     'minSize' => '',
-                    'extensions' => '',
-                    'mimeTypes' => '',
+                    //TODO create groups like "documents", "images", "video", "media"
+                    'extensions' => '', //TODO Provide list of extensions
+                    'mimeTypes' => '', //TODO Provide list of mime types
                     'checkExtensionByMimeType' => [
                         'value' => ['true','false']
                     ],
@@ -134,11 +135,37 @@ class UWfile
         }
         $options = $params['options'];
         unset($params['options']);
-        
-        return Html::activeFileInput($model, $field->varname, $params)
-        .(($model->getAttribute($field->varname))?'<br/>'.Html::activeCheckBox($model, '[uwfdel]'.$field->varname, $params)
-        .' '.Html::activeLabel($model, '[uwfdel]'.$field->varname, ['label'=>Module::t('Delete file'), 'style'=>'display:inline;']):'')
-        ;
+
+        /** @var \yii\widgets\ActiveField $form */
+        $form = $params['formField'];
+        unset($params['formField']);
+
+        $return = $form->fileInput($options);
+
+        $file = $model->getAttribute($field->varname);
+
+        if ($file) {
+            $return .= "<div class='form-group'>";
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $root = Yii::getAlias('@webroot/'.$file);
+            $type = explode("/", finfo_file($finfo, $root));
+
+            if ($type[0] == 'image') {
+                $return .= Html::img(Url::base()."/".$file, ['class'=>'UWfile-image-preview']);
+            } else {
+                $assetsPath = Yii::$app->assetManager->getBundle('mariusz_soltys\yii2user\assets\UserAssets')->basePath;
+                $assetsUrl = Yii::$app->assetManager->getBundle('mariusz_soltys\yii2user\assets\UserAssets')->baseUrl;
+                $img = "/img/".pathinfo($file, PATHINFO_EXTENSION).".png";
+                if (file_exists($assetsPath.$img)) {
+                    $return .= Html::img($assetsUrl.$img, ['class'=>'UWfile-image-preview']);
+                }
+            }
+
+            $return .= Html::activeCheckBox($model, '[uwfdel]'.$field->varname, ['label'=>Module::t('Delete file')]);
+            $return .= "</div>";
+        }
+
+        return $return;
     }
 
     /**

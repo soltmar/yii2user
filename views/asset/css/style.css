@@ -11,3 +11,8 @@ div.required label:after {
     content: " *";
     color: red;
 }
+
+img.UWfile-image-preview {
+    max-width: 100px;
+    margin-right: 20px;
+}
