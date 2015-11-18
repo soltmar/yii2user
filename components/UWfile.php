@@ -95,10 +95,11 @@ class UWfile
             $this->new_file_path .= $file_name;
             
         } else {
-            if (isset($_POST[get_class($model)]['uwfdel'][$field_varname])&&$_POST[get_class($model)]['uwfdel'][$field_varname]) {
+            $c = join('', array_slice(explode('\\', get_class($model)), -1));
+            if (isset($_POST[$c]['uwfdel'][$field_varname])&&$_POST[$c]['uwfdel'][$field_varname]) {
                 $model->on(ActiveRecord::EVENT_AFTER_INSERT, [$this, 'processFile'], null, false);
                 $model->on(ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'processFile'], null, false);
-                $path = '';
+                $this->new_file_path = '';
             }
         }
         
@@ -158,6 +159,8 @@ class UWfile
                 $img = "/img/".pathinfo($file, PATHINFO_EXTENSION).".png";
                 if (file_exists($assetsPath.$img)) {
                     $return .= Html::img($assetsUrl.$img, ['class'=>'UWfile-image-preview']);
+                } else {
+                    $return .= Html::img($assetsUrl."/img/file.png", ['class'=>'UWfile-image-preview']);
                 }
             }
 
