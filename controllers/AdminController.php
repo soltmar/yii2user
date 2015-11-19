@@ -71,27 +71,29 @@ class AdminController extends Controller
     {
         $model = new User;
         $profile = new Profile;
-        $this->performAjaxValidation([$model,$profile]);
-        if ($model->load(Yii::$app->request->post())) {
+        $post = Yii::$app->request->post();
+        if ($model->load($post) && $profile->load($post)) {
+            $model->loadDefaultValues(true);
+            $validation = $this->performAjaxValidation([$model, $profile]);
+            if ($validation!==false) {
+                return $validation;
+            }
             $model->activkey = Yii::$app->security->generateRandomString();
-            //Module::getInstance()->encrypting(microtime().$model->password);
-            $profile->load(Yii::$app->request->post());
             $profile->user_id=0;
-            if ($model->validate()&&$profile->validate()) {
+            if ($model->validate()) {
                 $model->password = Module::getInstance()->encrypting($model->password);
                 if ($model->save()) {
                     $profile->user_id = $model->id;
-                    $profile->save();
-                    Yii::$app->user->setFlash(
-                        'success',
-                        Module::t(
-                            "User has been created successfully."
-                        )
-                    );
+                    if ($profile->save(true)) {
+                        Yii::$app->user->setFlash(
+                            'success',
+                            Module::t(
+                                "User has been created successfully."
+                            )
+                        );
+                        return $this->redirect(['view', 'id'=>$model->id]);
+                    }
                 }
-                return $this->redirect(['view', 'id'=>$model->id]);
-            } else {
-                $profile->validate();
             }
         }
 
