@@ -4,12 +4,12 @@ Yii-User Installation
 Download
 --------
 
-Download or checkout (SVN/Git) from http://yii-user.2mx.org and unpack files in your protected/modules/user
+Download or checkout (SVN/Git) from https://github.com/marsoltys/yii2user and unpack files in your protected/modules/user
 
 Git clone
 ---------
 
-    clone git git@github.com:mishamx/yii-user.git
+    clone git git@github.com:marsoltys/yii2user.git
 
 Configure
 ---------
@@ -128,6 +128,6 @@ Install
 -------
 
 Run command:
-    yiic migrate --migrationPath=user.migrations
+    yii migrate --migrationPath=user.migrations
 
 Input admin login, email and password
