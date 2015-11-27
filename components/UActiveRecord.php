@@ -9,10 +9,9 @@
  *
  */
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
-
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
@@ -28,7 +27,7 @@ class UActiveRecord extends ActiveRecord
     public function setAttributes($values, $safeOnly = true)
     {
         foreach ($this->widgetAttributes() as $fieldName => $className) {
-            $className = '\\mariusz_soltys\\yii2user\\components\\'.$className;
+            $className = '\\marsoltys\\yii2user\\components\\'.$className;
             if (isset($values[$fieldName])&&class_exists($className)) {
                 $class = new $className;
                 $arr = $this->widgetParams($fieldName);

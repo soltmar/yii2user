@@ -1,8 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;

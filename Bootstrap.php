@@ -1,5 +1,5 @@
 <?php
-namespace mariusz_soltys\yii2user;
+namespace marsoltys\yii2user;
 
 use yii\base\BootstrapInterface;
 

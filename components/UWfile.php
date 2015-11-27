@@ -1,10 +1,9 @@
 <?php
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use Yii;
-use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -154,8 +153,8 @@ class UWfile
             if ($type[0] == 'image') {
                 $return .= Html::img(Url::base()."/".$file, ['class'=>'UWfile-image-preview']);
             } else {
-                $assetsPath = Yii::$app->assetManager->getBundle('mariusz_soltys\yii2user\assets\UserAssets')->basePath;
-                $assetsUrl = Yii::$app->assetManager->getBundle('mariusz_soltys\yii2user\assets\UserAssets')->baseUrl;
+                $assetsPath = Yii::$app->assetManager->getBundle('marsoltys\yii2user\assets\UserAssets')->basePath;
+                $assetsUrl = Yii::$app->assetManager->getBundle('marsoltys\yii2user\assets\UserAssets')->baseUrl;
                 $img = "/img/".pathinfo($file, PATHINFO_EXTENSION).".png";
                 if (file_exists($assetsPath.$img)) {
                     $return .= Html::img($assetsUrl.$img, ['class'=>'UWfile-image-preview']);
@@ -172,14 +171,11 @@ class UWfile
     }
 
     /**
-     * @param  Event $event
      * @return void
      */
     
-    public function processFile($event)
+    public function processFile()
     {
-            
-        $model = $event->sender;
         
         if ($this->old_file_path && file_exists($this->old_file_path)) {
             unlink($this->old_file_path);

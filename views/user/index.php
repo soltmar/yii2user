@@ -1,5 +1,5 @@
 <?php
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\grid\GridView;
 use yii\helpers\Html;
 

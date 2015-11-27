@@ -1,13 +1,13 @@
 <?php
 
-namespace mariusz_soltys\yii2user\controllers;
+namespace marsoltys\yii2user\controllers;
 
-use HttpException;
-use mariusz_soltys\yii2user\models\User;
+use marsoltys\yii2user\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class UserController extends Controller
 {
@@ -72,7 +72,7 @@ class UserController extends Controller
                 $this->model=User::findOne($_GET['id']);
             }
             if ($this->model === null) {
-                throw new HttpException(404, 'The requested page does not exist.');
+                throw new NotFoundHttpException('The requested page does not exist.');
             }
         }
         return $this->model;
@@ -84,7 +84,7 @@ class UserController extends Controller
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the primary key value. Defaults to null, meaning using the 'id' GET variable
      * @return User
-     * @throws HttpException
+     * @throws NotFoundHttpException
      */
     public function loadUser($id = null)
     {
@@ -93,7 +93,7 @@ class UserController extends Controller
                 $this->model=User::findOne($id!==null ? $id : Yii::$app->request->get('id'));
             }
             if ($this->model===null) {
-                throw new HttpException(404, 'The requested page does not exist.');
+                throw new NotFoundHttpException('The requested page does not exist.');
             }
         }
         return $this->model;

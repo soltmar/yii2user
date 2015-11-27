@@ -1,11 +1,11 @@
 <?php
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /**
- * @var mariusz_soltys\yii2user\models\UserLogin $model
+ * @var marsoltys\yii2user\models\UserLogin $model
  * @var $this yii\web\View
 */
 

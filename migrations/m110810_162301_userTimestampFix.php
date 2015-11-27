@@ -1,6 +1,6 @@
 <?php
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\db\Migration;
 
 class m110810_162301_userTimestampFix extends Migration

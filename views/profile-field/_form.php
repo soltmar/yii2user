@@ -1,14 +1,14 @@
 <?php
 
-use mariusz_soltys\yii2user\controllers\ProfileFieldController;
-use mariusz_soltys\yii2user\models\ProfileField;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\controllers\ProfileFieldController;
+use marsoltys\yii2user\models\ProfileField;
+use marsoltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model mariusz_soltys\yii2user\models\ProfileField */
+/* @var $model marsoltys\yii2user\models\ProfileField */
 
 ?>
 

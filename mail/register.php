@@ -9,7 +9,7 @@
  *
  */
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 
 /* @var $this \yii\web\View view component instance */
 /* @var $activation_url string containing activation link HTML */

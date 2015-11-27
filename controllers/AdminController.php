@@ -1,15 +1,16 @@
 <?php
 
-namespace mariusz_soltys\yii2user\controllers;
+namespace marsoltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\models\search\UserSearch;
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\Profile;
+use marsoltys\yii2user\models\UserSearch;
+use marsoltys\yii2user\models\User;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -123,7 +124,7 @@ class AdminController extends Controller
                 $old_password = User::find()->notsafe()->findbyPk($model->id)->one();
                 if ($old_password->password != $model->password) {
                     $model->password = Module::getInstance()->encrypting($model->password);
-                    $model->activkey = Yii::$app->security->generateRandomString();//Module::getInstance()->encrypting(microtime().$model->password);
+                    $model->activkey = Yii::$app->security->generateRandomString();
                 }
                 if ($model->save(true)) {
                     return $this->redirect(['view', 'id'=>$model->id]);
@@ -157,9 +158,12 @@ class AdminController extends Controller
 
             $model->delete();
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-            if (!Yii::$app->request->isAjax) {
-                return $this->redirect(['/user/admin']);
+            if (Yii::$app->request->isAjax) {
+                return '';
             }
+
+            return $this->redirect(['/user/admin']);
+
         } else {
             throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
         }
@@ -167,7 +171,7 @@ class AdminController extends Controller
 
     /**
      * Performs the AJAX validation.
-     * @param $validate array the model to be validated
+     * @param $validate array|\yii\db\ActiveRecord the model to be validated
      * @return array containing validation results for each of the models fields
      */
     protected function performAjaxValidation($validate)
@@ -201,7 +205,7 @@ class AdminController extends Controller
                 $this->model = User::find()->notsafe()->findbyPk(Yii::$app->request->get('id'))->one();
             }
             if ($this->model===null) {
-                throw new HttpException(404, 'The requested page does not exist.');
+                throw new NotFoundHttpException('The requested page does not exist.');
             }
         }
         return $this->model;

@@ -1,8 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user;
+namespace marsoltys\yii2user;
 
-use mariusz_soltys\yii2user\models\User;
+use marsoltys\yii2user\models\User;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\swiftmailer\Mailer;
@@ -17,7 +17,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     public $mainLayout = '@app/views/layouts/main.php';
 
-    public $mailViews = '@mariusz_soltys/yii2user/mail';
+    public $mailViews = '@marsoltys/yii2user/mail';
 
     public $urlPrefix = 'user';
 
@@ -141,7 +141,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'mariusz_soltys\yii2user\controllers';
+    public $controllerNamespace = 'marsoltys\yii2user\controllers';
 
     /**
      * @inheritdoc

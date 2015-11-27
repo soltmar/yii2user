@@ -1,8 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
@@ -118,7 +118,7 @@ class UWjuiAutoComplete {
 		$options=Json::encode($options);
 
 //		//$basePath=Yii::getPathOfAlias('application.views.asset');
-//		$basePath=Yii::getAlias('@mariusz_soltys/yii2user/views/asset');
+//		$basePath=Yii::getAlias('@marsoltys/yii2user/views/asset');
 //		$baseUrl=Yii::$app->getAssetManager()->publish($basePath);
 //		$cs = Yii::$app->getClientScript();
 //		$cs->registerCssFile($baseUrl.'/css/'.$this->params['ui-theme'].'/jquery-ui.css');

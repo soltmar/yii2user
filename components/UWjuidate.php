@@ -1,10 +1,10 @@
 <?php
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
 use Yii;
-use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\Profile;
+use marsoltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\jui\DatePicker;

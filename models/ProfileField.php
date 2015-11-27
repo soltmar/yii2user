@@ -1,9 +1,9 @@
 <?php
-namespace mariusz_soltys\yii2user\models;
+namespace marsoltys\yii2user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\helpers\Json;
 use yii\widgets\ActiveForm;
 
@@ -143,8 +143,8 @@ class ProfileField extends ActiveRecord
     public function widgetView($model)
     {
         $w = $this->widget;
-        if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
-            $widgetClass = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
+        if ($this->widget && class_exists('\\marsoltys\\yii2user\\components\\'.$this->widget)) {
+            $widgetClass = '\\marsoltys\\yii2user\\components\\'.$this->widget;
             $widgetClass = new $widgetClass;
 
             $arr = $this->widgetparams;
@@ -169,8 +169,8 @@ class ProfileField extends ActiveRecord
     public function widgetEdit($model, $params = [])
     {
         $mod = $this->widget;
-        if ($this->widget && class_exists('\\mariusz_soltys\\yii2user\\components\\'.$this->widget)) {
-            $this->widget = '\\mariusz_soltys\\yii2user\\components\\'.$this->widget;
+        if ($this->widget && class_exists('\\marsoltys\\yii2user\\components\\'.$this->widget)) {
+            $this->widget = '\\marsoltys\\yii2user\\components\\'.$this->widget;
             $widgetClass = new $this->widget;
 
             $arr = $this->widgetparams;

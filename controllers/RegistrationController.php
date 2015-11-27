@@ -1,11 +1,11 @@
 <?php
 
-namespace mariusz_soltys\yii2user\controllers;
+namespace marsoltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\models\RegistrationForm;
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\Profile;
+use marsoltys\yii2user\models\RegistrationForm;
+use marsoltys\yii2user\models\User;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;

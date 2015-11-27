@@ -1,11 +1,11 @@
 <?php
-    use mariusz_soltys\yii2user\models\ProfileField;
+    use marsoltys\yii2user\models\ProfileField;
     use yii\helpers\Html;
     use yii\widgets\ActiveForm;
 
 /**
 * @var $this yii\web\View
-* @var mariusz_soltys\yii2user\models\ProfileField $model
+* @var marsoltys\yii2user\models\ProfileField $model
 */
 ?>
 <div class="wide form">
@@ -55,7 +55,7 @@
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton(\mariusz_soltys\yii2user\Module::t('search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton(\marsoltys\yii2user\Module::t('search'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
     <?php ActiveForm::end() ?>

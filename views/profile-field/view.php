@@ -1,8 +1,8 @@
 <?php
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\widgets\DetailView;
 
-/** @var $model \mariusz_soltys\yii2user\models\ProfileField */
+/** @var $model \marsoltys\yii2user\models\ProfileField */
 /** @var $this \yii\web\View*/
 
 $this->params['breadcrumbs']= [

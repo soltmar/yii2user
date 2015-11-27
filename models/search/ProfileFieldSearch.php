@@ -1,8 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user\models\search;
+namespace marsoltys\yii2user\models;
 
-use mariusz_soltys\yii2user\models\ProfileField;
+use marsoltys\yii2user\models\ProfileField;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;

@@ -5,7 +5,7 @@
 
     /**
      * @var $this yii\web\View
-     * @var mariusz_soltys\yii2user\models\User $model
+     * @var marsoltys\yii2user\models\User $model
      */
 
 ?>
@@ -42,7 +42,7 @@
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton(\mariusz_soltys\yii2user\Module::t('search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton(\marsoltys\yii2user\Module::t('search'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
     <?php ActiveForm::end() ?>

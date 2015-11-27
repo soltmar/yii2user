@@ -1,10 +1,10 @@
 <?php
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 
 /**
  * @var \yii\base\View $this
- * @var \mariusz_soltys\yii2user\models\ProfileField $model
+ * @var \marsoltys\yii2user\models\ProfileField $model
  */
 
 $this->params['breadcrumbs']= [

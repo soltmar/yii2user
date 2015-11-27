@@ -1,10 +1,8 @@
 <?php
 
-namespace mariusz_soltys\yii2user\controllers;
+namespace marsoltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\models\UserChangePassword;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -14,7 +12,7 @@ class ProfileController extends Controller
 {
     public $defaultAction = 'profile';
 
-    /** @var \mariusz_soltys\yii2user\models\Profile the currently loaded data model instance. */
+    /** @var \marsoltys\yii2user\models\Profile the currently loaded data model instance. */
     private $model;
 
     /**
@@ -64,7 +62,7 @@ class ProfileController extends Controller
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      *
-     * @return \mariusz_soltys\yii2user\models\User
+     * @return \marsoltys\yii2user\models\User
      */
     public function loadUser()
     {

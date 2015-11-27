@@ -1,7 +1,7 @@
 <?php
 
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\User;
+use marsoltys\yii2user\Module;
 use yii\db\Migration;
 
 class m110805_153437_installYiiUser extends Migration

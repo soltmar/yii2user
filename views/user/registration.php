@@ -1,13 +1,13 @@
 <?php
 
-use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\Profile;
+use marsoltys\yii2user\Module;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model \mariusz_soltys\yii2user\models\RegistrationForm */
-/* @var $profile \mariusz_soltys\yii2user\models\Profile */
+/* @var $model \marsoltys\yii2user\models\RegistrationForm */
+/* @var $profile \marsoltys\yii2user\models\Profile */
 
 $this->title=Yii::$app->name . ' - '.Module::t("Registration");
 $this->params['breadcrumbs'][] = Module::t("Registration");
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = Module::t("Registration");
             $profileFields=Profile::getFields();
             if ($profileFields) {
                 foreach ($profileFields as $field) {
-                    /**@var \mariusz_soltys\yii2user\models\ProfileField $field*/
+                    /**@var \marsoltys\yii2user\models\ProfileField $field*/
                     $input = $form->field($profile, $field->varname);
 
                     if ($widgetEdit = $field->widgetEdit($profile)) {

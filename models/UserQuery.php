@@ -1,6 +1,6 @@
 <?php
 
-namespace mariusz_soltys\yii2user\models;
+namespace marsoltys\yii2user\models;
 
 /**
  * This is the ActiveQuery class for [[User]].

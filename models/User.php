@@ -1,11 +1,11 @@
 <?php
 
-namespace mariusz_soltys\yii2user\models;
+namespace marsoltys\yii2user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\web\IdentityInterface;
 
 /**

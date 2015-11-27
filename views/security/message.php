@@ -1,4 +1,4 @@
-<?php use mariusz_soltys\yii2user\Module;
+<?php use marsoltys\yii2user\Module;
 
 $this->title=Yii::$app->name . ' - '.Module::t("Login"); ?>
 

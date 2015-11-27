@@ -1,5 +1,5 @@
 <?php
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 
 $this->params['breadcrumbs']= [
     ['label' => Module::t('Profile Fields'), 'url' => ['admin']],

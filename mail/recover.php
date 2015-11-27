@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/MIT
  *
  */
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 
 /** @var string $activation_url */
 ?>

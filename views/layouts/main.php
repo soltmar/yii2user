@@ -12,8 +12,8 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use mariusz_soltys\yii2user\assets\UserAssets;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\assets\UserAssets;
+use marsoltys\yii2user\Module;
 use yii\web\View;
 
 UserAssets::register($this);

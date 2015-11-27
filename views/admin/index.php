@@ -1,13 +1,13 @@
 <?php
-use mariusz_soltys\yii2user\components\UHtml;
-use mariusz_soltys\yii2user\models\User;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\components\UHtml;
+use marsoltys\yii2user\models\User;
+use marsoltys\yii2user\Module;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /**
  * @var \yii\web\View $this
- * @var \mariusz_soltys\yii2user\models\search\UserSearch $searchModel
+ * @var \marsoltys\yii2user\models\UserSearch $searchModel
  * @var \yii\data\ActiveDataProvider $dataProvider
  */
 

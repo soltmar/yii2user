@@ -1,6 +1,6 @@
 <?php
-use mariusz_soltys\yii2user\models\ProfileField;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\ProfileField;
+use marsoltys\yii2user\Module;
 use yii\widgets\DetailView;
 
 $this->params['breadcrumbs']= [

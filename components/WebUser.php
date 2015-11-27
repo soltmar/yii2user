@@ -1,14 +1,14 @@
 <?php
 
-namespace mariusz_soltys\yii2user\components;
+namespace marsoltys\yii2user\components;
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use Yii;
 
 /**
  * @inheritdoc
  *
- * @property \mariusz_soltys\yii2user\models\User|\yii\web\IdentityInterface|null $identity
+ * @property \marsoltys\yii2user\models\User|\yii\web\IdentityInterface|null $identity
  *      The identity object associated with the currently logged-in user.
  *      null is returned if the user is not logged in (not authenticated).
  */
@@ -91,7 +91,7 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user id.
      * @param integer $id user id. Default - current user id.
-     * @return \mariusz_soltys\yii2user\models\User
+     * @return \marsoltys\yii2user\models\User
      */
     public function model($id = 0)
     {
@@ -101,7 +101,7 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user id.
      * @param integer $id user id. Default - current user id.
-     * @return \mariusz_soltys\yii2user\models\User
+     * @return \marsoltys\yii2user\models\User
      */
     public function user($id = 0)
     {
@@ -111,7 +111,7 @@ class WebUser extends \yii\web\User
     /**
      * Returns user model by user name.
      * @param string $username
-     * @return \mariusz_soltys\yii2user\models\User
+     * @return \marsoltys\yii2user\models\User
      */
     public function getUserByName($username)
     {

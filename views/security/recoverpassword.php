@@ -1,11 +1,11 @@
 <?php
 
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\Module;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /**
- * @var $form \mariusz_soltys\yii2user\models\UserRecoveryForm
+ * @var $form \marsoltys\yii2user\models\UserRecoveryForm
  */
 
 $this->title=Yii::$app->name . ' - '.Module::t("Change password");

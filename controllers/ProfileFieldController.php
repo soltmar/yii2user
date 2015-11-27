@@ -1,14 +1,13 @@
 <?php
 
-namespace mariusz_soltys\yii2user\controllers;
+namespace marsoltys\yii2user\controllers;
 
-use mariusz_soltys\yii2user\assets\ProfileFieldAssets;
-use mariusz_soltys\yii2user\components\WebUser;
-use mariusz_soltys\yii2user\models\search\ProfileFieldSearch;
+use marsoltys\yii2user\assets\ProfileFieldAssets;
+use marsoltys\yii2user\models\ProfileFieldSearch;
 use yii\base\Exception;
-use mariusz_soltys\yii2user\models\Profile;
-use mariusz_soltys\yii2user\models\ProfileField;
-use mariusz_soltys\yii2user\Module;
+use marsoltys\yii2user\models\Profile;
+use marsoltys\yii2user\models\ProfileField;
+use marsoltys\yii2user\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -80,7 +79,7 @@ class ProfileFieldController extends Controller
                 }
             }
         }
-        //echo '<pre>'; print_r($widgets[1]); die();
+
         /** @var string $js */
         $js = "
 
@@ -359,7 +358,6 @@ class ProfileFieldController extends Controller
 	";
         $this->view->registerJs($js);
 
-        //  $cs->registerScript(__CLASS__.'#dialog', $js);
     }
 
     /**
@@ -500,7 +498,7 @@ class ProfileFieldController extends Controller
                 $this->redirect(['admin']);
             }
         } else {
-            throw new HttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new HttpException(400, Module::t('Invalid request.'));
         }
     }
 
@@ -548,7 +546,7 @@ class ProfileFieldController extends Controller
 
     public static function getWidgets($fieldType = '')
     {
-        $basePath=Yii::getAlias('@mariusz_soltys/yii2user/components');
+        $basePath=Yii::getAlias('@marsoltys/yii2user/components');
         $widgets = [];
         $list = ['' =>Module::t('No')];
         if (self::$widgets) {
@@ -558,9 +556,9 @@ class ProfileFieldController extends Controller
             while (false !== ($file = $d->read())) {
                 if (strpos($file, 'UW') === 0) {
                     list($className) = explode('.', $file);
-                    if (class_exists('\\mariusz_soltys\\yii2user\\components\\'.$className)) {
-                        /**@var \mariusz_soltys\yii2user\components\UWfile $widgetClass - this is to trick IDEs*/
-                        $cs = '\\mariusz_soltys\\yii2user\\components\\'.$className;
+                    if (class_exists('\\marsoltys\\yii2user\\components\\'.$className)) {
+                        /**@var \marsoltys\yii2user\components\UWfile $widgetClass - this is to trick IDEs*/
+                        $cs = '\\marsoltys\\yii2user\\components\\'.$className;
                         $widgetClass = new $cs;
                         if ($widgetClass->init()) {
                             $widgets[$className] = $widgetClass->init();

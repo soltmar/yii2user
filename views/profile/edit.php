@@ -1,13 +1,13 @@
 <?php
 
-    use mariusz_soltys\yii2user\models\Profile;
-    use mariusz_soltys\yii2user\Module;
+    use marsoltys\yii2user\models\Profile;
+    use marsoltys\yii2user\Module;
     use yii\helpers\Html;
     use yii\widgets\ActiveForm;
 
     /* @var $this yii\web\View */
-    /* @var $model mariusz_soltys\yii2user\models\User */
-    /* @var $profile mariusz_soltys\yii2user\models\Profile */
+    /* @var $model marsoltys\yii2user\models\User */
+    /* @var $profile marsoltys\yii2user\models\Profile */
 
     $this->title=Yii::$app->name . ' - '.Module::t("Profile");
     $this->params['breadcrumbs']= [
