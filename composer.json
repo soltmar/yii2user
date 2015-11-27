@@ -1,10 +1,10 @@
 {
-    "name": "marsoltys/yii2-user",
+    "name": "marsoltys/yii2user",
     "type": "yii2-extension",
     "license": "MIT",
     "source": {
         "type": "git",
-        "url":  "https://marsoltys@bitbucket.org/marsoltys/yii2-user.git",
+        "url":  "https://github.com/marsoltys/yii2user.git",
         "reference": "master"
     },
     "autoload": {
