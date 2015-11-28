@@ -14,7 +14,7 @@ Download or checkout (SVN/Git) from https://github.com/marsoltys/yii2user and un
 Composer
 ---------
 
-    composer require "marsoltys/yii2user:dev-master",
+    composer require "marsoltys/yii2user:*",
 
 Configure
 ---------
