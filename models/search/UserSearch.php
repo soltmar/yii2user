@@ -1,7 +1,8 @@
 <?php
 
-namespace marsoltys\yii2user\models;
+namespace marsoltys\yii2user\models\search;
 
+use marsoltys\yii2user\models\User;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;

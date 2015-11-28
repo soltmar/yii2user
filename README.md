@@ -1,3 +1,8 @@
+##NOTE: This is Yii2-User module, which is rewritten version of Yii-User which can be found on [http://www.yiiframework.com/extension/yii-user](http://www.yiiframework.com/extension/yii-user)
+
+
+This module allows you to maintain users.
+
 Yii-User Installation
 =====================
 
@@ -6,128 +11,63 @@ Download
 
 Download or checkout (SVN/Git) from https://github.com/marsoltys/yii2user and unpack files in your protected/modules/user
 
-Git clone
+Composer
 ---------
 
-    clone git git@github.com:marsoltys/yii2user.git
+    composer require "marsoltys/yii2user:dev-master",
 
 Configure
 ---------
 
-Change your config main:
+Change your config web:
 
-    return array(
-        #...
-        // autoloading model and component classes
-        'import'=>array(
-            'application.models.*',
-            'application.components.*',
-            'application.modules.user.models.*',
-            'application.modules.user.components.*',
-        ),
+        'bootstrap' => [
+            #...
+            function ()
+            {
+                return Yii::$app->getModule('user');
+            }
+        ],
 
         #...
-        'modules'=>array(
+        'modules'=>[
             #...
-            'user'=>array(
-                # encrypting method (php hash function)
-                'hash' => 'md5',
-
-                # send activation email
-                'sendActivationMail' => true,
-
-                # allow access for non-activated users
-                'loginNotActiv' => false,
-
-                # activate user on registration (only sendActivationMail = false)
-                'activeAfterRegister' => false,
-
-                # automatically login from registration
-                'autoLogin' => true,
-
-                # registration path
-                'registrationUrl' => array('/user/registration'),
-
-                # recovery password path
-                'recoveryUrl' => array('/user/recovery'),
-
-                # login form path
-                'loginUrl' => array('/user/login'),
-
-                # page after login
-                'returnUrl' => array('/user/profile'),
-
-                # page after logout
-                'returnLogoutUrl' => array('/user/login'),
-            ),
+            'user' => [
+                'class' => 'marsoltys\yii2user\Module'
+            ]
             #...
-        ),
+        ],
 
         #...
         // application components
-        'components'=>array(
+        'components'=>[
+            'user' => [
+                'identityClass' => 'marsoltys\yii2user\models\User',
+                'class' => 'marsoltys\yii2user\components\WebUser',
+            ],
+        ],
         #...
-            'db'=>array(
-            #...
-                'tablePrefix' => 'tbl_',
-            #...
-            ),
-            #...
-            'user'=>array(
-                // enable cookie-based authentication
-                'class' => 'WebUser',
-            ),
-        #...
-        ),
-        #...
-    );
-
+    
 Change your config console:
 
     return array(
         #...
-        'modules'=>array(
+        'modules'=>[
             #...
-            'user'=>array(
-                # encrypting method (php hash function)
-                'hash' => 'md5',
-
-                # send activation email
-                'sendActivationMail' => true,
-
-                # allow access for non-activated users
-                'loginNotActiv' => false,
-
-                # activate user on registration (only sendActivationMail = false)
-                'activeAfterRegister' => false,
-
-                # automatically login from registration
-                'autoLogin' => true,
-
-                # registration path
-                'registrationUrl' => array('/user/registration'),
-
-                # recovery password path
-                'recoveryUrl' => array('/user/recovery'),
-
-                # login form path
-                'loginUrl' => array('/user/login'),
-
-                # page after login
-                'returnUrl' => array('/user/profile'),
-
-                # page after logout
-                'returnLogoutUrl' => array('/user/login'),
-            ),
+            
+            'user' => [
+                'class' => 'mariusz_soltys\yii2user\Module'
+            ],
+            
             #...
-        ),
+        ]
         #...
     );
 
 Install
 -------
 
-Run command:
-    yii migrate --migrationPath=user.migrations
+Run console command:
+    php yii migrate --migrationPath=@marsoltys/yii2user/migrations
 
 Input admin login, email and password

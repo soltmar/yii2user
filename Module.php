@@ -170,6 +170,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         ]);
 
         Yii::configure($this, require(__DIR__ . '/config.php'));
+        $this->registerTranslations();
     }
 
     public function getBehaviorsFor($componentName)
@@ -181,15 +182,18 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
     }
 
-//    public function beforeAction($action)
-//    {
-//        if (!parent::beforeAction($action)) {
-//            return false;
-//        }
-//        // your custom code here
-//        //
-//        // return true; // or false to not run the action
-//    }
+    public function registerTranslations()
+    {
+        Yii::$app->i18n->translations['user*'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath' => '@marsoltys/yii2user/messages',
+//            'fileMap' => [
+//                'modules/users/validation' => 'validation.php',
+//                'modules/users/form' => 'form.php',
+//            ],
+        ];
+    }
 
 
     /**

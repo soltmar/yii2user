@@ -3,7 +3,7 @@
 namespace marsoltys\yii2user\controllers;
 
 use marsoltys\yii2user\assets\ProfileFieldAssets;
-use marsoltys\yii2user\models\ProfileFieldSearch;
+use marsoltys\yii2user\models\search\ProfileFieldSearch;
 use yii\base\Exception;
 use marsoltys\yii2user\models\Profile;
 use marsoltys\yii2user\models\ProfileField;

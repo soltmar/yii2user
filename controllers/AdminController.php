@@ -3,7 +3,7 @@
 namespace marsoltys\yii2user\controllers;
 
 use marsoltys\yii2user\models\Profile;
-use marsoltys\yii2user\models\UserSearch;
+use marsoltys\yii2user\models\search\UserSearch;
 use marsoltys\yii2user\models\User;
 use marsoltys\yii2user\Module;
 use Yii;
@@ -85,6 +85,7 @@ class AdminController extends Controller
                 $model->password = Module::getInstance()->encrypting($model->password);
                 if ($model->save()) {
                     $profile->user_id = $model->id;
+                    $profile->loadDefaultValues(true);
                     if ($profile->save(true)) {
                         Yii::$app->user->setFlash(
                             'success',
