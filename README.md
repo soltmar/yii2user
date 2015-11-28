@@ -14,7 +14,7 @@ Download or checkout (SVN/Git) from https://github.com/marsoltys/yii2user and un
 Composer
 ---------
 
-    composer require "marsoltys/yii2user:*",
+    composer require "marsoltys/yii2user:dev-master",
 
 Configure
 ---------
@@ -65,9 +65,15 @@ Change your config console:
     );
 
 Install
--------
+------- 
 
 Run console command:
     php yii migrate --migrationPath=@marsoltys/yii2user/migrations
 
 Input admin login, email and password
+
+##TODO 
+
+- Fix "Autocomplete" and "Belongsto" components
+- Refresh user session if anything changes within user details (logout user after pass change?)
+- add activation email option when user is created by admin and status is not active
