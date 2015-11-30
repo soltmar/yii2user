@@ -67,10 +67,11 @@ Change your config console:
 Install
 ------- 
 
-Run console command:
-    php yii migrate --migrationPath=@marsoltys/yii2user/migrations
+1. Run console command:
 
-Input admin login, email and password
+        php yii migrate --migrationPath=@marsoltys/yii2user/migrations
+
+2. Provide admin login, email and password in console when prompted.
 
 ##TODO 
 
