@@ -11,7 +11,7 @@ use yii\web\UploadedFile;
 
 class UWfile
 {
-    
+
     /**
      * @var array
      * @desc widget parameters
@@ -23,7 +23,7 @@ class UWfile
 
     private $old_file_path = '';
     private $new_file_path = '';
-    
+
     /**
      * Widget initialization
      * @return array
@@ -67,7 +67,7 @@ class UWfile
             ],
         ];
     }
-    
+
     /**
      * @param $value
      * @param ActiveRecord $model
@@ -77,22 +77,22 @@ class UWfile
     public function setAttributes($value, $model, $field_varname)
     {
         $this->new_file_path = $this->old_file_path = $model->getAttribute($field_varname);
-        
+
         if ($this->file_instance = UploadedFile::getInstance($model, $field_varname)) {
             $model->on(ActiveRecord::EVENT_AFTER_INSERT, [$this, 'processFile'], null, false);
             $model->on(ActiveRecord::EVENT_AFTER_UPDATE, [$this, 'processFile'], null, false);
 
             $file_name = str_replace(' ', '-', $this->file_instance->name);
             $this->new_file_path = $this->params['path'].'/';
-            
+
             if ($this->old_file_path) {
                 $this->new_file_path = pathinfo($this->old_file_path, PATHINFO_DIRNAME).'/';
             } else {
                 $this->new_file_path .= $this->uniqueDir($this->new_file_path).'/';
             }
-            
+
             $this->new_file_path .= $file_name;
-            
+
         } else {
             $c = join('', array_slice(explode('\\', get_class($model)), -1));
             if (isset($_POST[$c]['uwfdel'][$field_varname])&&$_POST[$c]['uwfdel'][$field_varname]) {
@@ -101,10 +101,10 @@ class UWfile
                 $this->new_file_path = '';
             }
         }
-        
+
         return $this->new_file_path;
     }
-        
+
     /**
      * @param ActiveRecord $model
      * @return string
@@ -123,7 +123,7 @@ class UWfile
 
         return '';
     }
-        
+
     /**
      * @param ActiveRecord $model
      * @return string
@@ -145,10 +145,12 @@ class UWfile
         $file = $model->getAttribute($field->varname);
 
         if ($file) {
-            $return .= "<div class='form-group'>";
+            $return .= "<div class='form-group'><fieldset>";
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $root = Yii::getAlias('@webroot/'.$file);
             $type = explode("/", finfo_file($finfo, $root));
+
+            $return .= Html::activeCheckBox($model, '[uwfdel]'.$field->varname, ['label'=>Module::t('Delete file')])."<br>";
 
             if ($type[0] == 'image') {
                 $return .= Html::img(Url::base()."/".$file, ['class'=>'UWfile-image-preview']);
@@ -161,10 +163,11 @@ class UWfile
                 } else {
                     $return .= Html::img($assetsUrl."/img/file.png", ['class'=>'UWfile-image-preview']);
                 }
+
+                $return .= Html::a(pathinfo($file, PATHINFO_BASENAME)." ", Url::base()."/".$file);
             }
 
-            $return .= Html::activeCheckBox($model, '[uwfdel]'.$field->varname, ['label'=>Module::t('Delete file')]);
-            $return .= "</div>";
+            $return .= "</fieldset></div>";
         }
 
         return $return;
@@ -173,10 +176,9 @@ class UWfile
     /**
      * @return void
      */
-    
+
     public function processFile()
     {
-        
         if ($this->old_file_path && file_exists($this->old_file_path)) {
             unlink($this->old_file_path);
             $files = scandir(pathinfo($this->old_file_path, PATHINFO_DIRNAME));
@@ -184,7 +186,7 @@ class UWfile
                 //No files in directory left
                 rmdir(pathinfo($this->old_file_path, PATHINFO_DIRNAME));
             }
-            
+
         }
         if ($this->file_instance) {
             if (!is_dir(pathinfo($this->new_file_path, PATHINFO_DIRNAME))) {
@@ -193,27 +195,15 @@ class UWfile
             $this->file_instance->saveAs($this->new_file_path);
         }
     }
-    
+
     private function uniqueDir($base_path = '')
     {
-        $unique_dir = $this->randomString();
-        
+        $unique_dir = Yii::$app->security->generateRandomString(20);
+
         while (is_dir($base_path . $unique_dir)) {
-            $unique_dir = $this->randomString();
+            $unique_dir = Yii::$app->security->generateRandomString(20);
         }
-        
+
         return $unique_dir;
     }
-    
-    private function randomString($max = 20)
-    {
-        $string = '';
-        $chars = "abcdefghijklmnopqrstuvwxwz0123456789_-ABCDEGFHIJKLMNOPQRSTUVW";
-        for ($i = 0; $i < $max; $i++) {
-            $rand_key = mt_rand(0, strlen($chars));
-            $string  .= substr($chars, $rand_key, 1);
-        }
-        return str_shuffle($string);
-    }
-    
 }
