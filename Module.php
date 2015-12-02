@@ -15,18 +15,22 @@ class Module extends \yii\base\Module implements BootstrapInterface
     const ALERT_WARNING = 'warning';
     const ALERT_SUCCESS = 'success';
 
+    public $userClass = 'marsoltys\yii2user\components\WebUser';
+
+    public $identityClass = 'marsoltys\yii2user\models\User';
+
     public $mainLayout = '@app/views/layouts/main.php';
 
     public $mailViews = '@marsoltys/yii2user/mail';
 
-    public $urlPrefix = 'user';
+    public $urlPrefix = 'users';
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = ['class' => 'yii\web\GroupUrlRule',
-                        'prefix' => 'user',
+                        'prefix' => 'users',
                         'rules' => [
-                            'login' => 'user/security/login',
-                            'logout' => 'user/security/logout',
+                            'login' => 'users/security/login',
+                            'logout' => 'users/security/logout',
                         ],
     ];
     /**
@@ -148,10 +152,21 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public $defaultRoute = 'user';
 
+    /**
+     * @param \yii\web\Application $app
+     */
     public function bootstrap($app)
     {
         $rules = $this->urlRules;
-        $app->getUrlManager()->addRules($rules, true);
+        $urlManager = $app->getUrlManager();
+        //$urlManager->enablePrettyUrl = true;
+        $urlManager->addRules($rules, true);
+
+//        Yii::$app->set('user', [
+//            'identityClass' => $this->identityClass,
+//            'class' => $this->userClass
+//        ]);
+
     }
 
     /**

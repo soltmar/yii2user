@@ -22,11 +22,11 @@ return [
     'autoLogin' => true,
     'rememberMeTime' => 2592000, // 30 days
     'urlRules' => [
-        'login' => 'user/security/login',
-        'logout' => 'user/security/logout',
+        'login' => 'users/security/login',
+        'logout' => 'users/security/logout',
         [
             'class' => 'yii\web\GroupUrlRule',
-            'prefix' => 'user',
+            'prefix' => 'users',
             'rules' => [
                 '/' => 'user/index',
                 'registration' => 'registration/registration',
