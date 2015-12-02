@@ -10,7 +10,8 @@
  */
 
 return [
-
+    'userClass' => 'marsoltys\yii2user\components\WebUser',
+    'identityClass' => 'marsoltys\yii2user\models\User',
     'mainLayout' => '@app/views/layouts/main.php',
     'layout' => "topmenu",
     'user_page_size' => 10,
@@ -22,11 +23,11 @@ return [
     'autoLogin' => true,
     'rememberMeTime' => 2592000, // 30 days
     'urlRules' => [
-        'login' => 'users/security/login',
-        'logout' => 'users/security/logout',
+        'login' => 'user/security/login',
+        'logout' => 'user/security/logout',
         [
             'class' => 'yii\web\GroupUrlRule',
-            'prefix' => 'users',
+            'prefix' => 'user',
             'rules' => [
                 '/' => 'user/index',
                 'registration' => 'registration/registration',

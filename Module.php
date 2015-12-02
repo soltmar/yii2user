@@ -161,10 +161,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
         //$urlManager->enablePrettyUrl = true;
         $urlManager->addRules($rules, true);
 
-//        Yii::$app->set('user', [
-//            'identityClass' => $this->identityClass,
-//            'class' => $this->userClass
-//        ]);
+        Yii::$app->set('user', [
+            'identityClass' => $this->identityClass,
+            'class' => $this->userClass
+        ]);
 
     }
 
@@ -201,11 +201,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         Yii::$app->i18n->translations['user*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
-            'basePath' => '@marsoltys/yii2user/messages',
-//            'fileMap' => [
-//                'modules/users/validation' => 'validation.php',
-//                'modules/users/form' => 'form.php',
-//            ],
+            'basePath' => '@marsoltys/yii2user/messages'
         ];
     }
 
