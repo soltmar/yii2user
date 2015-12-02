@@ -6,7 +6,6 @@ use marsoltys\yii2user\models\User;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\swiftmailer\Mailer;
-use yii\web\GroupUrlRule;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {

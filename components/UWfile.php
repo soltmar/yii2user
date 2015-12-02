@@ -164,6 +164,7 @@ class UWfile
                     $return .= Html::img($assetsUrl."/img/file.png", ['class'=>'UWfile-image-preview']);
                 }
 
+                $return .= pathinfo($file, PATHINFO_BASENAME)." ";
                 $return .= Html::a(pathinfo($file, PATHINFO_BASENAME)." ", Url::base()."/".$file);
             }
 
