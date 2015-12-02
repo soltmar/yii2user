@@ -62,7 +62,7 @@ Change your config console:
             #...
         ]
         #...
-    );
+    ); 
 
 Install
 ------- 
