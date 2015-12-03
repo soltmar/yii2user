@@ -51,7 +51,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function tableName()
     {
-        return Yii::$app->getModule('user')->tableUsers;
+        return '{{users}}';
     }
 
     /**

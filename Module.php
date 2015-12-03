@@ -121,7 +121,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     //public $cacheEnable = false;
 
-    public $tableUsers = '{{users}}';
     public $tableProfiles = '{{profiles}}';
     public $tableProfileFields = '{{profiles_fields}}';
 
