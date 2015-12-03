@@ -163,6 +163,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         Yii::$app->set('user', [
             'identityClass' => $this->identityClass,
+            'loginUrl' => $this->loginUrl,
             'class' => $this->userClass
         ]);
 
