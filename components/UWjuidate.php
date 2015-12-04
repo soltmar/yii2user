@@ -51,7 +51,7 @@ class UWjuidate {
     /**
      * @param $model - profile model
      * @param $field - profile fields model item
-     * @param $params - htmlOptions
+     * @param $htmlOptions - htmlOptions
      * @return string
      */
     public function editAttribute($model, $field, $htmlOptions = [])
