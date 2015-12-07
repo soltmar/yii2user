@@ -31,8 +31,6 @@ return [
             'rules' => [
                 '/' => 'user/index',
                 'registration' => 'registration/registration',
-//                'login' => 'security/login',
-//                'logout' => 'security/logout',
                 'admin/<action:(view|update|delete)>/<id:\d+>' => 'admin/<action>',
                 'admin' => 'admin/admin',
                 'profile-field/<id:\d+>' => 'profile-field/view',
