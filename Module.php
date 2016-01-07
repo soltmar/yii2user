@@ -7,7 +7,7 @@ use Yii;
 use yii\base\BootstrapInterface;
 use yii\swiftmailer\Mailer;
 
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module
 {
     const ALERT_ERROR = 'danger';
     const ALERT_INFO = 'info';
@@ -149,24 +149,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @inheritdoc
      */
     public $defaultRoute = 'user';
-
-    /**
-     * @param \yii\web\Application $app
-     */
-    public function bootstrap($app)
-    {
-        $rules = $this->urlRules;
-        $urlManager = $app->getUrlManager();
-        //$urlManager->enablePrettyUrl = true;
-        $urlManager->addRules($rules, true);
-
-        Yii::$app->set('user', [
-            'identityClass' => $this->identityClass,
-            'loginUrl' => $this->loginUrl,
-            'class' => $this->userClass
-        ]);
-
-    }
 
     /**
      * @return Module

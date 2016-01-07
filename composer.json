@@ -9,7 +9,7 @@
     }
 
     ,"extra": {
-        "bootstrap": "marsoltys\\yii2user\\Module"
+        "bootstrap": "marsoltys\\yii2user\\Bootstrap"
     },
 
     "autoload": {
