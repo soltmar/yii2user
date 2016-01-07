@@ -6,10 +6,15 @@
         "type": "git",
         "url":  "https://github.com/marsoltys/yii2user.git",
         "reference": "master"
-    },
-    "autoload": {
-    "psr-4": {
-      "marsoltys\\yii2user\\": ""
     }
+
+    ,"extra": {
+        "bootstrap": "marsoltys\\yii2user\\Module"
+    },
+
+    "autoload": {
+        "psr-4": {
+          "marsoltys\\yii2user\\": ""
+        }
   }
 }
