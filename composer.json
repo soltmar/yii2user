@@ -6,9 +6,9 @@
         "type": "git",
         "url":  "https://github.com/marsoltys/yii2user.git",
         "reference": "master"
-    }
+    },
 
-    ,"extra": {
+    "extra": {
         "bootstrap": "marsoltys\\yii2user\\Bootstrap"
     },
 
