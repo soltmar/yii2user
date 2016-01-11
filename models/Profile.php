@@ -12,6 +12,7 @@ use yii\helpers\Json;
  * Class Profile
  * @package marsoltys\yii2user\models
  * @property int $user_id
+ * @property User user
  */
 
 class Profile extends UActiveRecord
