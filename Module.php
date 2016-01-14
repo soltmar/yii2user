@@ -5,6 +5,7 @@ namespace marsoltys\yii2user;
 use marsoltys\yii2user\models\User;
 use Yii;
 use yii\base\BootstrapInterface;
+use yii\db\ActiveRecord;
 use yii\swiftmailer\Mailer;
 
 class Module extends \yii\base\Module
@@ -15,8 +16,8 @@ class Module extends \yii\base\Module
     const ALERT_SUCCESS = 'success';
 
     public $userClass = 'marsoltys\yii2user\components\WebUser';
-
     public $identityClass = 'marsoltys\yii2user\models\User';
+    public $userModel = 'marsoltys\yii2user\models\User';
 
     public $mainLayout = '@app/views/layouts/main.php';
 
@@ -25,12 +26,13 @@ class Module extends \yii\base\Module
     public $urlPrefix = 'users';
 
     /** @var array The rules to be used in URL management. */
-    public $urlRules = ['class' => 'yii\web\GroupUrlRule',
-                        'prefix' => 'users',
-                        'rules' => [
-                            'login' => 'users/security/login',
-                            'logout' => 'users/security/logout',
-                        ],
+    public $urlRules = [
+        'class' => 'yii\web\GroupUrlRule',
+        'prefix' => 'users',
+        'rules' => [
+            'login' => 'users/security/login',
+            'logout' => 'users/security/logout',
+        ],
     ];
     /**
      * @var int
@@ -316,12 +318,14 @@ class Module extends \yii\base\Module
      */
     public static function user($id = 0, $clearCache = false)
     {
+        /* @var $userModel ActiveRecord */
+        $userModel = Yii::$app->getModule('user')->userModel;
         if (!$id&&!Yii::$app->user->isGuest) {
             $id = Yii::$app->user->id;
         }
         if ($id) {
             if (!isset(self::$users[$id])||$clearCache) {
-                self::$users[$id] = User::findOne($id);
+                self::$users[$id] = $userModel::findOne($id);
             }
             return self::$users[$id];
         } else {

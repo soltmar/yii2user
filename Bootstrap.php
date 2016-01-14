@@ -11,7 +11,7 @@
 
 namespace marsoltys\yii2user;
 
-
+use Yii;
 use yii\base\BootstrapInterface;
 
 class Bootstrap implements BootstrapInterface
@@ -21,11 +21,11 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        $module = $app->getModule('user');
-        $rules = $module->urlRules;
+        /* @var $module \marsoltys\yii2user\Module */
+        $module = Yii::$app->getModule("user");
         $urlManager = $app->getUrlManager();
         //$urlManager->enablePrettyUrl = true;
-        $urlManager->addRules($rules, true);
+        $urlManager->addRules($module->urlRules, true);
 
         $app->set('user', [
             'identityClass' => $module->identityClass,

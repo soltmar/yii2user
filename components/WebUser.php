@@ -38,55 +38,13 @@ class WebUser extends \yii\web\User
     public function init()
     {
         parent::init();
-        $this->module = Module::getInstance();
+        $this->module = Yii::$app->getModule('user');
     }
 
     public function getRole()
     {
         return Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
     }
-//
-//    public function getId()
-//    {
-//        return $this->id ? $this->id : 0;
-//    }
-
-//    protected function beforeLogin($id, $states, $fromCookie)
-//    {
-//        parent::beforeLogin($id, $states, $fromCookie);
-//
-//        $model = new UserLoginStats();
-//        $model->attributes = array(
-//            'user_id' => $id,
-//            'ip' => ip2long(Yii::$app->request->getUserHostAddress())
-//        );
-//        $model->save();
-//
-//        return true;
-//    }
-
-    protected function afterLogin($identity, $cookieBased, $duration)
-    {
-        parent::afterLogin($identity, $cookieBased, $duration);
-       // $this->updateSession();
-
-        //TODO Check what user properties needs to be stored in session
-    }
-
-//    public function updateSession() {
-//        if ($user = Module::getInstance()->user($this->id)) {
-//            $this->name = $user->username;
-//            $this = ArrayHelper::merge(array(
-//                'email'=>$user->email,
-//                'username'=>$user->username,
-//                'create_at'=>$user->create_at,
-//                'lastvisit_at'=>$user->lastvisit_at,
-//            ),$user->profile->getAttributes());
-//            foreach ($userAttributes as $attrName=>$attrValue) {
-//                $this->setState($attrName,$attrValue);
-//            }
-//        }
-//    }
 
     /**
      * Returns user model by user id.
@@ -190,12 +148,13 @@ class WebUser extends \yii\web\User
     {
         try {
             return parent::__get($name);
-        } catch (\yii\base\UnknownPropertyException $e) {
-            if (in_array($name, $this->sessionKeys)) {
-                return \Yii::$app->session->get("user.$name");
-            } else {
+        } catch (\Exception $e) {
+            $val = \Yii::$app->session->get("user.$name", false);
+            if (!$val) {
                 throw $e;
             }
+
+            return $val;
         }
     }
 
@@ -203,12 +162,8 @@ class WebUser extends \yii\web\User
     {
         try {
             parent::__set($name, $value);
-        } catch (\yii\base\UnknownPropertyException $e) {
-            if (in_array($name, $this->sessionKeys)) {
-                \Yii::$app->session->set("user.$name", $value);
-            } else {
-                throw $e;
-            }
+        } catch (\Exception $e) {
+            \Yii::$app->session->set("user.$name", $value);
         }
     }
 

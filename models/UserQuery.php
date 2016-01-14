@@ -78,4 +78,8 @@ class UserQuery extends \yii\db\ActiveQuery
         }
         return $this->andWhere($condition);
     }
+    public function byUsername($username)
+    {
+        return $this->andWhere(['username'=>$username]);
+    }
 }
