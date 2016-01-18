@@ -11,9 +11,10 @@ use Yii;
  * @property \marsoltys\yii2user\models\User|\yii\web\IdentityInterface|null $identity
  *      The identity object associated with the currently logged-in user.
  *      null is returned if the user is not logged in (not authenticated).
+ *
  */
 
-class WebUser extends \yii\web\User
+class User extends \yii\web\User
 {
 
     /**
