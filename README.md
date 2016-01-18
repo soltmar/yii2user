@@ -18,7 +18,7 @@ Composer
 
 Configure
 ---------
-
+```
 Change your config web.php:
         #...
         'modules'=>[
@@ -33,9 +33,9 @@ Change your config web.php:
             ],
             #...
         ],
-    
+```    
 Change your config console:
-
+```
     return array(
         #...
         'modules'=>[
@@ -49,6 +49,7 @@ Change your config console:
         ]
         #...
     ); 
+```
 
 Install
 ------- 
