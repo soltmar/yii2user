@@ -63,7 +63,7 @@ Install
 ##NOTE##
 
 Please note that "user" component will be configured through this User module.
-To configure user composer classes please comments in web.php config file of "Configure" section above
+To configure user component classes please see comments in web.php config file of "Configure" section above
 
 ##TODO##
 
