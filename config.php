@@ -10,7 +10,7 @@
  */
 
 return [
-    'userClass' => 'marsoltys\yii2user\components\WebUser',
+    'userClass' => 'marsoltys\yii2user\components\User',
     'identityClass' => 'marsoltys\yii2user\models\User',
     'userModel' => 'marsoltys\yii2user\models\User',
     'mainLayout' => '@app/views/layouts/main.php',

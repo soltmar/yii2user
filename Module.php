@@ -4,7 +4,6 @@ namespace marsoltys\yii2user;
 
 use marsoltys\yii2user\models\User;
 use Yii;
-use yii\base\BootstrapInterface;
 use yii\db\ActiveRecord;
 use yii\swiftmailer\Mailer;
 
@@ -15,7 +14,7 @@ class Module extends \yii\base\Module
     const ALERT_WARNING = 'warning';
     const ALERT_SUCCESS = 'success';
 
-    public $userClass = 'marsoltys\yii2user\components\WebUser';
+    public $userClass = 'marsoltys\yii2user\components\User';
     public $identityClass = 'marsoltys\yii2user\models\User';
     public $userModel = 'marsoltys\yii2user\models\User';
 
