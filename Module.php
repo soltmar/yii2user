@@ -212,7 +212,6 @@ class Module extends \yii\base\Module
      */
     public static function encrypting($string = "")
     {
-
         return Yii::$app->getSecurity()->generatePasswordHash($string);
     }
 
