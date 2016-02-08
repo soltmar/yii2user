@@ -121,7 +121,8 @@ class Module extends \yii\base\Module
      * @var boolean
      */
     //public $cacheEnable = false;
-
+    
+    public $tableUsers = '{{users}}';
     public $tableProfiles = '{{profiles}}';
     public $tableProfileFields = '{{profiles_fields}}';
 
