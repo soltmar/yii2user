@@ -42,7 +42,7 @@ Change your config console:
             #...
             
             'user' => [
-                'class' => 'mariusz_soltys\yii2user\Module'
+                'class' => 'marsoltys\yii2user\Module'
             ],
             
             #...
