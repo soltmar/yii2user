@@ -12,6 +12,7 @@
 return [
     'userClass' => 'marsoltys\yii2user\components\WebUser',
     'identityClass' => 'marsoltys\yii2user\models\User',
+    'userModel' => 'marsoltys\yii2user\models\User',
     'mainLayout' => '@app/views/layouts/main.php',
     'layout' => "topmenu",
     'user_page_size' => 10,

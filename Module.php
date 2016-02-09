@@ -20,6 +20,8 @@ class Module extends \yii\base\Module
 
     public $mainLayout = '@app/views/layouts/main.php';
 
+    public $layout = "topmenu";
+
     public $mailViews = '@marsoltys/yii2user/mail';
 
     public $urlPrefix = 'users';
@@ -27,11 +29,20 @@ class Module extends \yii\base\Module
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
         'class' => 'yii\web\GroupUrlRule',
-        'prefix' => 'users',
-        'rules' => [
-            'login' => 'users/security/login',
-            'logout' => 'users/security/logout',
-        ],
+        'login' => 'user/security/login',
+        'logout' => 'user/security/logout',
+        [
+            'class' => 'yii\web\GroupUrlRule',
+            'prefix' => 'user',
+            'rules' => [
+                '/' => 'user/index',
+                'registration' => 'registration/registration',
+                'admin/<action:(view|update|delete)>/<id:\d+>' => 'admin/<action>',
+                'admin' => 'admin/admin',
+                'profile-field/<id:\d+>' => 'profile-field/view',
+                'profile-field/<action:(view|update|delete)>/<id:\d+>' => 'profile-field/<action>'
+            ],
+        ]
     ];
     /**
      * @var int
@@ -167,7 +178,9 @@ class Module extends \yii\base\Module
             '@user-assets' => __DIR__ . '/views/assets',
         ]);
 
-        Yii::configure($this, require(__DIR__ . '/config.php'));
+        if (is_file(__DIR__ . '/config.php')) {
+            Yii::configure($this, require(__DIR__ . '/config.php'));
+        }
         $this->registerTranslations();
     }
 
