@@ -83,7 +83,7 @@ class User extends \yii\web\User
     }
 
     /**
-     * This is function here is to make it compatible with new Yii2 flash messages
+     * This function is to make it compatible with new Yii2 flash messages
      * @param string $key
      * @param mixed $value
      * @param bool|true $del
@@ -94,7 +94,7 @@ class User extends \yii\web\User
     }
 
     /**
-     * This is function here is to make it compatible with new Yii2 flash messages
+     * This function is to make it compatible with new Yii2 flash messages
      * @param $key
      * @param string|null $defaultValue
      * @param bool|false $delete
@@ -106,7 +106,7 @@ class User extends \yii\web\User
     }
 
     /**
-     * This is function here is to make it compatible with new Yii2 flash messages
+     * This function is to make it compatible with new Yii2 flash messages
      * @param $key
      * @return bool
      */
@@ -116,23 +116,23 @@ class User extends \yii\web\User
     }
 
     /**
-     * This is function here is to make it compatible with new Yii2 flash messages
+     * This function is to make it compatible with new Yii2 flash messages
      * @return array
      */
     public function getFlashes()
     {
         $messages = Yii::$app->session->getAllFlashes();
 
-        $messages = array_filter($messages, function ($key) {
-            return(strpos($key, 'user.') !== false);
-        }, ARRAY_FILTER_USE_KEY);
+        $user_message = [];
 
         foreach ($messages as $key => $value) {
-            $nkey = str_replace("user.", "", $key);
-            $messages[$nkey] = $value;
-            unset($messages[$key]);
+            if (strpos($key, 'user.') !== false) {
+                $nkey = str_replace("user.", "", $key);
+                $user_message[$nkey] = $value;
+                unset($messages[$key]);
+            }
         }
-        return $messages;
+        return $user_message;
     }
 
 

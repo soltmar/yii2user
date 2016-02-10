@@ -25,6 +25,7 @@ $this->registerJS(
     View::POS_READY,
     'HideEffect'
 );
+
 if (!Yii::$app->request->isAjax) {
     $flashMessages = Yii::$app->user->getFlashes();
     if ($flashMessages) {
